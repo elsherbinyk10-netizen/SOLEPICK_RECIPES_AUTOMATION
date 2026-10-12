@@ -26,7 +26,9 @@
     ],
     "prep_minutes": 10,
     "cook_minutes": 25,
-    "servings": 4
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_alt": "Roasted lemon herb chicken with golden vegetables"
   },
   {
     "slug": "creamy-tomato-spinach-pasta",
@@ -55,7 +57,9 @@
     ],
     "prep_minutes": 10,
     "cook_minutes": 20,
-    "servings": 3
+    "servings": 3,
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_alt": "Pasta with sauce and fresh herbs"
   },
   {
     "slug": "roasted-chickpea-rainbow-bowls",
@@ -85,6 +89,8 @@
     ],
     "prep_minutes": 15,
     "cook_minutes": 25,
-    "servings": 2
+    "servings": 2,
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_alt": "Colorful chickpea bowl with fresh vegetables"
   }
 ]

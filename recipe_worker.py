@@ -119,6 +119,11 @@ def create_draft(blog_id, r):
                "author":{"name":"SolePick Recipes"},
                "body":article_html(r),"summary":r["description"],
                "tags":r.get("tags",[]),"isPublished":False}
+    if r.get("image_url"):
+        article["image"] = {
+            "url": r["image_url"],
+            "altText": r.get("image_alt", r["title"])
+        }
     result = graphql(mutation, {"article":article}).get("articleCreate") or {}
     if result.get("userErrors"):
         raise RuntimeError("Shopify rejected draft: " + json.dumps(result["userErrors"]))
