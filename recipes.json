@@ -357,5 +357,3525 @@
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1488477181946-6428a0291777",
     "image_alt": "Yogurt and fruit layered in a breakfast parfait"
+  },
+  {
+    "slug": "lemon-garlic-chicken-rice-bowls",
+    "title": "Lemon Garlic Chicken Rice Bowls",
+    "description": "A practical rice bowls featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-roasted-vegetable-tray",
+    "title": "Lemon Garlic Chicken Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-quick-pasta",
+    "title": "Lemon Garlic Chicken Quick Pasta",
+    "description": "A practical quick pasta featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-warm-grain-salad",
+    "title": "Lemon Garlic Chicken Warm Grain Salad",
+    "description": "A practical warm grain salad featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-one-pot-soup",
+    "title": "Lemon Garlic Chicken One-Pot Soup",
+    "description": "A practical one-pot soup featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-tacos",
+    "title": "Lemon Garlic Chicken Tacos",
+    "description": "A practical tacos featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-stuffed-sweet-potatoes",
+    "title": "Lemon Garlic Chicken Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-breakfast-hash",
+    "title": "Lemon Garlic Chicken Breakfast Hash",
+    "description": "A practical breakfast hash featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-fresh-wraps",
+    "title": "Lemon Garlic Chicken Fresh Wraps",
+    "description": "A practical fresh wraps featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-coconut-curry",
+    "title": "Lemon Garlic Chicken Coconut Curry",
+    "description": "A practical coconut curry featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "lemon-garlic-chicken-loaded-salad",
+    "title": "Lemon Garlic Chicken Loaded Salad",
+    "description": "A practical loaded salad featuring lemon garlic chicken, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "chicken",
+      "high-protein",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "600 g boneless chicken breast, sliced",
+      "1–2 teaspoons lemon juice",
+      "1–2 teaspoons minced garlic",
+      "1–2 teaspoons oregano",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Lemon Garlic Chicken Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-rice-bowls",
+    "title": "Smoky Chickpeas Rice Bowls",
+    "description": "A practical rice bowls featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-roasted-vegetable-tray",
+    "title": "Smoky Chickpeas Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-quick-pasta",
+    "title": "Smoky Chickpeas Quick Pasta",
+    "description": "A practical quick pasta featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-warm-grain-salad",
+    "title": "Smoky Chickpeas Warm Grain Salad",
+    "description": "A practical warm grain salad featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-one-pot-soup",
+    "title": "Smoky Chickpeas One-Pot Soup",
+    "description": "A practical one-pot soup featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-tacos",
+    "title": "Smoky Chickpeas Tacos",
+    "description": "A practical tacos featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-stuffed-sweet-potatoes",
+    "title": "Smoky Chickpeas Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-breakfast-hash",
+    "title": "Smoky Chickpeas Breakfast Hash",
+    "description": "A practical breakfast hash featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-fresh-wraps",
+    "title": "Smoky Chickpeas Fresh Wraps",
+    "description": "A practical fresh wraps featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-coconut-curry",
+    "title": "Smoky Chickpeas Coconut Curry",
+    "description": "A practical coconut curry featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "smoky-chickpeas-loaded-salad",
+    "title": "Smoky Chickpeas Loaded Salad",
+    "description": "A practical loaded salad featuring smoky chickpeas, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1–2 teaspoons smoked paprika",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons garlic",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Smoky Chickpeas Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-rice-bowls",
+    "title": "Ginger Soy Tofu Rice Bowls",
+    "description": "A practical rice bowls featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-roasted-vegetable-tray",
+    "title": "Ginger Soy Tofu Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-quick-pasta",
+    "title": "Ginger Soy Tofu Quick Pasta",
+    "description": "A practical quick pasta featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-warm-grain-salad",
+    "title": "Ginger Soy Tofu Warm Grain Salad",
+    "description": "A practical warm grain salad featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-one-pot-soup",
+    "title": "Ginger Soy Tofu One-Pot Soup",
+    "description": "A practical one-pot soup featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-tacos",
+    "title": "Ginger Soy Tofu Tacos",
+    "description": "A practical tacos featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-stuffed-sweet-potatoes",
+    "title": "Ginger Soy Tofu Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-breakfast-hash",
+    "title": "Ginger Soy Tofu Breakfast Hash",
+    "description": "A practical breakfast hash featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-fresh-wraps",
+    "title": "Ginger Soy Tofu Fresh Wraps",
+    "description": "A practical fresh wraps featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-coconut-curry",
+    "title": "Ginger Soy Tofu Coconut Curry",
+    "description": "A practical coconut curry featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "ginger-soy-tofu-loaded-salad",
+    "title": "Ginger Soy Tofu Loaded Salad",
+    "description": "A practical loaded salad featuring ginger soy tofu, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "plant-based",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cubed",
+      "1–2 teaspoons soy sauce",
+      "1–2 teaspoons fresh ginger",
+      "1–2 teaspoons garlic",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Ginger Soy Tofu Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-rice-bowls",
+    "title": "Honey Mustard Salmon Rice Bowls",
+    "description": "A practical rice bowls featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-roasted-vegetable-tray",
+    "title": "Honey Mustard Salmon Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-quick-pasta",
+    "title": "Honey Mustard Salmon Quick Pasta",
+    "description": "A practical quick pasta featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-warm-grain-salad",
+    "title": "Honey Mustard Salmon Warm Grain Salad",
+    "description": "A practical warm grain salad featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-one-pot-soup",
+    "title": "Honey Mustard Salmon One-Pot Soup",
+    "description": "A practical one-pot soup featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-tacos",
+    "title": "Honey Mustard Salmon Tacos",
+    "description": "A practical tacos featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-stuffed-sweet-potatoes",
+    "title": "Honey Mustard Salmon Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-breakfast-hash",
+    "title": "Honey Mustard Salmon Breakfast Hash",
+    "description": "A practical breakfast hash featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-fresh-wraps",
+    "title": "Honey Mustard Salmon Fresh Wraps",
+    "description": "A practical fresh wraps featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-coconut-curry",
+    "title": "Honey Mustard Salmon Coconut Curry",
+    "description": "A practical coconut curry featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "honey-mustard-salmon-loaded-salad",
+    "title": "Honey Mustard Salmon Loaded Salad",
+    "description": "A practical loaded salad featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "high-protein",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "1–2 teaspoons Dijon mustard",
+      "1–2 teaspoons honey",
+      "1–2 teaspoons lemon",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Honey Mustard Salmon Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-rice-bowls",
+    "title": "Black Bean and Corn Rice Bowls",
+    "description": "A practical rice bowls featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-roasted-vegetable-tray",
+    "title": "Black Bean and Corn Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-quick-pasta",
+    "title": "Black Bean and Corn Quick Pasta",
+    "description": "A practical quick pasta featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-warm-grain-salad",
+    "title": "Black Bean and Corn Warm Grain Salad",
+    "description": "A practical warm grain salad featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-one-pot-soup",
+    "title": "Black Bean and Corn One-Pot Soup",
+    "description": "A practical one-pot soup featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-tacos",
+    "title": "Black Bean and Corn Tacos",
+    "description": "A practical tacos featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-stuffed-sweet-potatoes",
+    "title": "Black Bean and Corn Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-breakfast-hash",
+    "title": "Black Bean and Corn Breakfast Hash",
+    "description": "A practical breakfast hash featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-fresh-wraps",
+    "title": "Black Bean and Corn Fresh Wraps",
+    "description": "A practical fresh wraps featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-coconut-curry",
+    "title": "Black Bean and Corn Coconut Curry",
+    "description": "A practical coconut curry featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "black-bean-corn-loaded-salad",
+    "title": "Black Bean and Corn Loaded Salad",
+    "description": "A practical loaded salad featuring black bean and corn, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "budget-friendly",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained, plus 1 cup corn",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons lime",
+      "1–2 teaspoons smoked paprika",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Black Bean and Corn Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-rice-bowls",
+    "title": "Turkey and Herb Rice Bowls",
+    "description": "A practical rice bowls featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-roasted-vegetable-tray",
+    "title": "Turkey and Herb Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-quick-pasta",
+    "title": "Turkey and Herb Quick Pasta",
+    "description": "A practical quick pasta featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-warm-grain-salad",
+    "title": "Turkey and Herb Warm Grain Salad",
+    "description": "A practical warm grain salad featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-one-pot-soup",
+    "title": "Turkey and Herb One-Pot Soup",
+    "description": "A practical one-pot soup featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Turkey and Herb One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-tacos",
+    "title": "Turkey and Herb Tacos",
+    "description": "A practical tacos featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-stuffed-sweet-potatoes",
+    "title": "Turkey and Herb Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-breakfast-hash",
+    "title": "Turkey and Herb Breakfast Hash",
+    "description": "A practical breakfast hash featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-fresh-wraps",
+    "title": "Turkey and Herb Fresh Wraps",
+    "description": "A practical fresh wraps featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-coconut-curry",
+    "title": "Turkey and Herb Coconut Curry",
+    "description": "A practical coconut curry featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "turkey-herb-loaded-salad",
+    "title": "Turkey and Herb Loaded Salad",
+    "description": "A practical loaded salad featuring turkey and herb, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "high-protein",
+      "family-meals",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons dried oregano",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Turkey and Herb Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-rice-bowls",
+    "title": "Red Lentil Rice Bowls",
+    "description": "A practical rice bowls featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Red Lentil Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-roasted-vegetable-tray",
+    "title": "Red Lentil Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Red Lentil Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-quick-pasta",
+    "title": "Red Lentil Quick Pasta",
+    "description": "A practical quick pasta featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Red Lentil Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-warm-grain-salad",
+    "title": "Red Lentil Warm Grain Salad",
+    "description": "A practical warm grain salad featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Red Lentil Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-one-pot-soup",
+    "title": "Red Lentil One-Pot Soup",
+    "description": "A practical one-pot soup featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Red Lentil One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-tacos",
+    "title": "Red Lentil Tacos",
+    "description": "A practical tacos featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Red Lentil Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-stuffed-sweet-potatoes",
+    "title": "Red Lentil Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Red Lentil Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-breakfast-hash",
+    "title": "Red Lentil Breakfast Hash",
+    "description": "A practical breakfast hash featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Red Lentil Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-fresh-wraps",
+    "title": "Red Lentil Fresh Wraps",
+    "description": "A practical fresh wraps featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Red Lentil Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-coconut-curry",
+    "title": "Red Lentil Coconut Curry",
+    "description": "A practical coconut curry featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Red Lentil Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "red-lentil-loaded-salad",
+    "title": "Red Lentil Loaded Salad",
+    "description": "A practical loaded salad featuring red lentil, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegan",
+      "budget-friendly",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1–2 teaspoons cumin",
+      "1–2 teaspoons coriander",
+      "1–2 teaspoons turmeric",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Red Lentil Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-rice-bowls",
+    "title": "Mediterranean White Bean Rice Bowls",
+    "description": "A practical rice bowls featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-roasted-vegetable-tray",
+    "title": "Mediterranean White Bean Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-quick-pasta",
+    "title": "Mediterranean White Bean Quick Pasta",
+    "description": "A practical quick pasta featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-warm-grain-salad",
+    "title": "Mediterranean White Bean Warm Grain Salad",
+    "description": "A practical warm grain salad featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-one-pot-soup",
+    "title": "Mediterranean White Bean One-Pot Soup",
+    "description": "A practical one-pot soup featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-tacos",
+    "title": "Mediterranean White Bean Tacos",
+    "description": "A practical tacos featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-stuffed-sweet-potatoes",
+    "title": "Mediterranean White Bean Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-breakfast-hash",
+    "title": "Mediterranean White Bean Breakfast Hash",
+    "description": "A practical breakfast hash featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-fresh-wraps",
+    "title": "Mediterranean White Bean Fresh Wraps",
+    "description": "A practical fresh wraps featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-coconut-curry",
+    "title": "Mediterranean White Bean Coconut Curry",
+    "description": "A practical coconut curry featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "mediterranean-white-bean-loaded-salad",
+    "title": "Mediterranean White Bean Loaded Salad",
+    "description": "A practical loaded salad featuring mediterranean white bean, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "2 cans cannellini beans, drained",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons parsley",
+      "1–2 teaspoons oregano",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Mediterranean White Bean Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-rice-bowls",
+    "title": "Garlic Mushroom Rice Bowls",
+    "description": "A practical rice bowls featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-roasted-vegetable-tray",
+    "title": "Garlic Mushroom Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-quick-pasta",
+    "title": "Garlic Mushroom Quick Pasta",
+    "description": "A practical quick pasta featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-warm-grain-salad",
+    "title": "Garlic Mushroom Warm Grain Salad",
+    "description": "A practical warm grain salad featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-one-pot-soup",
+    "title": "Garlic Mushroom One-Pot Soup",
+    "description": "A practical one-pot soup featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-tacos",
+    "title": "Garlic Mushroom Tacos",
+    "description": "A practical tacos featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-stuffed-sweet-potatoes",
+    "title": "Garlic Mushroom Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-breakfast-hash",
+    "title": "Garlic Mushroom Breakfast Hash",
+    "description": "A practical breakfast hash featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-fresh-wraps",
+    "title": "Garlic Mushroom Fresh Wraps",
+    "description": "A practical fresh wraps featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-coconut-curry",
+    "title": "Garlic Mushroom Coconut Curry",
+    "description": "A practical coconut curry featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "garlic-mushroom-loaded-salad",
+    "title": "Garlic Mushroom Loaded Salad",
+    "description": "A practical loaded salad featuring garlic mushroom, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "vegetarian",
+      "plant-based",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "400 g mushrooms, sliced",
+      "1–2 teaspoons garlic",
+      "1–2 teaspoons thyme",
+      "1–2 teaspoons black pepper",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Garlic Mushroom Loaded Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-rice-bowls",
+    "title": "Cajun Shrimp Rice Bowls",
+    "description": "A practical rice bowls featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "dinner",
+      "bowls"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "2 cups cooked rice",
+      "1 cucumber, diced; 1 cup shredded carrots",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook rice according to package directions.",
+      "Season the main ingredient with the listed flavorings and a pinch of salt.",
+      "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+      "Divide rice between bowls, add cucumber and carrots, and arrange the cooked topping over each bowl.",
+      "Finish with lemon or lime juice and serve warm."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Rice Bowls prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-roasted-vegetable-tray",
+    "title": "Cajun Shrimp Roasted Vegetable Tray",
+    "description": "A practical roasted vegetable tray featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "dinner",
+      "sheet-pan"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "1 zucchini, 1 red bell pepper, and 1 red onion, chopped",
+      "2 tablespoons olive oil; 1 teaspoon dried oregano",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F) and line a large baking tray.",
+      "Spread vegetables on the tray and toss with olive oil, flavorings, salt, and pepper.",
+      "Add the main ingredient and arrange everything in a single layer.",
+      "Roast, turning once, until vegetables are browned and the main ingredient is safely cooked through.",
+      "Taste, adjust seasoning, and serve hot."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Roasted Vegetable Tray prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-quick-pasta",
+    "title": "Cajun Shrimp Quick Pasta",
+    "description": "A practical quick pasta featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "dinner",
+      "pasta"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "300 g pasta",
+      "1 cup cherry tomatoes, halved; 2 cups baby spinach",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Boil salted water and cook pasta according to package directions.",
+      "Warm olive oil in a skillet and briefly cook the listed flavorings.",
+      "Add the main ingredient and cook until tender and safely cooked through, where applicable.",
+      "Stir in tomatoes and spinach; cook until tomatoes soften and spinach wilts.",
+      "Toss with drained pasta and a splash of pasta water, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Quick Pasta prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-warm-grain-salad",
+    "title": "Cajun Shrimp Warm Grain Salad",
+    "description": "A practical warm grain salad featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "lunch",
+      "salad"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "2 cups cooked quinoa or bulgur",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 2 tablespoons parsley",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare quinoa or bulgur according to package directions and fluff with a fork.",
+      "Heat a skillet with olive oil and add the main ingredient with the listed flavorings.",
+      "Cook until hot and tender; ensure meat or seafood is safely cooked through.",
+      "Combine grain with cucumber, tomatoes, and parsley in a bowl.",
+      "Dress with lemon juice and olive oil, toss gently, and serve warm or chilled."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Warm Grain Salad prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-one-pot-soup",
+    "title": "Cajun Shrimp One-Pot Soup",
+    "description": "A practical one-pot soup featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "soup",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "1 onion, diced; 2 carrots, sliced; 2 celery stalks, chopped",
+      "750 ml low-sodium vegetable or chicken broth",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm olive oil in a large pot over medium heat.",
+      "Add onion, carrots, and celery; cook for 5 minutes.",
+      "Stir in the main ingredient and flavorings, then pour in the broth.",
+      "Simmer until vegetables and main ingredient are tender and safely cooked through.",
+      "Season to taste and serve with herbs or whole-grain bread."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp One-Pot Soup prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-tacos",
+    "title": "Cajun Shrimp Tacos",
+    "description": "A practical tacos featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "dinner",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "8 small corn or flour tortillas",
+      "1 cup shredded cabbage; salsa and lime wedges",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm a lightly oiled skillet over medium heat.",
+      "Add the main ingredient and flavorings; cook until ready and safely cooked where applicable.",
+      "Adjust seasoning with salt, pepper, and lime.",
+      "Warm tortillas in a dry pan for about 30 seconds per side.",
+      "Fill tortillas with the cooked mixture and cabbage, then serve with salsa and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Tacos prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-stuffed-sweet-potatoes",
+    "title": "Cajun Shrimp Stuffed Sweet Potatoes",
+    "description": "A practical stuffed sweet potatoes featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "dinner",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "4 medium sweet potatoes, scrubbed",
+      "1 avocado, diced; 2 tablespoons plain yogurt or dairy-free alternative",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F), prick sweet potatoes with a fork, and place on a tray.",
+      "Bake 30–40 minutes until easily pierced with a knife.",
+      "Cook the main ingredient in a skillet with flavorings and a little olive oil.",
+      "Split sweet potatoes and fluff centers with a fork.",
+      "Fill with the cooked mixture and top with avocado and yogurt."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Stuffed Sweet Potatoes prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-breakfast-hash",
+    "title": "Cajun Shrimp Breakfast Hash",
+    "description": "A practical breakfast hash featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "breakfast",
+      "brunch"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "500 g potatoes, diced small",
+      "1 red bell pepper, diced; 4 eggs optional",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Parboil potatoes for 6 minutes, drain, and pat dry.",
+      "Cook potatoes in olive oil until golden, turning occasionally.",
+      "Add the main ingredient and flavorings; cook until tender and safely cooked through where applicable.",
+      "Stir in bell pepper and cook until just softened.",
+      "Serve as is or with eggs cooked safely to preference."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Breakfast Hash prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-fresh-wraps",
+    "title": "Cajun Shrimp Fresh Wraps",
+    "description": "A practical fresh wraps featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "lunch",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "4 whole-wheat wraps or large lettuce leaves",
+      "1 cucumber, sliced; 1 carrot, grated; 2 tablespoons yogurt or tahini sauce",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Prepare cucumber, carrot, and fresh toppings.",
+      "Cook the main ingredient with olive oil and flavorings until ready and safely cooked where applicable.",
+      "Let hot ingredients cool briefly.",
+      "Spread sauce over each wrap and add vegetables and filling.",
+      "Roll tightly, slice in half, and serve."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Fresh Wraps prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-coconut-curry",
+    "title": "Cajun Shrimp Coconut Curry",
+    "description": "A practical coconut curry featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "dinner",
+      "curry"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "1 onion, diced; 1 can (400 ml) coconut milk",
+      "1 can diced tomatoes; 2 cups vegetable broth or water",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Soften onion in a large pot with a little oil.",
+      "Add flavorings and stir for 30–60 seconds until fragrant.",
+      "Add main ingredient, coconut milk, tomatoes, and broth.",
+      "Simmer until ingredients are tender and sauce thickens; ensure meat or seafood is safely cooked through.",
+      "Season and serve with rice or warm flatbread."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Coconut Curry prepared with fresh ingredients"
+  },
+  {
+    "slug": "cajun-shrimp-loaded-salad",
+    "title": "Cajun Shrimp Loaded Salad",
+    "description": "A practical loaded salad featuring cajun shrimp, everyday ingredients, and clear steps for an easy homemade meal.",
+    "tags": [
+      "seafood",
+      "quick",
+      "lunch",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "500 g peeled shrimp",
+      "1–2 teaspoons Cajun seasoning",
+      "1–2 teaspoons lemon",
+      "1–2 teaspoons garlic",
+      "4 cups mixed salad greens",
+      "1 cucumber, diced; 1 cup cherry tomatoes, halved; 1/2 red onion, thinly sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Wash and thoroughly dry salad greens.",
+      "Prepare cucumber, tomatoes, and onion and arrange over the greens.",
+      "Cook the main ingredient in olive oil with flavorings if it requires cooking.",
+      "Whisk 2 tablespoons olive oil with 1 tablespoon lemon juice, salt, and black pepper.",
+      "Add the topping, dress just before serving, and toss gently."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "image_alt": "Cajun Shrimp Loaded Salad prepared with fresh ingredients"
   }
 ]
