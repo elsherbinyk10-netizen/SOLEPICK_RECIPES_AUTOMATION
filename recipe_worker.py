@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""Publish the scheduled SolePick recipe to the configured Shopify blog."""
+import argparse
+import datetime
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+API_VERSION = "2026-07"
+CAIRO = ZoneInfo("Africa/Cairo")
+RECIPES_PATH = Path(__file__).with_name("recipes.json")
+ACCESS_TOKEN = None
+
+
+def load_recipes():
+    recipes = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    if not recipes:
+        raise ValueError("recipes.json is empty")
+    slugs = [r.get("slug", "") for r in recipes]
+    if any(not s for s in slugs) or len(slugs) != len(set(slugs)):
+        raise ValueError("Every recipe needs a unique, non-empty slug")
+    required = {"title", "description", "ingredients", "instructions", "prep_minutes", "cook_minutes", "servings"}
+    for recipe in recipes:
+        missing = sorted(required - recipe.keys())
+        if missing:
+            raise ValueError(f"Recipe {recipe.get('slug', '(no slug)')} missing: {', '.join(missing)}")
+        if not recipe["ingredients"] or not recipe["instructions"]:
+            raise ValueError(f"Recipe {recipe['slug']} needs ingredients and instructions")
+    return recipes
+
+
+def esc(value):
+    return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+
+def article_html(recipe):
+    ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
+    steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
+    return (
+        f"<p>{esc(recipe['description'])}</p>"
+        f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
+        f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
+        f"<strong>Serves:</strong> {recipe['servings']}</p>"
+        f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
+        f"<h2>Instructions</h2><ol>{steps}</ol>"
+        "<p><em>Check labels for allergens and follow safe food-handling practices. "
+        "Cooking times vary; verify food is safely cooked before serving.</em></p>"
+    )
+
+
+def get_access_token(domain):
+    client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
+    client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        raise RuntimeError("Set SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET in GitHub Actions Secrets.")
+    payload = {"grant_type": "client_credentials", "client_id": client_id, "client_secret": client_secret}
+    req = urllib.request.Request(
+        f"https://{domain}/admin/oauth/access_token",
+        data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode())
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(f"Shopify token exchange failed with HTTP {error.code}; check app installation, credentials, and permissions.") from None
+    token = data.get("access_token")
+    if not token:
+        raise RuntimeError("Shopify returned no access token.")
+    return token
+
+
+def graphql(query, variables):
+    global ACCESS_TOKEN
+    domain = os.environ.get("SHOPIFY_STORE_DOMAIN", "").strip()
+    if not domain:
+        raise RuntimeError("Set SHOPIFY_STORE_DOMAIN in GitHub Actions Secrets.")
+    domain = domain.removeprefix("https://").removeprefix("http://").strip("/")
+    if "/" in domain or not domain.endswith(".myshopify.com"):
+        raise RuntimeError("SHOPIFY_STORE_DOMAIN must be a *.myshopify.com domain.")
+    if ACCESS_TOKEN is None:
+        ACCESS_TOKEN = get_access_token(domain)
+    req = urllib.request.Request(
+        f"https://{domain}/admin/api/{API_VERSION}/graphql.json",
+        data=json.dumps({"query": query, "variables": variables}).encode(),
+        headers={"Content-Type": "application/json", "X-Shopify-Access-Token": ACCESS_TOKEN},
+        method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode())
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(f"Shopify API returned HTTP {error.code}; verify domain, token, and permissions.") from None
+    if data.get("errors"):
+        raise RuntimeError("Shopify GraphQL errors: " + json.dumps(data["errors"]))
+    return data.get("data", {})
+
+
+def existing_articles(blog_id):
+    query = """query ArticleHandles($id: ID!, $after: String) {
+      blog(id: $id) { articles(first: 100, after: $after) {
+        nodes { id handle isPublished }
+        pageInfo { hasNextPage endCursor }
+      } }
+    }"""
+    found, after = {}, None
+    while True:
+        data = graphql(query, {"id": blog_id, "after": after})
+        blog = data.get("blog")
+        if not blog:
+            raise RuntimeError("Blog not found; verify SHOPIFY_BLOG_ID and token permissions.")
+        conn = blog["articles"]
+        for article in conn["nodes"]:
+            found[article["handle"]] = article
+        if not conn["pageInfo"]["hasNextPage"]:
+            return found
+        after = conn["pageInfo"]["endCursor"]
+
+
+def publish_existing(article):
+    mutation = """mutation PublishExistingArticle($article: ArticleUpdateInput!) {
+      articleUpdate(article: $article) {
+        article { id title handle isPublished }
+        userErrors { field message }
+      }
+    }"""
+    result = graphql(mutation, {"article": {"id": article["id"], "isPublished": True}}).get("articleUpdate") or {}
+    if result.get("userErrors"):
+        raise RuntimeError("Shopify rejected article publishing: " + json.dumps(result["userErrors"]))
+    published = result.get("article")
+    if not published or not published.get("isPublished"):
+        raise RuntimeError("Shopify did not confirm that the existing article is published.")
+    return published
+
+
+def create_published(blog_id, recipe):
+    mutation = """mutation CreatePublishedArticle($article: ArticleCreateInput!) {
+      articleCreate(article: $article) {
+        article { id title handle isPublished }
+        userErrors { field message }
+      }
+    }"""
+    article = {
+        "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
+        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe),
+        "summary": recipe["description"], "tags": recipe.get("tags", []), "isPublished": True,
+    }
+    if recipe.get("image_url"):
+        article["image"] = {"url": recipe["image_url"], "altText": recipe.get("image_alt", recipe["title"])}
+    result = graphql(mutation, {"article": article}).get("articleCreate") or {}
+    if result.get("userErrors"):
+        raise RuntimeError("Shopify rejected recipe publishing: " + json.dumps(result["userErrors"]))
+    published = result.get("article")
+    if not published or not published.get("isPublished"):
+        raise RuntimeError("Shopify did not confirm that the new article is published.")
+    return published
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+    now = datetime.datetime.now(CAIRO)
+    # The two cron entries cover Cairo's seasonal UTC offsets. Manual runs bypass this time guard.
+    if not args.dry_run and os.environ.get("GITHUB_EVENT_NAME") == "schedule" and now.hour != 10:
+        print(f"Skipping duplicate/out-of-window schedule: Cairo local time is {now:%Y-%m-%d %H:%M}.")
+        return
+    recipes = load_recipes()
+    day_number = (now.date() - datetime.date(2025, 1, 1)).days
+    recipe = recipes[day_number % len(recipes)]
+    print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
+    if args.dry_run:
+        print("Dry run only; no Shopify request made.")
+        return
+    blog_id = os.environ.get("SHOPIFY_BLOG_ID", "").strip()
+    if not blog_id:
+        raise RuntimeError("Set SHOPIFY_BLOG_ID in GitHub Actions Secrets.")
+    existing = existing_articles(blog_id).get(recipe["slug"])
+    if existing:
+        if existing["isPublished"]:
+            print(f"Already published; no duplicate created: {recipe['title']} ({recipe['slug']}).")
+            return
+        article = publish_existing(existing)
+        print(f"Published existing draft: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+        return
+    article = create_published(blog_id, recipe)
+    print(f"Published recipe: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        sys.exit(1)
