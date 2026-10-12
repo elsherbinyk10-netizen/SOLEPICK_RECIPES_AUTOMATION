@@ -78,6 +78,7 @@ def create_draft(blog_id, r):
       }
     }"""
     article = {"blogId":blog_id,"title":r["title"],"handle":r["slug"],
+               "author":{"name":"SolePick Recipes"},
                "body":article_html(r),"summary":r["description"],
                "tags":r.get("tags",[]),"isPublished":False}
     result = graphql(mutation, {"article":article}).get("articleCreate") or {}

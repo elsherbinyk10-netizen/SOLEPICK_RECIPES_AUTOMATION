@@ -1,0 +1,33 @@
+name: SolePick Daily Recipe Drafts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 7 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: solepick-daily-recipe-drafts
+  cancel-in-progress: false
+
+jobs:
+  create-draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate recipe library
+        run: python -m unittest discover -s tests -v
+      - name: Create Shopify draft recipe
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_ADMIN_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ADMIN_ACCESS_TOKEN }}
+          SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
+        run: python recipe_worker.py
