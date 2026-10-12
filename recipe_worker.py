@@ -184,6 +184,20 @@ def main():
     articles = existing_articles(blog_id)
     start = day_number % len(recipes)
 
+    eligible = [
+        recipe for recipe in recipes
+        if not (articles.get(recipe["slug"]) and articles[recipe["slug"]].get("isPublished"))
+    ]
+    print(f"Recipe library status: {len(eligible)} of {len(recipes)} recipes remain eligible.")
+
+    if len(eligible) <= 3:
+        print("WARNING: Recipe library is nearly exhausted. Add original recipes to recipes.json.")
+
+    if not eligible:
+        raise RuntimeError(
+            "Recipe library exhausted. Add new original recipes to recipes.json."
+        )
+
     # Rotate from today's recipe, skipping already-published recipes.
     for offset in range(len(recipes)):
         recipe = recipes[(start + offset) % len(recipes)]
@@ -203,7 +217,7 @@ def main():
             print(f"Published recipe: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
         return
 
-    print("No unpublished recipes or drafts available. Add new recipes to recipes.json.")
+    raise RuntimeError("No eligible recipe found. Review recipes.json and Shopify article handles.")
 
 
 if __name__ == "__main__":
