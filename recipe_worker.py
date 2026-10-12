@@ -30,14 +30,52 @@ def article_html(r):
             "<p><em>Check labels for allergens and follow safe food-handling practices. "
             "Cooking times vary; verify food is safely cooked before serving.</em></p>")
 
+ACCESS_TOKEN = None
+
+def get_access_token(domain):
+    client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
+    client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        raise RuntimeError(
+            "Set SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET in GitHub Actions Secrets."
+        )
+
+    payload = {
+        "grant_type": "client_credentials",
+        "client_id": client_id,
+        "client_secret": client_secret,
+    }
+    req = urllib.request.Request(
+        f"https://{domain}/admin/oauth/access_token",
+        data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode())
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(
+            f"Shopify token exchange failed with HTTP {e.code}; "
+            "check the app installation, credentials, and permissions."
+        ) from None
+
+    token = data.get("access_token")
+    if not token:
+        raise RuntimeError("Shopify returned no access token.")
+    return token
+
 def graphql(query, variables):
+    global ACCESS_TOKEN
     domain = os.environ.get("SHOPIFY_STORE_DOMAIN", "").strip()
-    token = os.environ.get("SHOPIFY_ADMIN_ACCESS_TOKEN", "").strip()
-    if not domain or not token:
-        raise RuntimeError("Set SHOPIFY_STORE_DOMAIN and SHOPIFY_ADMIN_ACCESS_TOKEN as GitHub Actions Secrets.")
+    if not domain:
+        raise RuntimeError("Set SHOPIFY_STORE_DOMAIN in GitHub Actions Secrets.")
     domain = domain.removeprefix("https://").removeprefix("http://").strip("/")
-    if "/" in domain:
-        raise RuntimeError("SHOPIFY_STORE_DOMAIN must be a domain only, without a path.")
+    if "/" in domain or not domain.endswith(".myshopify.com"):
+        raise RuntimeError("SHOPIFY_STORE_DOMAIN must be a *.myshopify.com domain.")
+    if ACCESS_TOKEN is None:
+        ACCESS_TOKEN = get_access_token(domain)
+    token = ACCESS_TOKEN
     req = urllib.request.Request(
         f"https://{domain}/admin/api/{API_VERSION}/graphql.json",
         data=json.dumps({"query":query,"variables":variables}).encode(),
