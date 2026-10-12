@@ -169,24 +169,41 @@ def main():
         return
     recipes = load_recipes()
     day_number = (now.date() - datetime.date(2025, 1, 1)).days
-    recipe = recipes[day_number % len(recipes)]
-    print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
+
+    # Dry-run is deliberately offline: it does not call Shopify.
     if args.dry_run:
+        recipe = recipes[day_number % len(recipes)]
+        print(f"Dry-run selection for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
         print("Dry run only; no Shopify request made.")
         return
+
     blog_id = os.environ.get("SHOPIFY_BLOG_ID", "").strip()
     if not blog_id:
         raise RuntimeError("Set SHOPIFY_BLOG_ID in GitHub Actions Secrets.")
-    existing = existing_articles(blog_id).get(recipe["slug"])
-    if existing:
-        if existing["isPublished"]:
-            print(f"Already published; no duplicate created: {recipe['title']} ({recipe['slug']}).")
-            return
-        article = publish_existing(existing)
-        print(f"Published existing draft: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+
+    articles = existing_articles(blog_id)
+    start = day_number % len(recipes)
+
+    # Rotate from today's recipe, skipping already-published recipes.
+    for offset in range(len(recipes)):
+        recipe = recipes[(start + offset) % len(recipes)]
+        existing = articles.get(recipe["slug"])
+
+        if existing and existing.get("isPublished"):
+            print(f"Skipping already-published recipe: {recipe['title']} ({recipe['slug']}).")
+            continue
+
+        print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
+
+        if existing:
+            article = publish_existing(existing)
+            print(f"Published existing draft: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+        else:
+            article = create_published(blog_id, recipe)
+            print(f"Published recipe: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
         return
-    article = create_published(blog_id, recipe)
-    print(f"Published recipe: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+
+    print("No unpublished recipes or drafts available. Add new recipes to recipes.json.")
 
 
 if __name__ == "__main__":

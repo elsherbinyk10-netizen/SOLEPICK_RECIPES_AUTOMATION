@@ -3,10 +3,30 @@
     "slug": "one-pan-lemon-herb-chicken",
     "title": "One-Pan Lemon Herb Chicken",
     "description": "A simple weeknight chicken dinner with lemon, garlic, and herbs.",
-    "tags": ["dinner", "chicken", "one-pan"],
-    "ingredients": ["4 boneless chicken thighs", "1 tablespoon olive oil", "1 lemon, juiced", "2 garlic cloves, minced", "1 teaspoon dried oregano", "Salt and black pepper, to taste", "1 cup chopped vegetables of choice"],
-    "instructions": ["Heat oven to 200°C (400°F).", "Mix olive oil, lemon juice, garlic, oregano, salt, and pepper.", "Place chicken and vegetables in a baking dish and coat with the mixture.", "Bake until the thickest part of each chicken piece reaches 74°C (165°F), checking with a food thermometer.", "Rest briefly and serve hot."],
-    "prep_minutes": 10, "cook_minutes": 25, "servings": 4,
+    "tags": [
+      "dinner",
+      "chicken",
+      "one-pan"
+    ],
+    "ingredients": [
+      "4 boneless chicken thighs",
+      "1 tablespoon olive oil",
+      "1 lemon, juiced",
+      "2 garlic cloves, minced",
+      "1 teaspoon dried oregano",
+      "Salt and black pepper, to taste",
+      "1 cup chopped vegetables of choice"
+    ],
+    "instructions": [
+      "Heat oven to 200°C (400°F).",
+      "Mix olive oil, lemon juice, garlic, oregano, salt, and pepper.",
+      "Place chicken and vegetables in a baking dish and coat with the mixture.",
+      "Bake until the thickest part of each chicken piece reaches 74°C (165°F), checking with a food thermometer.",
+      "Rest briefly and serve hot."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
     "image_alt": "Roasted lemon herb chicken with golden vegetables"
   },
@@ -14,10 +34,30 @@
     "slug": "creamy-tomato-spinach-pasta",
     "title": "Creamy Tomato Spinach Pasta",
     "description": "Comforting pasta with tomato, spinach, and a creamy sauce.",
-    "tags": ["dinner", "pasta", "vegetarian"],
-    "ingredients": ["300 g pasta", "1 tablespoon olive oil", "2 garlic cloves, minced", "1 cup crushed tomatoes", "2 cups fresh spinach", "1/3 cup cooking cream or unsweetened plant-based alternative", "Salt and black pepper, to taste"],
-    "instructions": ["Cook pasta according to package directions; reserve a little pasta water.", "Warm olive oil in a pan and cook garlic briefly without browning.", "Add crushed tomatoes and simmer for 8–10 minutes.", "Stir in spinach until wilted, then add cream.", "Toss with pasta, loosen with pasta water if needed, season, and serve."],
-    "prep_minutes": 10, "cook_minutes": 20, "servings": 3,
+    "tags": [
+      "dinner",
+      "pasta",
+      "vegetarian"
+    ],
+    "ingredients": [
+      "300 g pasta",
+      "1 tablespoon olive oil",
+      "2 garlic cloves, minced",
+      "1 cup crushed tomatoes",
+      "2 cups fresh spinach",
+      "1/3 cup cooking cream or unsweetened plant-based alternative",
+      "Salt and black pepper, to taste"
+    ],
+    "instructions": [
+      "Cook pasta according to package directions; reserve a little pasta water.",
+      "Warm olive oil in a pan and cook garlic briefly without browning.",
+      "Add crushed tomatoes and simmer for 8–10 minutes.",
+      "Stir in spinach until wilted, then add cream.",
+      "Toss with pasta, loosen with pasta water if needed, season, and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "servings": 3,
     "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
     "image_alt": "Pasta with sauce and fresh herbs"
   },
@@ -25,11 +65,297 @@
     "slug": "roasted-chickpea-rainbow-bowls",
     "title": "Roasted Chickpea Rainbow Bowls",
     "description": "A colorful bowl with roasted chickpeas, grains, and fresh vegetables.",
-    "tags": ["lunch", "vegetarian", "meal-prep"],
-    "ingredients": ["1 can chickpeas, drained and rinsed", "1 tablespoon olive oil", "1 teaspoon paprika", "2 cups cooked rice or quinoa", "1 cucumber, chopped", "1 tomato, chopped", "2 cups leafy greens", "Lemon wedges"],
-    "instructions": ["Heat oven to 220°C (425°F).", "Pat chickpeas dry, toss with olive oil and paprika, and spread on a tray.", "Roast for 20–25 minutes, shaking the tray once.", "Divide grains, cucumber, tomato, and greens among bowls.", "Top with roasted chickpeas and serve with lemon."],
-    "prep_minutes": 15, "cook_minutes": 25, "servings": 2,
+    "tags": [
+      "lunch",
+      "vegetarian",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "1 can chickpeas, drained and rinsed",
+      "1 tablespoon olive oil",
+      "1 teaspoon paprika",
+      "2 cups cooked rice or quinoa",
+      "1 cucumber, chopped",
+      "1 tomato, chopped",
+      "2 cups leafy greens",
+      "Lemon wedges"
+    ],
+    "instructions": [
+      "Heat oven to 220°C (425°F).",
+      "Pat chickpeas dry, toss with olive oil and paprika, and spread on a tray.",
+      "Roast for 20–25 minutes, shaking the tray once.",
+      "Divide grains, cucumber, tomato, and greens among bowls.",
+      "Top with roasted chickpeas and serve with lemon."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 2,
     "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
     "image_alt": "Colorful chickpea bowl with fresh vegetables"
+  },
+  {
+    "slug": "honey-garlic-salmon-bowls",
+    "title": "Honey Garlic Salmon Bowls",
+    "description": "Make a balanced dinner with tender honey-garlic salmon, rice, and crisp vegetables.",
+    "tags": [
+      "Dinner",
+      "Quick & Easy",
+      "Seafood",
+      "High Protein"
+    ],
+    "ingredients": [
+      "4 salmon fillets",
+      "2 tablespoons honey",
+      "2 tablespoons soy sauce",
+      "2 garlic cloves, minced",
+      "2 cups cooked rice",
+      "1 cucumber, sliced",
+      "1 tablespoon olive oil",
+      "Salt and black pepper"
+    ],
+    "instructions": [
+      "Mix the honey, soy sauce, garlic, and olive oil.",
+      "Season the salmon and brush with the sauce.",
+      "Bake at 400°F (200°C) for 12–15 minutes, or until cooked through.",
+      "Serve over rice with cucumber and spoon the remaining cooked sauce over the salmon."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288",
+    "image_alt": "Salmon served as a colorful dinner bowl"
+  },
+  {
+    "slug": "crispy-black-bean-tacos",
+    "title": "Crispy Black Bean Tacos",
+    "description": "Crisp-edged black bean tacos with warm spices and fresh toppings for an easy meatless meal.",
+    "tags": [
+      "Vegetarian",
+      "Quick & Easy",
+      "Lunch",
+      "Budget Friendly"
+    ],
+    "ingredients": [
+      "2 cans black beans, drained and rinsed",
+      "8 small corn tortillas",
+      "1 teaspoon ground cumin",
+      "1 teaspoon smoked paprika",
+      "1 tablespoon olive oil",
+      "1 avocado, sliced",
+      "1 cup shredded lettuce",
+      "Lime wedges and salsa, to serve"
+    ],
+    "instructions": [
+      "Mash half of the black beans with cumin and paprika.",
+      "Stir in the remaining beans.",
+      "Fill tortillas with the bean mixture and fold.",
+      "Cook in a lightly oiled skillet for 2–3 minutes per side until crisp.",
+      "Serve with avocado, lettuce, salsa, and lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b",
+    "image_alt": "Tacos ready to serve with fresh toppings"
+  },
+  {
+    "slug": "mediterranean-chickpea-salad",
+    "title": "Mediterranean Chickpea Salad",
+    "description": "A refreshing chickpea salad with cucumber, tomato, herbs, and a bright lemon dressing.",
+    "tags": [
+      "Fresh & Green",
+      "Vegetarian",
+      "Lunch",
+      "Meal Prep"
+    ],
+    "ingredients": [
+      "2 cans chickpeas, drained and rinsed",
+      "1 cucumber, diced",
+      "2 cups cherry tomatoes, halved",
+      "1/2 red onion, finely sliced",
+      "1/2 cup crumbled feta",
+      "3 tablespoons olive oil",
+      "2 tablespoons lemon juice",
+      "2 tablespoons chopped parsley",
+      "Salt and black pepper"
+    ],
+    "instructions": [
+      "Combine chickpeas, cucumber, tomatoes, onion, feta, and parsley in a bowl.",
+      "Whisk olive oil with lemon juice, salt, and pepper.",
+      "Pour the dressing over the salad and toss gently.",
+      "Chill for 10 minutes before serving, if time allows."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 0,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+    "image_alt": "Fresh colorful salad with vegetables and greens"
+  },
+  {
+    "slug": "easy-roasted-vegetable-pasta",
+    "title": "Easy Roasted Vegetable Pasta",
+    "description": "Roasted seasonal vegetables and pasta tossed with olive oil, garlic, and Parmesan.",
+    "tags": [
+      "Dinner",
+      "Vegetarian",
+      "Family Meals",
+      "Comfort Food"
+    ],
+    "ingredients": [
+      "12 ounces pasta",
+      "1 zucchini, chopped",
+      "1 red bell pepper, chopped",
+      "1 red onion, cut into wedges",
+      "2 cups cherry tomatoes",
+      "3 tablespoons olive oil",
+      "2 garlic cloves, minced",
+      "1/3 cup grated Parmesan",
+      "Salt, pepper, and dried oregano"
+    ],
+    "instructions": [
+      "Heat the oven to 425°F (220°C).",
+      "Toss zucchini, pepper, onion, and tomatoes with olive oil, garlic, oregano, salt, and pepper.",
+      "Roast for 20–25 minutes until tender and lightly browned.",
+      "Meanwhile, cook pasta according to its package directions and reserve a little pasta water.",
+      "Toss pasta with the roasted vegetables, Parmesan, and a splash of pasta water."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601",
+    "image_alt": "Pasta tossed with vegetables and herbs"
+  },
+  {
+    "slug": "creamy-lentil-coconut-curry",
+    "title": "Creamy Lentil Coconut Curry",
+    "description": "A warming one-pot red lentil curry simmered with coconut milk, tomatoes, and spices.",
+    "tags": [
+      "Vegan",
+      "Dinner",
+      "Budget Friendly",
+      "Meal Prep"
+    ],
+    "ingredients": [
+      "1 cup dried red lentils, rinsed",
+      "1 onion, diced",
+      "3 garlic cloves, minced",
+      "1 tablespoon grated ginger",
+      "1 tablespoon curry powder",
+      "1 can diced tomatoes",
+      "1 can coconut milk",
+      "2 cups vegetable broth",
+      "2 cups baby spinach",
+      "Salt and black pepper"
+    ],
+    "instructions": [
+      "Cook the onion in a little oil until softened.",
+      "Add garlic, ginger, and curry powder and cook for 1 minute.",
+      "Stir in lentils, tomatoes, coconut milk, and broth.",
+      "Simmer for 20–25 minutes, stirring occasionally, until the lentils are tender.",
+      "Stir in spinach until wilted, then season and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398",
+    "image_alt": "A warm bowl of curry ready to serve"
+  },
+  {
+    "slug": "sheet-pan-chicken-fajitas",
+    "title": "Sheet-Pan Chicken Fajitas",
+    "description": "Colorful peppers and seasoned chicken roast together for an easy weeknight fajita dinner.",
+    "tags": [
+      "Dinner",
+      "Quick & Easy",
+      "High Protein",
+      "Family Meals"
+    ],
+    "ingredients": [
+      "1 1/2 pounds boneless chicken breast, sliced",
+      "3 bell peppers, sliced",
+      "1 red onion, sliced",
+      "2 tablespoons olive oil",
+      "2 teaspoons chili powder",
+      "1 teaspoon ground cumin",
+      "1 teaspoon paprika",
+      "8 small tortillas",
+      "Lime wedges, to serve"
+    ],
+    "instructions": [
+      "Heat the oven to 425°F (220°C).",
+      "Arrange chicken, peppers, and onion on a sheet pan.",
+      "Toss with olive oil, chili powder, cumin, paprika, salt, and pepper.",
+      "Roast for 20–25 minutes, stirring halfway, until the chicken reaches 165°F (74°C) internally.",
+      "Serve in warm tortillas with lime wedges."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1534352956036-cd81e27dd615",
+    "image_alt": "Colorful fajita ingredients prepared for dinner"
+  },
+  {
+    "slug": "banana-oat-breakfast-pancakes",
+    "title": "Banana Oat Breakfast Pancakes",
+    "description": "Simple banana and oat pancakes for a comforting breakfast with everyday ingredients.",
+    "tags": [
+      "Breakfast",
+      "Quick & Easy",
+      "Vegetarian",
+      "Family Meals"
+    ],
+    "ingredients": [
+      "2 ripe bananas",
+      "2 eggs",
+      "1 cup rolled oats",
+      "1/2 teaspoon baking powder",
+      "1/2 teaspoon cinnamon",
+      "1 teaspoon vanilla extract",
+      "A little oil for the pan",
+      "Fresh fruit, to serve"
+    ],
+    "instructions": [
+      "Mash the bananas in a bowl.",
+      "Whisk in eggs, oats, baking powder, cinnamon, and vanilla.",
+      "Let the batter rest for 5 minutes.",
+      "Cook small pancakes in a lightly oiled skillet over medium-low heat for 2–3 minutes per side.",
+      "Serve warm with fresh fruit."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 12,
+    "servings": 2,
+    "image_url": "https://images.unsplash.com/photo-1528207776546-365bb710ee93",
+    "image_alt": "A stack of pancakes served for breakfast"
+  },
+  {
+    "slug": "quick-greek-yogurt-parfaits",
+    "title": "Quick Greek Yogurt Parfaits",
+    "description": "Layer creamy Greek yogurt, crunchy granola, and fresh fruit for a quick breakfast or snack.",
+    "tags": [
+      "Breakfast",
+      "Quick & Easy",
+      "Fresh & Green",
+      "Vegetarian"
+    ],
+    "ingredients": [
+      "2 cups plain Greek yogurt",
+      "1 cup granola",
+      "1 cup strawberries, chopped",
+      "1 cup blueberries",
+      "2 teaspoons honey, optional",
+      "1 tablespoon chia seeds, optional"
+    ],
+    "instructions": [
+      "Spoon a layer of Greek yogurt into four glasses or jars.",
+      "Add granola and a layer of fruit.",
+      "Repeat the layers until the ingredients are used.",
+      "Finish with honey or chia seeds if desired.",
+      "Serve immediately for crunchy granola, or keep the granola separate until serving."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 0,
+    "servings": 4,
+    "image_url": "https://images.unsplash.com/photo-1488477181946-6428a0291777",
+    "image_alt": "Yogurt and fruit layered in a breakfast parfait"
   }
 ]
