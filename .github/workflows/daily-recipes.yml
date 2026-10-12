@@ -1,31 +1,38 @@
-name: SolePick Daily Recipe Drafts
+name: SolePick Daily Recipe Publishing
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "15 7 * * *"
+    # 10:00 AM Egypt time during UTC+3
+    - cron: "0 7 * * *"
+    # 10:00 AM Egypt time during UTC+2
+    - cron: "0 8 * * *"
 
 permissions:
   contents: read
 
 concurrency:
-  group: solepick-daily-recipe-drafts
+  group: solepick-daily-recipe-publishing
   cancel-in-progress: false
 
 jobs:
-  create-draft:
+  publish-recipe:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
       - name: Validate recipe library
         run: python -m unittest discover -s tests -v
-      - name: Create Shopify draft recipe
+
+      - name: Publish daily Shopify recipe
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
