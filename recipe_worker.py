@@ -7,6 +7,8 @@ import os
 import sys
 import urllib.error
 import urllib.request
+import urllib.parse
+import re
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -37,19 +39,101 @@ def esc(value):
     return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
-def article_html(recipe):
+def _youtube_api(endpoint, params):
+    key = os.environ.get("YOUTUBE_API_KEY", "").strip()
+    if not key:
+        raise RuntimeError("Video workflow blocked: add YOUTUBE_API_KEY to GitHub Actions Secrets. No article will be published without a verified recipe video.")
+    params = dict(params, key=key)
+    url = "https://www.googleapis.com/youtube/v3/" + endpoint + "?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(url, headers={"Accept": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=25) as resp:
+            data = json.loads(resp.read().decode())
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(f"YouTube video validation failed with HTTP {error.code}; check YOUTUBE_API_KEY and YouTube Data API quota.") from None
+    return data
+
+
+def _video_title_score(recipe_title, video_title):
+    stop = {"recipe", "easy", "best", "how", "to", "make", "the", "with", "for", "and", "a", "an", "of", "in", "on", "quick", "simple", "delicious"}
+    wanted = {x for x in re.findall(r"[a-z0-9]+", recipe_title.lower()) if x not in stop}
+    found = {x for x in re.findall(r"[a-z0-9]+", video_title.lower()) if x not in stop}
+    return len(wanted & found) / max(1, len(wanted))
+
+
+def find_verified_recipe_video(recipe):
+    search = _youtube_api("search", {
+        "part": "snippet", "type": "video", "maxResults": 8,
+        "q": recipe["title"] + " recipe", "safeSearch": "strict",
+        "videoEmbeddable": "true", "order": "relevance",
+    })
+    candidates = []
+    for item in search.get("items", []):
+        video_id = item.get("id", {}).get("videoId")
+        title = item.get("snippet", {}).get("title", "")
+        if video_id:
+            candidates.append((_video_title_score(recipe["title"], title), video_id, title))
+    candidates.sort(reverse=True)
+    if not candidates or candidates[0][0] < 0.45:
+        raise RuntimeError(f"VIDEO REVIEW REQUIRED: no sufficiently close YouTube match found for '{recipe['title']}'. Article not published.")
+    score, video_id, title = candidates[0]
+    details = _youtube_api("videos", {"part": "status,contentDetails,snippet", "id": video_id}).get("items", [])
+    if not details:
+        raise RuntimeError(f"VIDEO UNAVAILABLE: YouTube no longer returns video {video_id}. Article not published.")
+    status = details[0].get("status", {})
+    if status.get("privacyStatus") != "public" or not status.get("embeddable", False):
+        raise RuntimeError(f"VIDEO UNAVAILABLE: '{title}' is not public and embeddable. Article not published.")
+    return {
+        "id": video_id, "title": title,
+        "url": "https://www.youtube.com/watch?v=" + video_id,
+        "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
+        "match_score": round(score, 2),
+    }
+
+
+def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
+    video_html = ""
+    if video:
+        video_html = (
+            "<h2>Recipe Video</h2>"
+            f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
+            f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;\">"
+            f"<iframe src=\"{esc(video['embed_url'])}\" title=\"{esc(recipe['title'])} recipe video\" "
+            "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
+            "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe></div>"
+        )
     return (
         f"<p>{esc(recipe['description'])}</p>"
         f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
+        f"{video_html}"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         "<p><em>Check labels for allergens and follow safe food-handling practices. "
         "Cooking times vary; verify food is safely cooked before serving.</em></p>"
     )
+
+
+def expected_schedule_cron(now=None):
+    now = now or datetime.datetime.now(CAIRO)
+    return "0 7 * * *" if now.utcoffset() == datetime.timedelta(hours=3) else "0 8 * * *"
+
+
+def already_published_today(articles, now=None):
+    now = now or datetime.datetime.now(CAIRO)
+    for article in articles.values():
+        published_at = article.get("publishedAt")
+        if article.get("isPublished") and published_at:
+            try:
+                published_date = datetime.datetime.fromisoformat(published_at.replace("Z", "+00:00")).astimezone(CAIRO).date()
+            except (ValueError, TypeError):
+                continue
+            if published_date == now.date():
+                return article
+    return None
 
 
 def get_access_token(domain):
@@ -101,7 +185,7 @@ def graphql(query, variables):
 def existing_articles(blog_id):
     query = """query ArticleHandles($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
-        nodes { id handle isPublished }
+        nodes { id handle isPublished publishedAt }
         pageInfo { hasNextPage endCursor }
       } }
     }"""
@@ -135,7 +219,7 @@ def publish_existing(article):
     return published
 
 
-def create_published(blog_id, recipe):
+def create_published(blog_id, recipe, video):
     mutation = """mutation CreatePublishedArticle($article: ArticleCreateInput!) {
       articleCreate(article: $article) {
         article { id title handle isPublished }
@@ -144,7 +228,7 @@ def create_published(blog_id, recipe):
     }"""
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
-        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe),
+        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video),
         "summary": recipe["description"], "tags": recipe.get("tags", []), "isPublished": True,
     }
     if recipe.get("image_url"):
@@ -163,10 +247,13 @@ def main():
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     now = datetime.datetime.now(CAIRO)
-    # The two cron entries cover Cairo's seasonal UTC offsets. Manual runs bypass this time guard.
-    if not args.dry_run and os.environ.get("GITHUB_EVENT_NAME") == "schedule" and now.hour != 10:
-        print(f"Skipping duplicate/out-of-window schedule: Cairo local time is {now:%Y-%m-%d %H:%M}.")
-        return
+    # Select the seasonal trigger by its declared cron, not the delayed runner's wall clock.
+    if not args.dry_run and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+        fired_cron = os.environ.get("GITHUB_EVENT_SCHEDULE", "").strip()
+        expected_cron = expected_schedule_cron(now)
+        if fired_cron != expected_cron:
+            print(f"Skipping seasonal trigger {fired_cron!r}; expected {expected_cron!r} for Cairo offset {now.utcoffset()}.")
+            return
     recipes = load_recipes()
     day_number = (now.date() - datetime.date(2025, 1, 1)).days
 
@@ -182,6 +269,10 @@ def main():
         raise RuntimeError("Set SHOPIFY_BLOG_ID in GitHub Actions Secrets.")
 
     articles = existing_articles(blog_id)
+    published_today = already_published_today(articles, now)
+    if published_today:
+        print(f"Daily idempotency guard: already published '{published_today.get('handle')}' on {now.date()} Cairo time; no second recipe will be published.")
+        return
     start = day_number % len(recipes)
 
     eligible = [
@@ -208,13 +299,21 @@ def main():
             continue
 
         print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
-
+        video = find_verified_recipe_video(recipe)
+        print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         if existing:
-            article = publish_existing(existing)
-            print(f"Published existing draft: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+            mutation = """mutation UpdateRecipeArticle($article: ArticleUpdateInput!) {
+              articleUpdate(article: $article) { article { id title handle isPublished } userErrors { field message } }
+            }"""
+            result = graphql(mutation, {"article": {"id": existing["id"], "body": article_html(recipe, video), "isPublished": True}}).get("articleUpdate") or {}
+            if result.get("userErrors"):
+                raise RuntimeError("Shopify rejected recipe/video update: " + json.dumps(result["userErrors"]))
+            article = result.get("article")
+            if not article or not article.get("isPublished"):
+                raise RuntimeError("Shopify did not confirm recipe article publication.")
         else:
-            article = create_published(blog_id, recipe)
-            print(f"Published recipe: {article['title']} | handle={article['handle']} | published={article['isPublished']}")
+            article = create_published(blog_id, recipe, video)
+        print(f"Published recipe with verified video: {article['title']} | handle={article['handle']} | published={article['isPublished']} | video={video['url']}")
         return
 
     raise RuntimeError("No eligible recipe found. Review recipes.json and Shopify article handles.")
