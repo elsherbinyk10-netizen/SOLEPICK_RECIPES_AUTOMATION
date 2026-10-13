@@ -39,57 +39,80 @@ def esc(value):
     return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
-def _youtube_api(endpoint, params):
-    key = os.environ.get("YOUTUBE_API_KEY", "").strip()
-    if not key:
-        raise RuntimeError("Video workflow blocked: add YOUTUBE_API_KEY to GitHub Actions Secrets. No article will be published without a verified recipe video.")
-    params = dict(params, key=key)
-    url = "https://www.googleapis.com/youtube/v3/" + endpoint + "?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(url, headers={"Accept": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=25) as resp:
-            data = json.loads(resp.read().decode())
-    except urllib.error.HTTPError as error:
-        raise RuntimeError(f"YouTube video validation failed with HTTP {error.code}; check YOUTUBE_API_KEY and YouTube Data API quota.") from None
-    return data
-
-
-def _video_title_score(recipe_title, video_title):
-    stop = {"recipe", "easy", "best", "how", "to", "make", "the", "with", "for", "and", "a", "an", "of", "in", "on", "quick", "simple", "delicious"}
-    wanted = {x for x in re.findall(r"[a-z0-9]+", recipe_title.lower()) if x not in stop}
-    found = {x for x in re.findall(r"[a-z0-9]+", video_title.lower()) if x not in stop}
-    return len(wanted & found) / max(1, len(wanted))
-
-
 def find_verified_recipe_video(recipe):
-    search = _youtube_api("search", {
-        "part": "snippet", "type": "video", "maxResults": 8,
-        "q": recipe["title"] + " recipe", "safeSearch": "strict",
-        "videoEmbeddable": "true", "order": "relevance",
-    })
-    candidates = []
-    for item in search.get("items", []):
-        video_id = item.get("id", {}).get("videoId")
-        title = item.get("snippet", {}).get("title", "")
-        if video_id:
-            candidates.append((_video_title_score(recipe["title"], title), video_id, title))
-    candidates.sort(reverse=True)
-    if not candidates or candidates[0][0] < 0.45:
-        raise RuntimeError(f"VIDEO REVIEW REQUIRED: no sufficiently close YouTube match found for '{recipe['title']}'. Article not published.")
-    score, video_id, title = candidates[0]
-    details = _youtube_api("videos", {"part": "status,contentDetails,snippet", "id": video_id}).get("items", [])
-    if not details:
-        raise RuntimeError(f"VIDEO UNAVAILABLE: YouTube no longer returns video {video_id}. Article not published.")
-    status = details[0].get("status", {})
-    if status.get("privacyStatus") != "public" or not status.get("embeddable", False):
-        raise RuntimeError(f"VIDEO UNAVAILABLE: '{title}' is not public and embeddable. Article not published.")
-    return {
-        "id": video_id, "title": title,
-        "url": "https://www.youtube.com/watch?v=" + video_id,
-        "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
-        "match_score": round(score, 2),
-    }
+    """Find a close recipe video without a YouTube Data API key.
 
+    yt-dlp searches YouTube's public search results; YouTube's oEmbed endpoint
+    is then used as a no-key check that the selected video is publicly
+    accessible and permits embedding. If a candidate cannot be verified, try
+    the next candidate rather than publishing an unverified iframe.
+    """
+    try:
+        import yt_dlp
+    except ImportError:
+        raise RuntimeError("Video search dependency missing: install yt-dlp in the workflow.") from None
+
+    search_options = {
+        "quiet": True,
+        "no_warnings": True,
+        "skip_download": True,
+        "extract_flat": True,
+        "socket_timeout": 20,
+        "playlistend": 8,
+    }
+    query = recipe["title"] + " recipe"
+    try:
+        with yt_dlp.YoutubeDL(search_options) as ydl:
+            search = ydl.extract_info("ytsearch8:" + query, download=False) or {}
+    except Exception as error:
+        raise RuntimeError(
+            "No-API YouTube search failed. YouTube may be temporarily limiting automated search; "
+            "retry later or add a manually reviewed video URL to this recipe. "
+            f"Details: {type(error).__name__}"
+        ) from None
+
+    candidates = []
+    for item in search.get("entries") or []:
+        if not item:
+            continue
+        video_id = item.get("id")
+        title = item.get("title") or ""
+        if not video_id or not title:
+            continue
+        score = _video_title_score(recipe["title"], title)
+        if score >= 0.45:
+            candidates.append((score, video_id, title))
+    candidates.sort(reverse=True)
+
+    for score, video_id, title in candidates:
+        video_url = "https://www.youtube.com/watch?v=" + video_id
+        oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
+            "url": video_url, "format": "json"
+        })
+        request = urllib.request.Request(
+            oembed_url,
+            headers={"Accept": "application/json", "User-Agent": "SolePickRecipePublisher/1.0"}
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=15) as response:
+                metadata = json.loads(response.read().decode("utf-8"))
+            # oEmbed returns metadata only for videos YouTube allows to be embedded.
+            verified_title = metadata.get("title") or title
+            return {
+                "id": video_id,
+                "title": verified_title,
+                "url": video_url,
+                "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
+                "match_score": round(score, 2),
+            }
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError):
+            # Private, removed, or non-embeddable videos are rejected; try the next match.
+            continue
+
+    raise RuntimeError(
+        f"VIDEO REVIEW REQUIRED: no close, publicly embeddable YouTube match could be verified "
+        f"without an API key for '{recipe['title']}'. Article not published."
+    )
 
 def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
