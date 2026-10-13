@@ -9,7 +9,7 @@ on:
         description: "Optional: repair video on an existing published article (example: cajun-shrimp-tacos-zesty-lime-slaw)"
         required: false
         type: string
-        default: "cajun-shrimp-tacos-zesty-lime-slaw"
+        default: ""
   schedule:
     # 10:00 AM Egypt time during UTC+3
     - cron: "0 7 * * *"
