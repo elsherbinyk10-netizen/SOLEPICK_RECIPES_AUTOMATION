@@ -282,13 +282,13 @@ def repair_existing_article_video(blog_id, handle, recipes):
     video = find_verified_recipe_video(recipe)
     print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
     updated_body = upsert_recipe_video_section(existing.get("body") or "", recipe, video)
-    mutation = """mutation RepairExistingArticleVideo($article: ArticleUpdateInput!) {
-      articleUpdate(article: $article) {
+    mutation = """mutation RepairExistingArticleVideo($id: ID!, $article: ArticleUpdateInput!) {
+      articleUpdate(id: $id, article: $article) {
         article { id title handle body isPublished }
         userErrors { field message }
       }
     }"""
-    result = graphql(mutation, {"article": {"id": existing["id"], "body": updated_body}}).get("articleUpdate") or {}
+    result = graphql(mutation, {"id": existing["id"], "article": {"body": updated_body}}).get("articleUpdate") or {}
     if result.get("userErrors"):
         raise RuntimeError("Shopify rejected existing article video repair: " + json.dumps(result["userErrors"]))
     updated = result.get("article")
@@ -301,13 +301,13 @@ def repair_existing_article_video(blog_id, handle, recipes):
 
 
 def publish_existing(article):
-    mutation = """mutation PublishExistingArticle($article: ArticleUpdateInput!) {
-      articleUpdate(article: $article) {
+    mutation = """mutation PublishExistingArticle($id: ID!, $article: ArticleUpdateInput!) {
+      articleUpdate(id: $id, article: $article) {
         article { id title handle isPublished }
         userErrors { field message }
       }
     }"""
-    result = graphql(mutation, {"article": {"id": article["id"], "isPublished": True}}).get("articleUpdate") or {}
+    result = graphql(mutation, {"id": article["id"], "article": {"isPublished": True}}).get("articleUpdate") or {}
     if result.get("userErrors"):
         raise RuntimeError("Shopify rejected article publishing: " + json.dumps(result["userErrors"]))
     published = result.get("article")
@@ -404,10 +404,10 @@ def main():
         video = find_verified_recipe_video(recipe)
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         if existing:
-            mutation = """mutation UpdateRecipeArticle($article: ArticleUpdateInput!) {
-              articleUpdate(article: $article) { article { id title handle isPublished } userErrors { field message } }
+            mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
+              articleUpdate(id: $id, article: $article) { article { id title handle isPublished } userErrors { field message } }
             }"""
-            result = graphql(mutation, {"article": {"id": existing["id"], "body": article_html(recipe, video), "isPublished": True}}).get("articleUpdate") or {}
+            result = graphql(mutation, {"id": existing["id"], "article": {"body": article_html(recipe, video), "isPublished": True}}).get("articleUpdate") or {}
             if result.get("userErrors"):
                 raise RuntimeError("Shopify rejected recipe/video update: " + json.dumps(result["userErrors"]))
             article = result.get("article")
