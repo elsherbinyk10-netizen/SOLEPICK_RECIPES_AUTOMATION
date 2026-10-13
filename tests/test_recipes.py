@@ -59,5 +59,31 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn(video["url"], html)
 
 
+    def test_repair_upserts_video_and_preserves_other_article_content(self):
+        original = (
+            "<p>Original recipe introduction.</p>"
+            "<h2>Ingredients</h2><ul><li>shrimp</li></ul>"
+            "<h2>Instructions</h2><ol><li>Cook shrimp.</li></ol>"
+        )
+        recipe = {"title": "Cajun Shrimp Tacos", "description": "Tacos."}
+        first_video = {
+            "title": "Cajun Shrimp Tacos Recipe", "url": "https://www.youtube.com/watch?v=abcdefghijk",
+            "embed_url": "https://www.youtube-nocookie.com/embed/abcdefghijk",
+        }
+        updated = recipe_worker.upsert_recipe_video_section(original, recipe, first_video)
+        self.assertIn("Original recipe introduction.", updated)
+        self.assertIn("<h2>Ingredients</h2>", updated)
+        self.assertIn(first_video["embed_url"], updated)
+        second_video = {
+            "title": "Cajun Shrimp Tacos Cook Along", "url": "https://www.youtube.com/watch?v=lmnopqrstuv",
+            "embed_url": "https://www.youtube-nocookie.com/embed/lmnopqrstuv",
+        }
+        repaired_again = recipe_worker.upsert_recipe_video_section(updated, recipe, second_video)
+        self.assertIn(second_video["embed_url"], repaired_again)
+        self.assertNotIn(first_video["embed_url"], repaired_again)
+        self.assertEqual(repaired_again.count("<h2>Recipe Video</h2>"), 1)
+        self.assertIn("<h2>Instructions</h2>", repaired_again)
+
+
 if __name__ == "__main__":
     unittest.main()
