@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      repair_handle:
+        description: "Optional: repair video on an existing published article (example: cajun-shrimp-tacos-zesty-lime-slaw)"
+        required: false
+        type: string
+        default: ""
   schedule:
     # 10:00 AM Egypt time during UTC+3
     - cron: "0 7 * * *"
@@ -45,4 +51,10 @@ jobs:
           SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
-        run: python recipe_worker.py
+          REPAIR_HANDLE: ${{ inputs.repair_handle }}
+        run: |
+          if [[ -n "$REPAIR_HANDLE" ]]; then
+            python recipe_worker.py --repair-handle "$REPAIR_HANDLE"
+          else
+            python recipe_worker.py
+          fi
