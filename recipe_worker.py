@@ -343,7 +343,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
+    parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
     args = parser.parse_args()
+    if args.one_time_test and args.repair_handle:
+        parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
     # GitHub may delay scheduled workflows well beyond their cron time.
     # Do not reject a scheduled run based on the runner's current clock or seasonal
@@ -369,9 +372,11 @@ def main():
 
     articles = existing_articles(blog_id)
     published_today = already_published_today(articles, now)
-    if published_today:
+    if published_today and not args.one_time_test:
         print(f"Daily idempotency guard: already published '{published_today.get('handle')}' on {now.date()} Cairo time; no second recipe will be published.")
         return
+    if published_today and args.one_time_test:
+        print(f"ONE-TIME TEST MODE: allowing one additional eligible recipe despite today's existing article '{published_today.get('handle')}'. Normal daily guard remains enabled for all other runs.")
     start = day_number % len(recipes)
 
     eligible = [
