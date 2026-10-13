@@ -270,14 +270,14 @@ def get_existing_article_for_repair(blog_id, handle):
 
 
 def repair_existing_article_video(blog_id, handle, recipes):
-    recipe = next((item for item in recipes if item.get("slug") == handle), None)
-    if not recipe:
-        raise RuntimeError(f"No recipe in recipes.json matches repair handle '{handle}'. No Shopify changes made.")
     existing = get_existing_article_for_repair(blog_id, handle)
     if not existing:
         raise RuntimeError(f"No existing Shopify article found for handle '{handle}'. No Shopify changes made.")
     if not existing.get("isPublished"):
         raise RuntimeError(f"Article '{handle}' is not published; refusing to change its publication state.")
+    # The target article may not be part of the rotating recipes.json library.
+    # Use its actual Shopify title for video search and preserve its existing body.
+    recipe = {"title": existing.get("title") or handle}
     print(f"Repairing video only for existing article: {existing.get('title')} | handle={handle}")
     video = find_verified_recipe_video(recipe)
     print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
