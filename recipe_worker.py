@@ -39,6 +39,13 @@ def esc(value):
     return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
+def _video_title_score(recipe_title, video_title):
+    stop = {"recipe", "easy", "best", "how", "to", "make", "the", "with", "for", "and", "a", "an", "of", "in", "on", "quick", "simple", "delicious"}
+    wanted = {x for x in re.findall(r"[a-z0-9]+", recipe_title.lower()) if x not in stop}
+    found = {x for x in re.findall(r"[a-z0-9]+", video_title.lower()) if x not in stop}
+    return len(wanted & found) / max(1, len(wanted))
+
+
 def find_verified_recipe_video(recipe):
     """Find a close recipe video without a YouTube Data API key.
 
