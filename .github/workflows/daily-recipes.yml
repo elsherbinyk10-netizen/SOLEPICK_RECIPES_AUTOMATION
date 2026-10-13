@@ -10,6 +10,11 @@ on:
         required: false
         type: string
         default: ""
+      one_time_test:
+        description: "One-time manual test: publish one eligible new recipe even if today already has a post. Normal daily duplicate protection stays enabled."
+        required: false
+        type: boolean
+        default: false
   schedule:
     # 10:00 AM Egypt time during UTC+3
     - cron: "0 7 * * *"
@@ -52,9 +57,15 @@ jobs:
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
+          ONE_TIME_TEST: ${{ inputs.one_time_test }}
         run: |
-          if [[ -n "$REPAIR_HANDLE" ]]; then
+          if [[ -n "$REPAIR_HANDLE" && "$ONE_TIME_TEST" == "true" ]]; then
+            echo "Choose either repair_handle or one_time_test, not both."
+            exit 2
+          elif [[ -n "$REPAIR_HANDLE" ]]; then
             python recipe_worker.py --repair-handle "$REPAIR_HANDLE"
+          elif [[ "$ONE_TIME_TEST" == "true" ]]; then
+            python recipe_worker.py --one-time-test
           else
             python recipe_worker.py
           fi
