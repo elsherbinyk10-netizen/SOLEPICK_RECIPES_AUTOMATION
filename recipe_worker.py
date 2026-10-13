@@ -345,13 +345,10 @@ def main():
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     args = parser.parse_args()
     now = datetime.datetime.now(CAIRO)
-    # Select the seasonal trigger by its declared cron, not the delayed runner's wall clock.
-    if not args.dry_run and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
-        fired_cron = os.environ.get("GITHUB_EVENT_SCHEDULE", "").strip()
-        expected_cron = expected_schedule_cron(now)
-        if fired_cron != expected_cron:
-            print(f"Skipping seasonal trigger {fired_cron!r}; expected {expected_cron!r} for Cairo offset {now.utcoffset()}.")
-            return
+    # GitHub may delay scheduled workflows well beyond their cron time.
+    # Do not reject a scheduled run based on the runner's current clock or seasonal
+    # offset: the Shopify same-Cairo-day idempotency guard below prevents duplicate
+    # posts when both seasonal cron triggers run. Video verification still gates publish.
     recipes = load_recipes()
     day_number = (now.date() - datetime.date(2025, 1, 1)).days
 
