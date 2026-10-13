@@ -121,19 +121,33 @@ def find_verified_recipe_video(recipe):
         f"without an API key for '{recipe['title']}'. Article not published."
     )
 
+def recipe_video_section_html(recipe, video):
+    return (
+        "<h2>Recipe Video</h2>"
+        f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
+        "<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;\">"
+        f"<iframe src=\"{esc(video['embed_url'])}\" title=\"{esc(recipe['title'])} recipe video\" "
+        "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
+        "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe></div>"
+    )
+
+
+def upsert_recipe_video_section(existing_body, recipe, video):
+    """Insert or replace only the video section, preserving the article's other content."""
+    section = recipe_video_section_html(recipe, video)
+    pattern = r"<h2>Recipe Video</h2>.*?(?=<h2\b|$)"
+    if re.search(pattern, existing_body, flags=re.IGNORECASE | re.DOTALL):
+        return re.sub(pattern, section, existing_body, count=1, flags=re.IGNORECASE | re.DOTALL)
+    match = re.search(r"<h2\b", existing_body, flags=re.IGNORECASE)
+    if match:
+        return existing_body[:match.start()] + section + existing_body[match.start():]
+    return existing_body.rstrip() + "\n" + section
+
+
 def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
-    video_html = ""
-    if video:
-        video_html = (
-            "<h2>Recipe Video</h2>"
-            f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
-            f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;\">"
-            f"<iframe src=\"{esc(video['embed_url'])}\" title=\"{esc(recipe['title'])} recipe video\" "
-            "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
-            "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe></div>"
-        )
+    video_html = recipe_video_section_html(recipe, video) if video else ""
     return (
         f"<p>{esc(recipe['description'])}</p>"
         f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
@@ -233,6 +247,59 @@ def existing_articles(blog_id):
         after = conn["pageInfo"]["endCursor"]
 
 
+def get_existing_article_for_repair(blog_id, handle):
+    query = """query RepairArticleByHandle($id: ID!, $after: String) {
+      blog(id: $id) { articles(first: 100, after: $after) {
+        nodes { id title handle body isPublished }
+        pageInfo { hasNextPage endCursor }
+      } }
+    }"""
+    after = None
+    while True:
+        data = graphql(query, {"id": blog_id, "after": after})
+        blog = data.get("blog")
+        if not blog:
+            raise RuntimeError("Blog not found; verify SHOPIFY_BLOG_ID and token permissions.")
+        conn = blog["articles"]
+        for article in conn["nodes"]:
+            if article.get("handle") == handle:
+                return article
+        if not conn["pageInfo"]["hasNextPage"]:
+            return None
+        after = conn["pageInfo"]["endCursor"]
+
+
+def repair_existing_article_video(blog_id, handle, recipes):
+    recipe = next((item for item in recipes if item.get("slug") == handle), None)
+    if not recipe:
+        raise RuntimeError(f"No recipe in recipes.json matches repair handle '{handle}'. No Shopify changes made.")
+    existing = get_existing_article_for_repair(blog_id, handle)
+    if not existing:
+        raise RuntimeError(f"No existing Shopify article found for handle '{handle}'. No Shopify changes made.")
+    if not existing.get("isPublished"):
+        raise RuntimeError(f"Article '{handle}' is not published; refusing to change its publication state.")
+    print(f"Repairing video only for existing article: {existing.get('title')} | handle={handle}")
+    video = find_verified_recipe_video(recipe)
+    print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
+    updated_body = upsert_recipe_video_section(existing.get("body") or "", recipe, video)
+    mutation = """mutation RepairExistingArticleVideo($article: ArticleUpdateInput!) {
+      articleUpdate(article: $article) {
+        article { id title handle body isPublished }
+        userErrors { field message }
+      }
+    }"""
+    result = graphql(mutation, {"article": {"id": existing["id"], "body": updated_body}}).get("articleUpdate") or {}
+    if result.get("userErrors"):
+        raise RuntimeError("Shopify rejected existing article video repair: " + json.dumps(result["userErrors"]))
+    updated = result.get("article")
+    if not updated or updated.get("handle") != handle or not updated.get("isPublished"):
+        raise RuntimeError("Shopify did not confirm the existing published article was updated.")
+    if video["embed_url"] not in (updated.get("body") or ""):
+        raise RuntimeError("Shopify update response did not contain the verified video embed URL.")
+    print(f"REPAIR VERIFIED: existing article updated without creating a new article | handle={handle} | video={video['url']}")
+    return updated
+
+
 def publish_existing(article):
     mutation = """mutation PublishExistingArticle($article: ArticleUpdateInput!) {
       articleUpdate(article: $article) {
@@ -275,6 +342,7 @@ def create_published(blog_id, recipe, video):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     args = parser.parse_args()
     now = datetime.datetime.now(CAIRO)
     # Select the seasonal trigger by its declared cron, not the delayed runner's wall clock.
@@ -297,6 +365,10 @@ def main():
     blog_id = os.environ.get("SHOPIFY_BLOG_ID", "").strip()
     if not blog_id:
         raise RuntimeError("Set SHOPIFY_BLOG_ID in GitHub Actions Secrets.")
+
+    if args.repair_handle:
+        repair_existing_article_video(blog_id, args.repair_handle.strip(), recipes)
+        return
 
     articles = existing_articles(blog_id)
     published_today = already_published_today(articles, now)
