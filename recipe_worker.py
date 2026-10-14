@@ -46,8 +46,34 @@ def _video_title_score(recipe_title, video_title):
     return len(wanted & found) / max(1, len(wanted))
 
 
+def _video_title_is_compatible(recipe, video_title):
+    """Reject videos with a different main protein or dish format before scoring similarity."""
+    wanted_text = str(recipe.get("title", "")).lower()
+    found_text = str(video_title or "").lower()
+
+    protein_groups = [
+        {"chicken"}, {"salmon"}, {"shrimp", "prawn", "prawns"}, {"tuna"},
+        {"beef"}, {"pork"}, {"turkey"}, {"tofu"}, {"tempeh"},
+        {"chickpea", "chickpeas"}, {"lentil", "lentils"}, {"egg", "eggs"}
+    ]
+    wanted_proteins = [group for group in protein_groups if any(term in wanted_text for term in group)]
+    found_proteins = [group for group in protein_groups if any(term in found_text for term in group)]
+    if wanted_proteins and not any(group in found_proteins for group in wanted_proteins):
+        return False
+    dish_formats = [
+        {"salad"}, {"pasta"}, {"taco", "tacos"}, {"noodle", "noodles"},
+        {"soup"}, {"curry"}, {"pizza"}, {"pancake", "pancakes"},
+        {"parfait", "parfaits"}, {"bowl", "bowls"}, {"fajita", "fajitas"},
+        {"frittata"}, {"sandwich", "sandwiches"}, {"stir-fry", "stir fry"}
+    ]
+    wanted_formats = [group for group in dish_formats if any(term in wanted_text for term in group)]
+    if wanted_formats and not any(any(term in found_text for term in group) for group in wanted_formats):
+        return False
+    return True
+
+
 def find_verified_recipe_video(recipe):
-    """Find a close recipe video without a YouTube Data API key.
+    """Find a relevant, publicly embeddable recipe video without a YouTube Data API key.
 
     yt-dlp searches YouTube's public search results; YouTube's oEmbed endpoint
     is then used as a no-key check that the selected video is publicly
@@ -85,6 +111,9 @@ def find_verified_recipe_video(recipe):
         video_id = item.get("id")
         title = item.get("title") or ""
         if not video_id or not title:
+            continue
+        if not _video_title_is_compatible(recipe, title):
+            print(f"Rejecting incompatible video title for '{recipe['title']}': {title}")
             continue
         score = _video_title_score(recipe["title"], title)
         if score >= 0.45:
