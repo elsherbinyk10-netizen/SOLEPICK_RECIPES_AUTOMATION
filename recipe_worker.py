@@ -176,69 +176,71 @@ def upsert_recipe_video_section(existing_body, recipe, video):
 
 
 def generate_recipe_image(recipe):
-    """Generate a recipe-matched featured photo, upload it to Shopify, and verify it is ready."""
-    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("OPENAI_API_KEY is missing from GitHub Actions Secrets. Refusing to publish a recipe without its own verified featured image.")
-    ingredients = recipe.get("ingredients", [])
-    prompt = (
-        "Photorealistic professional food photography for a premium recipe website. The exact finished dish is: "
-        + recipe["title"] + ". Description: " + recipe.get("description", "") + ". Ingredients: "
-        + ", ".join(ingredients[:12]) + ". Show the actual named recipe prepared realistically from these ingredients; "
-        "do not substitute a different protein, dish, or cuisine. Appetizing natural light, realistic food texture, "
-        "clean tasteful table setting, 45-degree angle, landscape composition, dish clearly centered. "
-        "No text, typography, logos, watermark, people, hands, collage, or split panels."
+    """Use the recipe's preconfigured public photo URL and upload it to Shopify; no image-generation API is needed."""
+    source_url = (recipe.get("image_url") or "").strip()
+    if not source_url.startswith(("https://", "http://")):
+        raise RuntimeError(
+            "Recipe has no configured image_url. Add a reviewed food-photo URL and image_alt to recipes.json."
+        )
+    alt_text = (recipe.get("image_alt") or ("Finished " + recipe["title"] + " served and ready to eat")).strip()
+    request = urllib.request.Request(
+        source_url,
+        headers={"User-Agent": "SolePickRecipePublisher/1.0", "Accept": "image/avif,image/webp,image/jpeg,image/png,*/*"}
     )
-    body = {"model": os.environ.get("OPENAI_IMAGE_MODEL", "gpt-image-1.5"), "prompt": prompt, "size": "1536x1024", "quality": "medium", "output_format": "jpeg", "output_compression": 85, "n": 1}
-    req = urllib.request.Request("https://api.openai.com/v1/images/generations", data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "Authorization": "Bearer " + api_key}, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=240) as response:
-            payload = json.loads(response.read().decode())
-        encoded = payload.get("data", [{}])[0].get("b64_json")
-        if not encoded:
-            raise RuntimeError("Image API returned no image data.")
-        image_bytes = base64.b64decode(encoded)
+        with urllib.request.urlopen(request, timeout=45) as response:
+            content_type = (response.headers.get("Content-Type") or "").split(";")[0].lower()
+            image_bytes = response.read(15 * 1024 * 1024 + 1)
+        if len(image_bytes) > 15 * 1024 * 1024:
+            raise RuntimeError("Configured recipe photo is larger than 15 MB.")
+        if not content_type.startswith("image/") or not image_bytes:
+            raise RuntimeError("Configured recipe image URL did not return image data.")
     except urllib.error.HTTPError as error:
-        detail = error.read().decode("utf-8", errors="replace")[:400]
-        raise RuntimeError(f"Recipe image generation failed (HTTP {error.code}): {detail}") from None
-    except (urllib.error.URLError, TimeoutError, ValueError, IndexError) as error:
-        raise RuntimeError(f"Recipe image generation failed: {type(error).__name__}") from None
-    filename = re.sub(r"[^a-z0-9-]+", "-", recipe["slug"].lower()).strip("-") + "-featured.jpg"
-    alt_text = "Finished " + recipe["title"] + " served and ready to eat"
+        raise RuntimeError(f"Configured recipe image could not be downloaded (HTTP {error.code}).") from None
+    except (urllib.error.URLError, TimeoutError, ValueError) as error:
+        raise RuntimeError(f"Configured recipe image could not be downloaded: {type(error).__name__}.") from None
+
+    extension = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif"}.get(content_type, "jpg")
+    filename = re.sub(r"[^a-z0-9-]+", "-", recipe["slug"].lower()).strip("-") + "-featured." + extension
     stage_mutation = """mutation StageRecipeImage($input: [StagedUploadInput!]!) { stagedUploadsCreate(input: $input) { stagedTargets { url resourceUrl parameters { name value } } userErrors { field message } } }"""
-    staged = graphql(stage_mutation, {"input": [{"filename": filename, "mimeType": "image/jpeg", "resource": "IMAGE", "httpMethod": "PUT", "fileSize": str(len(image_bytes))}]}).get("stagedUploadsCreate") or {}
+    staged = graphql(stage_mutation, {"input": [{"filename": filename, "mimeType": content_type, "resource": "IMAGE", "httpMethod": "PUT", "fileSize": str(len(image_bytes))}]}).get("stagedUploadsCreate") or {}
     if staged.get("userErrors"):
-        raise RuntimeError("Shopify could not stage generated image: " + json.dumps(staged["userErrors"]))
+        raise RuntimeError("Shopify could not stage recipe image: " + json.dumps(staged["userErrors"]))
     targets = staged.get("stagedTargets") or []
     if not targets:
-        raise RuntimeError("Shopify returned no upload target for generated image.")
+        raise RuntimeError("Shopify returned no upload target for recipe image.")
     target = targets[0]
-    upload = urllib.request.Request(target["url"], data=image_bytes, headers={"Content-Type": "image/jpeg"}, method="PUT")
+    upload_headers = {"Content-Type": content_type}
+    for parameter in target.get("parameters") or []:
+        if parameter.get("name") and parameter.get("value"):
+            upload_headers[parameter["name"]] = parameter["value"]
+    upload = urllib.request.Request(target["url"], data=image_bytes, headers=upload_headers, method="PUT")
     try:
         with urllib.request.urlopen(upload, timeout=90) as response:
             if response.status not in (200, 201, 204):
                 raise RuntimeError(f"Shopify image upload returned HTTP {response.status}.")
     except urllib.error.HTTPError as error:
-        raise RuntimeError(f"Uploading generated image to Shopify failed (HTTP {error.code}).") from None
+        raise RuntimeError(f"Uploading recipe image to Shopify failed (HTTP {error.code}).") from None
     file_mutation = """mutation CreateRecipeImageFile($files: [FileCreateInput!]!) { fileCreate(files: $files) { files { id fileStatus ... on MediaImage { image { url altText } } } userErrors { field message } } }"""
     created = graphql(file_mutation, {"files": [{"originalSource": target["resourceUrl"], "contentType": "IMAGE", "filename": filename, "alt": alt_text}]}).get("fileCreate") or {}
     if created.get("userErrors"):
-        raise RuntimeError("Shopify rejected generated image: " + json.dumps(created["userErrors"]))
+        raise RuntimeError("Shopify rejected recipe image: " + json.dumps(created["userErrors"]))
     files = created.get("files") or []
     if not files or not files[0].get("id"):
-        raise RuntimeError("Shopify did not return a generated image file ID.")
+        raise RuntimeError("Shopify did not return a recipe image file ID.")
     file_id = files[0]["id"]
     status_query = """query RecipeImageStatus($id: ID!) { node(id: $id) { ... on MediaImage { id fileStatus image { url altText } } } }"""
     for _ in range(30):
         node = graphql(status_query, {"id": file_id}).get("node") or {}
         image = node.get("image") or {}
         if node.get("fileStatus") == "READY" and image.get("url"):
-            print("RECIPE IMAGE VERIFIED: Shopify-hosted image ready for " + recipe["title"])
+            print("RECIPE IMAGE VERIFIED: Shopify-hosted configured photo ready for " + recipe["title"])
             return {"url": image["url"], "altText": alt_text}
         if node.get("fileStatus") == "FAILED":
-            raise RuntimeError("Shopify failed to process generated image for " + recipe["title"])
+            raise RuntimeError("Shopify failed to process recipe image for " + recipe["title"])
         time.sleep(2)
     raise RuntimeError("Shopify image processing timed out; article was not published.")
+
 
 def featured_image_for(recipe, generated_image):
     """Only accept a newly generated and Shopify-verified recipe image."""
@@ -504,7 +506,11 @@ def main():
             continue
 
         print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
-        video = find_verified_recipe_video(recipe)
+        try:
+            video = find_verified_recipe_video(recipe)
+        except RuntimeError as error:
+            print(f"SKIPPING recipe without a verified matching video: {recipe['title']}. {error}")
+            continue
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         generated_image = generate_recipe_image(recipe)
         print(f"Generated and verified Shopify-hosted featured image for: {recipe['title']}")
