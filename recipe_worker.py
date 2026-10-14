@@ -193,7 +193,7 @@ def featured_image_for(recipe, generated_image):
     url = (image.get("url") or recipe.get("image_url") or "").strip()
     if not url.startswith(("https://", "http://")):
         raise RuntimeError("No configured public featured image URL for " + recipe["title"])
-    return {"src": url, "altText": image.get("altText") or recipe.get("image_alt") or ("Finished " + recipe["title"])}
+    return {"url": url, "altText": image.get("altText") or recipe.get("image_alt") or ("Finished " + recipe["title"])}
 
 def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
