@@ -144,6 +144,21 @@ def upsert_recipe_video_section(existing_body, recipe, video):
     return existing_body.rstrip() + "\n" + section
 
 
+def featured_image_for(recipe, video):
+    """Use a recipe-specific curated image when available; otherwise use the verified recipe video's thumbnail."""
+    if recipe.get("image_url"):
+        return {
+            "url": recipe["image_url"],
+            "altText": recipe.get("image_alt") or f"Finished {recipe['title']} recipe",
+        }
+    if video and video.get("id"):
+        return {
+            "url": f"https://img.youtube.com/vi/{video['id']}/hqdefault.jpg",
+            "altText": f"Thumbnail for the verified recipe video: {recipe['title']}",
+        }
+    raise RuntimeError(f"No featured image or verified video thumbnail available for '{recipe['title']}'.")
+
+
 def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
@@ -327,9 +342,8 @@ def create_published(blog_id, recipe, video):
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
         "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video),
         "summary": recipe["description"], "tags": recipe.get("tags", []), "isPublished": True,
+        "image": featured_image_for(recipe, video),
     }
-    if recipe.get("image_url"):
-        article["image"] = {"url": recipe["image_url"], "altText": recipe.get("image_alt", recipe["title"])}
     result = graphql(mutation, {"article": article}).get("articleCreate") or {}
     if result.get("userErrors"):
         raise RuntimeError("Shopify rejected recipe publishing: " + json.dumps(result["userErrors"]))
@@ -409,7 +423,11 @@ def main():
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
               articleUpdate(id: $id, article: $article) { article { id title handle isPublished } userErrors { field message } }
             }"""
-            result = graphql(mutation, {"id": existing["id"], "article": {"body": article_html(recipe, video), "isPublished": True}}).get("articleUpdate") or {}
+            result = graphql(mutation, {"id": existing["id"], "article": {
+                "body": article_html(recipe, video),
+                "image": featured_image_for(recipe, video),
+                "isPublished": True,
+            }}).get("articleUpdate") or {}
             if result.get("userErrors"):
                 raise RuntimeError("Shopify rejected recipe/video update: " + json.dumps(result["userErrors"]))
             article = result.get("article")
