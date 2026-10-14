@@ -514,7 +514,7 @@ def main():
             }"""
             result = graphql(mutation, {"id": existing["id"], "article": {
                 "body": article_html(recipe, video),
-                "image": featured_image_for(recipe, video),
+                "image": featured_image_for(recipe, generated_image),
                 "isPublished": True,
             }}).get("articleUpdate") or {}
             if result.get("userErrors"):
