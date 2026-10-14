@@ -70,11 +70,18 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(image["url"], generated_image["url"])
         self.assertEqual(image["altText"], generated_image["altText"])
 
-    def test_featured_image_fails_without_verified_generated_image(self):
+    def test_featured_image_falls_back_to_recipe_public_url_without_api(self):
+        recipe = {
+            "title": "Sample Dish",
+            "image_url": "https://images.example.com/sample-dish.jpg",
+            "image_alt": "Sample dish on a plate",
+        }
+        self.assertEqual(
+            recipe_worker.featured_image_for(recipe, None),
+            {"url": recipe["image_url"], "altText": recipe["image_alt"]},
+        )
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
-        with self.assertRaises(RuntimeError):
-            recipe_worker.featured_image_for({"title": "Sample Dish"}, {})
 
     def test_recipe_video_is_embedded_in_article_html(self):
         recipe = {
