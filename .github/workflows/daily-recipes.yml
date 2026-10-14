@@ -59,6 +59,14 @@ jobs:
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
           ONE_TIME_TEST: ${{ inputs.one_time_test }}
         run: |
+          # Both UTC cron entries cover Egypt seasonal time changes; publish only on the matching one.
+          if [[ -n "$GITHUB_EVENT_SCHEDULE" ]]; then
+            expected_cron="$(python -c 'from datetime import datetime; from zoneinfo import ZoneInfo; offset=datetime.now(ZoneInfo("Africa/Cairo")).utcoffset().total_seconds(); print("0 7 * * *" if offset == 10800 else "0 8 * * *")')"
+            if [[ "$GITHUB_EVENT_SCHEDULE" != "$expected_cron" ]]; then
+              echo "Skipping duplicate seasonal schedule entry; expected $expected_cron for Africa/Cairo."
+              exit 0
+            fi
+          fi
           if [[ -n "$REPAIR_HANDLE" && "$ONE_TIME_TEST" == "true" ]]; then
             echo "Choose either repair_handle or one_time_test, not both."
             exit 2
