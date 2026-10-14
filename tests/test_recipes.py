@@ -43,6 +43,23 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertLess(recipe_worker._video_title_score("Creamy Tomato Spinach Pasta", "How to make chocolate cake"), 0.45)
         self.assertGreaterEqual(recipe_worker._video_title_score("Honey Garlic Salmon Bowls", "Honey Garlic Salmon Bowl Recipe"), 0.45)
 
+    def test_video_compatibility_rejects_wrong_protein_even_if_keywords_overlap(self):
+        recipe = {"title": "Honey Mustard Salmon Warm Grain Salad"}
+        self.assertFalse(recipe_worker._video_title_is_compatible(
+            recipe, "Honey Mustard Chicken, Avocado and Bacon Salad"
+        ))
+        self.assertTrue(recipe_worker._video_title_is_compatible(
+            recipe, "Kale Salad with Lemon Dijon Vinaigrette, Salmon and Crispy Chickpeas"
+        ))
+
+    def test_video_compatibility_requires_named_dish_format(self):
+        self.assertFalse(recipe_worker._video_title_is_compatible(
+            {"title": "Creamy Tomato Spinach Pasta"}, "Creamy Tomato Spinach Soup Recipe"
+        ))
+        self.assertTrue(recipe_worker._video_title_is_compatible(
+            {"title": "Creamy Tomato Spinach Pasta"}, "Creamy Tomato Spinach Pasta Recipe"
+        ))
+
     def test_featured_image_uses_curated_photo_when_available(self):
         recipe = {
             "title": "Sample Salmon Pasta",
