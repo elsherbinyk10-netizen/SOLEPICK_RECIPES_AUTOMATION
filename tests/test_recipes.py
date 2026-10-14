@@ -60,27 +60,21 @@ class RecipeLibraryTests(unittest.TestCase):
             {"title": "Creamy Tomato Spinach Pasta"}, "Creamy Tomato Spinach Pasta Recipe"
         ))
 
-    def test_featured_image_uses_curated_photo_when_available(self):
-        recipe = {
-            "title": "Sample Salmon Pasta",
-            "image_url": "https://cdn.example.com/salmon-pasta.jpg",
-            "image_alt": "Creamy salmon pasta with parsley",
-        }
-        video = {"id": "abcdefghijk"}
-        image = recipe_worker.featured_image_for(recipe, video)
-        self.assertEqual(image["url"], recipe["image_url"])
-        self.assertEqual(image["altText"], recipe["image_alt"])
-
-    def test_featured_image_falls_back_to_verified_video_thumbnail(self):
+    def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
-        video = {"id": "abcdefghijk"}
-        image = recipe_worker.featured_image_for(recipe, video)
-        self.assertEqual(image["url"], "https://img.youtube.com/vi/abcdefghijk/hqdefault.jpg")
-        self.assertIn("Sample Salmon Pasta", image["altText"])
+        generated_image = {
+            "url": "https://cdn.example.com/generated-salmon-pasta.jpg",
+            "altText": "Creamy salmon pasta with parsley, photographed on a plate",
+        }
+        image = recipe_worker.featured_image_for(recipe, generated_image)
+        self.assertEqual(image["url"], generated_image["url"])
+        self.assertEqual(image["altText"], generated_image["altText"])
 
-    def test_featured_image_fails_if_no_image_or_verified_video(self):
+    def test_featured_image_fails_without_verified_generated_image(self):
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
+        with self.assertRaises(RuntimeError):
+            recipe_worker.featured_image_for({"title": "Sample Dish"}, {})
 
     def test_recipe_video_is_embedded_in_article_html(self):
         recipe = {
