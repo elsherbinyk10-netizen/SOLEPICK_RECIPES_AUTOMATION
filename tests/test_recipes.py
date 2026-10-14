@@ -43,6 +43,28 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertLess(recipe_worker._video_title_score("Creamy Tomato Spinach Pasta", "How to make chocolate cake"), 0.45)
         self.assertGreaterEqual(recipe_worker._video_title_score("Honey Garlic Salmon Bowls", "Honey Garlic Salmon Bowl Recipe"), 0.45)
 
+    def test_featured_image_uses_curated_photo_when_available(self):
+        recipe = {
+            "title": "Sample Salmon Pasta",
+            "image_url": "https://cdn.example.com/salmon-pasta.jpg",
+            "image_alt": "Creamy salmon pasta with parsley",
+        }
+        video = {"id": "abcdefghijk"}
+        image = recipe_worker.featured_image_for(recipe, video)
+        self.assertEqual(image["url"], recipe["image_url"])
+        self.assertEqual(image["altText"], recipe["image_alt"])
+
+    def test_featured_image_falls_back_to_verified_video_thumbnail(self):
+        recipe = {"title": "Sample Salmon Pasta"}
+        video = {"id": "abcdefghijk"}
+        image = recipe_worker.featured_image_for(recipe, video)
+        self.assertEqual(image["url"], "https://img.youtube.com/vi/abcdefghijk/hqdefault.jpg")
+        self.assertIn("Sample Salmon Pasta", image["altText"])
+
+    def test_featured_image_fails_if_no_image_or_verified_video(self):
+        with self.assertRaises(RuntimeError):
+            recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
+
     def test_recipe_video_is_embedded_in_article_html(self):
         recipe = {
             "title": "Sample Pasta", "description": "A simple pasta.", "prep_minutes": 5,
