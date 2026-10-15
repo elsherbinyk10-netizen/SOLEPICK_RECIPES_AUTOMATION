@@ -9,8 +9,8 @@ Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube re
 - GitHub may delay scheduled runs. The daily guard is the final protection against duplicate publications.
 
 ## Recipe video checks
-- Add the repository secret `YOUTUBE_API_KEY` (YouTube Data API v3 enabled). If it is missing or the API fails, publication stops rather than reporting success without a video.
-- For each selected recipe, the worker searches YouTube using the recipe title, checks title overlap, then verifies that the video still exists, is public, and is embeddable.
+- No YouTube API key is required. The worker searches public YouTube results with `yt-dlp`, rejects titles that do not match the recipe's named protein and dish format, and checks each candidate with YouTube oEmbed before accepting an embeddable video. Public search can be rate-limited; when no safe match can be verified, the recipe is skipped and no mismatched video is published.
+- Recipe photos are curated HTTPS URLs in `recipes.json`. Before publication, the worker requests the image and checks that it is reachable and returns an `image/*` content type. This validates availability, not semantic image matching; the photo URL and alt text must still be reviewed when adding recipes. Shopify references the public image URL; the worker does not upload or host the photo on Shopify.
 - If no sufficiently close match exists or the video is unavailable/private/not embeddable, the run fails with a `VIDEO REVIEW REQUIRED` or `VIDEO UNAVAILABLE` message. Review the run logs and select a suitable video rather than forcing a weak match.
 - The selected video URL and responsive embed are added to the Shopify article body. Confirm the embed renders on the public article because Shopify/theme sanitization and third-party playback restrictions can only be fully verified in a browser.
 
@@ -18,7 +18,6 @@ Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube re
 - `SHOPIFY_STORE_DOMAIN`: the store's `*.myshopify.com` domain.
 - `SHOPIFY_CLIENT_ID` and `SHOPIFY_CLIENT_SECRET`: Shopify app credentials with article/blog permissions.
 - `SHOPIFY_BLOG_ID`: the target blog's GraphQL ID.
-- `YOUTUBE_API_KEY`: YouTube Data API v3 key with YouTube Data API enabled.
 
 Never put credentials in repository files.
 
