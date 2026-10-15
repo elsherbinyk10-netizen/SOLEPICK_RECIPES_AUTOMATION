@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       repair_handle:
-        description: "Optional: repair video on an existing published article (example: cajun-shrimp-tacos-zesty-lime-slaw)"
+        description: "Optional: repair video on an existing published article (example: honey-mustard-salmon-stuffed-sweet-potatoes)"
         required: false
         type: string
         default: ""
@@ -61,13 +61,12 @@ jobs:
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
           ONE_TIME_TEST: ${{ inputs.one_time_test }}
         run: |
-          # Both UTC cron entries cover Egypt seasonal time changes; publish only on the matching one.
+          # GitHub may delay scheduled jobs, so do not infer which cron fired from
+          # the runner's current clock. Both seasonal entries target 10:00 Cairo.
+          # The worker's Africa/Cairo publication-date guard is the single source
+          # of truth and prevents duplicate articles if both entries run.
           if [[ -n "$GITHUB_EVENT_SCHEDULE" ]]; then
-            expected_cron="$(python -c 'from datetime import datetime; from zoneinfo import ZoneInfo; offset=datetime.now(ZoneInfo("Africa/Cairo")).utcoffset().total_seconds(); print("0 7 * * *" if offset == 10800 else "0 8 * * *")')"
-            if [[ "$GITHUB_EVENT_SCHEDULE" != "$expected_cron" ]]; then
-              echo "Skipping duplicate seasonal schedule entry; expected $expected_cron for Africa/Cairo."
-              exit 0
-            fi
+            echo "Scheduled trigger: $GITHUB_EVENT_SCHEDULE"
           fi
           if [[ -n "$REPAIR_HANDLE" && "$ONE_TIME_TEST" == "true" ]]; then
             echo "Choose either repair_handle or one_time_test, not both."
