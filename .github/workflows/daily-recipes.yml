@@ -3,6 +3,8 @@ name: SolePick Daily Recipe Publishing
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
     inputs:
       repair_handle:
@@ -49,7 +51,7 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Publish daily Shopify recipe
-        if: github.event_name != 'push'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
