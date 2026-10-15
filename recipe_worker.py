@@ -49,30 +49,96 @@ def _video_title_score(recipe_title, video_title):
 
 
 def _video_title_is_compatible(recipe, video_title):
-    """Reject videos with a different main protein or dish format before scoring similarity."""
+    """Require the same named main protein and every explicit dish-format anchor."""
     wanted_text = str(recipe.get("title", "")).lower()
     found_text = str(video_title or "").lower()
+    wanted_tokens = set(re.findall(r"[a-z0-9]+", wanted_text))
+    found_tokens = set(re.findall(r"[a-z0-9]+", found_text))
 
     protein_groups = [
         {"chicken"}, {"salmon"}, {"shrimp", "prawn", "prawns"}, {"tuna"},
         {"beef"}, {"pork"}, {"turkey"}, {"tofu"}, {"tempeh"},
         {"chickpea", "chickpeas"}, {"lentil", "lentils"}, {"egg", "eggs"}
     ]
-    wanted_proteins = [group for group in protein_groups if any(term in wanted_text for term in group)]
-    found_proteins = [group for group in protein_groups if any(term in found_text for term in group)]
+    wanted_proteins = [group for group in protein_groups if group & wanted_tokens]
+    found_proteins = [group for group in protein_groups if group & found_tokens]
     if wanted_proteins and not any(group in found_proteins for group in wanted_proteins):
         return False
+
+    # Require every named format anchor: salmon salad is not a salmon pasta.
     dish_formats = [
         {"salad"}, {"pasta"}, {"taco", "tacos"}, {"noodle", "noodles"},
         {"soup"}, {"curry"}, {"pizza"}, {"pancake", "pancakes"},
         {"parfait", "parfaits"}, {"bowl", "bowls"}, {"fajita", "fajitas"},
-        {"frittata"}, {"sandwich", "sandwiches"}, {"stir-fry", "stir fry"}
+        {"frittata"}, {"sandwich", "sandwiches"}, {"stir", "fry"},
+        {"stuffed"}, {"sweet", "potato", "potatoes"}, {"rice"},
+        {"wrap", "wraps"}, {"tray"}, {"hash"}, {"grain", "grains"},
+        {"risotto"}, {"dumpling", "dumplings"}, {"skillet"}
     ]
-    wanted_formats = [group for group in dish_formats if any(term in wanted_text for term in group)]
-    if wanted_formats and not any(any(term in found_text for term in group) for group in wanted_formats):
+    wanted_formats = [group for group in dish_formats if group & wanted_tokens]
+    if any(not (group & found_tokens) for group in wanted_formats):
         return False
+
+    # Core starch/vegetable identity must be present in the candidate title.
+    if "sweet" in wanted_tokens and "potato" in wanted_tokens:
+        if not ({"sweet", "potato"} <= found_tokens or {"sweet", "potatoes"} <= found_tokens):
+            return False
+    for term in ("quinoa", "rice"):
+        if term in wanted_tokens and term not in found_tokens:
+            return False
     return True
 
+
+def make_recipe_specific(recipe):
+    """Replace legacy placeholders with concrete ingredient names before publication."""
+    import copy
+    result = copy.deepcopy(recipe)
+    title = str(result.get("title", ""))
+    title_tokens = set(re.findall(r"[a-z]+", title.lower()))
+    main_groups = [
+        ({"chicken"}, "chicken"), ({"salmon"}, "salmon"),
+        ({"shrimp", "prawn", "prawns"}, "shrimp"), ({"tuna"}, "tuna"),
+        ({"beef"}, "beef"), ({"pork"}, "pork"), ({"turkey"}, "turkey"),
+        ({"tofu"}, "tofu"), ({"tempeh"}, "tempeh"),
+        ({"chickpea", "chickpeas"}, "chickpeas"), ({"lentil", "lentils"}, "lentils"),
+        ({"egg", "eggs"}, "eggs"), ({"pasta"}, "pasta"),
+        ({"noodle", "noodles"}, "noodles"), ({"potato", "potatoes"}, "potatoes"),
+        ({"rice"}, "rice"), ({"mushroom", "mushrooms"}, "mushrooms")
+    ]
+    main_food = next((label for tokens, label in main_groups if tokens & title_tokens), None)
+    if not main_food:
+        first = str((result.get("ingredients") or ["the prepared ingredients"])[0])
+        first = re.sub(r"^\s*\d+(?:[./]\d+)?\s*", "", first)
+        first = re.sub(r"\b(cups?|tablespoons?|teaspoons?|tbsp|tsp|grams?|g|kg|ml|litres?|liters?|oz|ounces?|pounds?|lb)\b", "", first, flags=re.I)
+        main_food = re.sub(r"[,;].*$", "", first).strip().lower() or "prepared filling"
+
+    seasoning_terms = []
+    for item in result.get("ingredients", []):
+        clean = str(item).lower()
+        clean = re.sub(r"^\s*\d+(?:[./]\d+)?\s*", "", clean)
+        clean = re.sub(r"\b(cups?|tablespoons?|teaspoons?|tbsp|tsp|grams?|g|kg|ml|litres?|liters?|oz|ounces?|pounds?|lb|cloves?|fresh|dried|chopped|minced|boneless|skinless|medium|large|small)\b", "", clean, flags=re.I)
+        clean = re.sub(r"[^a-z -]", " ", clean)
+        clean = " ".join(clean.split()).strip(" -")
+        if clean and not any(term in clean for term in (main_food, "salt", "black pepper", "to taste")):
+            if any(word in clean for word in ("mustard", "honey", "lemon", "lime", "garlic", "ginger", "oregano", "paprika", "cumin", "curry", "chili", "chilli", "soy sauce", "sesame", "thyme", "rosemary", "basil", "coriander", "parsley")):
+                seasoning_terms.append(clean)
+    seasoning_text = ", ".join(dict.fromkeys(seasoning_terms[:5])) or "the listed seasonings"
+
+    instructions = []
+    for step in result.get("instructions", []):
+        step = re.sub(r"the main ingredient|main ingredient", main_food, str(step), flags=re.I)
+        step = re.sub(r"the listed flavorings|listed flavorings|flavorings", seasoning_text, step, flags=re.I)
+        step = re.sub(r"vegetables of choice", "the vegetables listed in the ingredients", step, flags=re.I)
+        step = re.sub(r"cook until ready", "cook until tender and safely cooked through", step, flags=re.I)
+        instructions.append(step)
+    result["instructions"] = instructions
+
+    placeholders = ("main ingredient", "flavorings", "vegetables of choice", "cook until ready")
+    if any(any(marker in step.lower() for marker in placeholders) for step in instructions):
+        raise ValueError(f"Recipe '{title}' still contains generic instruction placeholders.")
+    if len(instructions) < 4:
+        raise ValueError(f"Recipe '{title}' needs at least four clear, sequential instructions.")
+    return result
 
 def find_verified_recipe_video(recipe):
     """Find a relevant, publicly embeddable recipe video without a YouTube Data API key.
@@ -118,7 +184,7 @@ def find_verified_recipe_video(recipe):
             print(f"Rejecting incompatible video title for '{recipe['title']}': {title}")
             continue
         score = _video_title_score(recipe["title"], title)
-        if score >= 0.45:
+        if score >= 0.60 and _video_title_is_compatible(recipe, title):
             candidates.append((score, video_id, title))
     candidates.sort(reverse=True)
 
@@ -453,6 +519,11 @@ def main():
             continue
 
         print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
+        try:
+            recipe = make_recipe_specific(recipe)
+        except ValueError as error:
+            print(f"SKIPPING recipe with low-quality instructions: {error}")
+            continue
         try:
             video = find_verified_recipe_video(recipe)
         except RuntimeError as error:
