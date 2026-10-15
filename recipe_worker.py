@@ -131,6 +131,23 @@ def make_recipe_specific(recipe):
         step = re.sub(r"vegetables of choice", "the vegetables listed in the ingredients", step, flags=re.I)
         step = re.sub(r"cook until ready", "cook until tender and safely cooked through", step, flags=re.I)
         instructions.append(step)
+    # Replace vague safety wording with a concrete internal-temperature target.
+    protein = next((label for tokens, label in main_groups if tokens & title_tokens), "")
+    safe_temp = None
+    if protein in {"chicken", "turkey"}:
+        safe_temp = "74°C (165°F) at the thickest part"
+    elif protein in {"salmon", "shrimp", "tuna"}:
+        safe_temp = "63°C (145°F) for fish, or until shrimp are opaque and firm"
+    if safe_temp:
+        instructions = [
+            re.sub(
+                r"safely cooked through(?:, where applicable)?",
+                "reaches " + safe_temp,
+                step,
+                flags=re.I
+            )
+            for step in instructions
+        ]
     result["instructions"] = instructions
 
     placeholders = ("main ingredient", "flavorings", "vegetables of choice", "cook until ready")
