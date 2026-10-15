@@ -49,7 +49,7 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe, "Honey Mustard Chicken, Avocado and Bacon Salad"
         ))
         self.assertTrue(recipe_worker._video_title_is_compatible(
-            recipe, "Kale Salad with Lemon Dijon Vinaigrette, Salmon and Crispy Chickpeas"
+            recipe, "Warm Grain Salad with Lemon Dijon Vinaigrette, Salmon and Crispy Chickpeas"
         ))
 
     def test_video_compatibility_requires_named_dish_format(self):
@@ -59,6 +59,40 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertTrue(recipe_worker._video_title_is_compatible(
             {"title": "Creamy Tomato Spinach Pasta"}, "Creamy Tomato Spinach Pasta Recipe"
         ))
+
+
+    def test_video_match_rejects_wrong_starch_and_dish_format(self):
+        recipe = {"title": "Honey Mustard Salmon Stuffed Sweet Potatoes"}
+        self.assertFalse(recipe_worker._video_title_is_compatible(
+            recipe, "Browned Butter Honey Garlic Salmon Recipe"
+        ))
+        self.assertFalse(recipe_worker._video_title_is_compatible(
+            recipe, "Honey Mustard Salmon Pasta"
+        ))
+        self.assertTrue(recipe_worker._video_title_is_compatible(
+            recipe, "Honey Mustard Salmon Stuffed Sweet Potatoes Recipe"
+        ))
+
+    def test_recipe_specificity_replaces_generic_instruction_placeholders(self):
+        recipe = {
+            "title": "Honey Mustard Salmon Stuffed Sweet Potatoes",
+            "ingredients": [
+                "4 salmon fillets", "1 teaspoon Dijon mustard", "1 teaspoon honey",
+                "4 sweet potatoes", "1 avocado", "2 tablespoons yogurt"
+            ],
+            "instructions": [
+                "Bake sweet potatoes until tender.",
+                "Cook the main ingredient in a skillet with flavorings and oil.",
+                "Split sweet potatoes and fluff centers.",
+                "Fill with the cooked mixture and top with avocado and yogurt."
+            ]
+        }
+        improved = recipe_worker.make_recipe_specific(recipe)
+        joined = " ".join(improved["instructions"]).lower()
+        self.assertIn("salmon", joined)
+        self.assertIn("mustard", joined)
+        self.assertNotIn("main ingredient", joined)
+        self.assertNotIn("flavorings", joined)
 
     def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
