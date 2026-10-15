@@ -259,14 +259,32 @@ def upsert_recipe_video_section(existing_body, recipe, video):
 
 
 def generate_recipe_image(recipe):
-    """Use the configured public recipe photo URL directly; no image-generation API or Shopify upload scope is needed."""
+    """Validate a curated public food-photo URL before using it as the article image."""
     source_url = (recipe.get("image_url") or "").strip()
-    if not source_url.startswith(("https://", "http://")):
+    if not source_url.startswith("https://"):
         raise RuntimeError(
-            "Recipe has no configured image_url. Add a reviewed public food-photo URL to recipes.json."
+            "Recipe has no HTTPS image_url. Add a reviewed public food-photo URL to recipes.json."
         )
     alt_text = (recipe.get("image_alt") or ("Finished " + recipe["title"] + " served and ready to eat")).strip()
-    print("RECIPE IMAGE VERIFIED: using configured public photo URL for " + recipe["title"])
+    if len(alt_text) < 12 or len(alt_text) > 250:
+        raise RuntimeError("Recipe image alt text must be descriptive and 12–250 characters.")
+    request = urllib.request.Request(
+        source_url,
+        headers={"Range": "bytes=0-1023", "User-Agent": "SolePickRecipePublisher/1.0"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            content_type = (response.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+            status = getattr(response, "status", 200)
+            if status < 200 or status >= 300:
+                raise RuntimeError("Recipe image URL returned HTTP " + str(status))
+            if not content_type.startswith("image/"):
+                raise RuntimeError("Recipe image URL did not return an image; Content-Type was " + (content_type or "missing"))
+            if not response.read(32):
+                raise RuntimeError("Recipe image URL returned an empty response.")
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as error:
+        raise RuntimeError("Recipe image could not be fetched; check or replace image_url. Details: " + type(error).__name__) from None
+    print("RECIPE IMAGE VERIFIED: reachable HTTPS image for " + recipe["title"] + " (" + content_type + ")")
     return {"url": source_url, "altText": alt_text}
 
 
@@ -547,8 +565,11 @@ def main():
             print(f"SKIPPING recipe without a verified matching video: {recipe['title']}. {error}")
             continue
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
-        generated_image = generate_recipe_image(recipe)
-        print(f"Generated and verified Shopify-hosted featured image for: {recipe['title']}")
+        try:
+            generated_image = generate_recipe_image(recipe)
+        except RuntimeError as error:
+            print(f"SKIPPING recipe with unavailable/invalid image: {recipe['title']}. {error}")
+            continue
         if existing:
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
               articleUpdate(id: $id, article: $article) { article { id title handle isPublished } userErrors { field message } }
