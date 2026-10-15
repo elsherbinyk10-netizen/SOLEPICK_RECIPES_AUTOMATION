@@ -80,7 +80,7 @@ def _video_title_is_compatible(recipe, video_title):
         return False
 
     # Core starch/vegetable identity must be present in the candidate title.
-    if "sweet" in wanted_tokens and "potato" in wanted_tokens:
+    if "sweet" in wanted_tokens and ({"potato", "potatoes"} & wanted_tokens):
         if not ({"sweet", "potato"} <= found_tokens or {"sweet", "potatoes"} <= found_tokens):
             return False
     for term in ("quinoa", "rice"):
