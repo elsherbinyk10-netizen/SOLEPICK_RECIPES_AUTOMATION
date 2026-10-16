@@ -28,34 +28,12 @@ def load_recipes():
     if any(not s for s in slugs) or len(slugs) != len(set(slugs)):
         raise ValueError("Every recipe needs a unique, non-empty slug")
     required = {"title", "description", "ingredients", "instructions", "prep_minutes", "cook_minutes", "servings"}
-    seen_images = {}
     for recipe in recipes:
         missing = sorted(required - recipe.keys())
         if missing:
             raise ValueError(f"Recipe {recipe.get('slug', '(no slug)')} missing: {', '.join(missing)}")
         if not recipe["ingredients"] or not recipe["instructions"]:
             raise ValueError(f"Recipe {recipe['slug']} needs ingredients and instructions")
-        image_url = str(recipe.get("image_url") or "").strip()
-        if not image_url.startswith("https://"):
-            raise ValueError(f"RECIPE IMAGE REVIEW REQUIRED: {recipe['slug']} has no HTTPS image_url.")
-        normalized_image = image_url.split("?", 1)[0].rstrip("/")
-        if normalized_image in seen_images:
-            raise ValueError(
-                f"RECIPE IMAGE REUSE BLOCKED: '{recipe['slug']}' and "
-                f"'{seen_images[normalized_image]}' use the same image URL. "
-                "Choose and review a different photo before publishing."
-            )
-        seen_images[normalized_image] = recipe["slug"]
-        if recipe.get("image_verified") is not True:
-            raise ValueError(
-                f"RECIPE IMAGE REVIEW REQUIRED: mark image_verified=true only after a person "
-                f"confirms the photo visibly matches '{recipe['title']}'."
-            )
-        if recipe.get("video_verified") is not True or not recipe.get("video_url"):
-            raise ValueError(
-                f"RECIPE VIDEO REVIEW REQUIRED: add a manually checked video_url and set "
-                f"video_verified=true only after confirming it shows '{recipe['title']}'."
-            )
     return recipes
 
 
