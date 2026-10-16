@@ -244,6 +244,25 @@ def upsert_recipe_video_section(existing_body, recipe, video):
 
 def generate_recipe_image(recipe):
     """Validate a curated public food-photo URL before using it as the article image."""
+    # Fail closed if another recipe points to the same exact image URL.
+    # This catches accidental cross-recipe reuse even if a review flag is mistakenly set.
+    source_url = (recipe.get("image_url") or "").strip()
+    try:
+        catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError("Could not audit recipe catalogue for duplicate image URLs: " + type(error).__name__) from None
+    duplicates = [
+        item.get("title", item.get("slug", "another recipe"))
+        for item in catalogue
+        if item.get("slug") != recipe.get("slug")
+        and source_url
+        and (item.get("image_url") or "").strip() == source_url
+    ]
+    if duplicates:
+        raise RuntimeError(
+            "DUPLICATE RECIPE IMAGE: '" + recipe["title"] + "' shares its image URL with "
+            + ", ".join(duplicates[:5]) + ". Assign and review a distinct matching photo first."
+        )
     source_url = (recipe.get("image_url") or "").strip()
     if not source_url.startswith("https://"):
         raise RuntimeError(
