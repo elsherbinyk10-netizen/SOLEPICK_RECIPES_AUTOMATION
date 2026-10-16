@@ -28,12 +28,34 @@ def load_recipes():
     if any(not s for s in slugs) or len(slugs) != len(set(slugs)):
         raise ValueError("Every recipe needs a unique, non-empty slug")
     required = {"title", "description", "ingredients", "instructions", "prep_minutes", "cook_minutes", "servings"}
+    seen_images = {}
     for recipe in recipes:
         missing = sorted(required - recipe.keys())
         if missing:
             raise ValueError(f"Recipe {recipe.get('slug', '(no slug)')} missing: {', '.join(missing)}")
         if not recipe["ingredients"] or not recipe["instructions"]:
             raise ValueError(f"Recipe {recipe['slug']} needs ingredients and instructions")
+        image_url = str(recipe.get("image_url") or "").strip()
+        if not image_url.startswith("https://"):
+            raise ValueError(f"RECIPE IMAGE REVIEW REQUIRED: {recipe['slug']} has no HTTPS image_url.")
+        normalized_image = image_url.split("?", 1)[0].rstrip("/")
+        if normalized_image in seen_images:
+            raise ValueError(
+                f"RECIPE IMAGE REUSE BLOCKED: '{recipe['slug']}' and "
+                f"'{seen_images[normalized_image]}' use the same image URL. "
+                "Choose and review a different photo before publishing."
+            )
+        seen_images[normalized_image] = recipe["slug"]
+        if recipe.get("image_verified") is not True:
+            raise ValueError(
+                f"RECIPE IMAGE REVIEW REQUIRED: mark image_verified=true only after a person "
+                f"confirms the photo visibly matches '{recipe['title']}'."
+            )
+        if recipe.get("video_verified") is not True or not recipe.get("video_url"):
+            raise ValueError(
+                f"RECIPE VIDEO REVIEW REQUIRED: add a manually checked video_url and set "
+                f"video_verified=true only after confirming it shows '{recipe['title']}'."
+            )
     return recipes
 
 
@@ -171,82 +193,53 @@ def make_recipe_specific(recipe):
     return result
 
 def find_verified_recipe_video(recipe):
-    """Find a relevant, publicly embeddable recipe video without a YouTube Data API key.
-
-    yt-dlp searches YouTube's public search results; YouTube's oEmbed endpoint
-    is then used as a no-key check that the selected video is publicly
-    accessible and permits embedding. If a candidate cannot be verified, try
-    the next candidate rather than publishing an unverified iframe.
-    """
-    try:
-        import yt_dlp
-    except ImportError:
-        raise RuntimeError("Video search dependency missing: install yt-dlp in the workflow.") from None
-
-    search_options = {
-        "quiet": True,
-        "no_warnings": True,
-        "skip_download": True,
-        "extract_flat": True,
-        "socket_timeout": 20,
-        "playlistend": 8,
-    }
-    query = recipe["title"] + " recipe"
-    try:
-        with yt_dlp.YoutubeDL(search_options) as ydl:
-            search = ydl.extract_info("ytsearch8:" + query, download=False) or {}
-    except Exception as error:
+    """Verify a manually reviewed recipe video; never guess relevance from search-title overlap."""
+    if recipe.get("video_verified") is not True:
         raise RuntimeError(
-            "No-API YouTube search failed. YouTube may be temporarily limiting automated search; "
-            "retry later or add a manually reviewed video URL to this recipe. "
-            f"Details: {type(error).__name__}"
-        ) from None
-
-    candidates = []
-    for item in search.get("entries") or []:
-        if not item:
-            continue
-        video_id = item.get("id")
-        title = item.get("title") or ""
-        if not video_id or not title:
-            continue
-        if not _video_title_is_compatible(recipe, title):
-            print(f"Rejecting incompatible video title for '{recipe['title']}': {title}")
-            continue
-        score = _video_title_score(recipe["title"], title)
-        if score >= 0.60 and _video_title_is_compatible(recipe, title):
-            candidates.append((score, video_id, title))
-    candidates.sort(reverse=True)
-
-    for score, video_id, title in candidates:
-        video_url = "https://www.youtube.com/watch?v=" + video_id
-        oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
-            "url": video_url, "format": "json"
-        })
-        request = urllib.request.Request(
-            oembed_url,
-            headers={"Accept": "application/json", "User-Agent": "SolePickRecipePublisher/1.0"}
+            f"VIDEO REVIEW REQUIRED: no video has been manually confirmed for '{recipe['title']}'."
         )
-        try:
-            with urllib.request.urlopen(request, timeout=15) as response:
-                metadata = json.loads(response.read().decode("utf-8"))
-            # oEmbed returns metadata only for videos YouTube allows to be embedded.
-            verified_title = metadata.get("title") or title
-            return {
-                "id": video_id,
-                "title": verified_title,
-                "url": video_url,
-                "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
-                "match_score": round(score, 2),
-            }
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError):
-            # Private, removed, or non-embeddable videos are rejected; try the next match.
-            continue
-
-    raise RuntimeError(
-        f"VIDEO REVIEW REQUIRED: no close, publicly embeddable YouTube match could be verified "
-        f"without an API key for '{recipe['title']}'. Article not published."
+    video_url = str(recipe.get("video_url") or "").strip()
+    match = re.fullmatch(r"https?://(?:www\\.)?(?:youtube\\.com/watch\\?v=|youtu\\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?", video_url)
+    if not match:
+        raise RuntimeError(
+            f"VIDEO REVIEW REQUIRED: '{recipe['title']}' needs a valid manually reviewed YouTube video_url."
+        )
+    video_id = match.group(1)
+    oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
+        "url": "https://www.youtube.com/watch?v=" + video_id, "format": "json"
+    })
+    request = urllib.request.Request(
+        oembed_url,
+        headers={"Accept": "application/json", "User-Agent": "SolePickRecipePublisher/1.0"}
     )
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            metadata = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
+        raise RuntimeError(
+            f"VIDEO EMBED CHECK FAILED for '{recipe['title']}': {type(error).__name__}. "
+            "Check the video URL and that embedding is allowed."
+        ) from None
+    verified_title = str(metadata.get("title") or "").strip()
+    if not verified_title:
+        raise RuntimeError(f"VIDEO EMBED CHECK FAILED: YouTube returned no title for '{recipe['title']}'.")
+    if not _video_title_is_compatible(recipe, verified_title):
+        raise RuntimeError(
+            f"VIDEO TITLE MISMATCH: approved video title '{verified_title}' is not compatible "
+            f"with recipe '{recipe['title']}'."
+        )
+    score = _video_title_score(recipe["title"], verified_title)
+    if score < 0.60:
+        raise RuntimeError(
+            f"VIDEO TITLE MATCH TOO WEAK ({score:.2f}) for '{recipe['title']}' vs '{verified_title}'."
+        )
+    return {
+        "id": video_id,
+        "title": verified_title,
+        "url": "https://www.youtube.com/watch?v=" + video_id,
+        "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
+        "match_score": round(score, 2),
+    }
 
 def recipe_video_section_html(recipe, video):
     return (
@@ -297,9 +290,12 @@ def generate_recipe_image(recipe):
                 raise RuntimeError("Recipe image URL returned an empty response.")
     except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as error:
         raise RuntimeError("Recipe image could not be fetched; check or replace image_url. Details: " + type(error).__name__) from None
-    # A reachable image URL is not proof that the photo depicts this recipe.
-    # Report the distinction so a repeated stock photo is not mistaken for a verified match.
-    print("RECIPE IMAGE URL CHECKED (visual relevance still requires review): " + recipe["title"] + " (" + content_type + ")")
+    if recipe.get("image_verified") is not True:
+        raise RuntimeError(
+            "RECIPE IMAGE REVIEW REQUIRED: URL is reachable, but a person must confirm the "
+            "actual photo depicts '" + recipe["title"] + "' before setting image_verified=true."
+        )
+    print("RECIPE IMAGE VERIFIED BY HUMAN REVIEW FLAG: " + recipe["title"] + " (" + content_type + ")")
     return {"url": source_url, "altText": alt_text}
 
 
