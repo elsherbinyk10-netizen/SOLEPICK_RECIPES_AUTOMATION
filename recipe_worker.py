@@ -58,7 +58,9 @@ def _video_title_is_compatible(recipe, video_title):
     protein_groups = [
         {"chicken"}, {"salmon"}, {"shrimp", "prawn", "prawns"}, {"tuna"},
         {"beef"}, {"pork"}, {"turkey"}, {"tofu"}, {"tempeh"},
-        {"chickpea", "chickpeas"}, {"lentil", "lentils"}, {"egg", "eggs"}
+        {"chickpea", "chickpeas"}, {"lentil", "lentils"}, {"egg", "eggs"},
+        {"crab"}, {"lobster"}, {"cod"}, {"tilapia"}, {"trout"}, {"mackerel"},
+        {"whitefish"}, {"anchovy", "anchovies"}, {"sardine", "sardines"}
     ]
     wanted_proteins = [group for group in protein_groups if group & wanted_tokens]
     found_proteins = [group for group in protein_groups if group & found_tokens]
@@ -295,7 +297,9 @@ def generate_recipe_image(recipe):
                 raise RuntimeError("Recipe image URL returned an empty response.")
     except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as error:
         raise RuntimeError("Recipe image could not be fetched; check or replace image_url. Details: " + type(error).__name__) from None
-    print("RECIPE IMAGE VERIFIED: reachable HTTPS image for " + recipe["title"] + " (" + content_type + ")")
+    # A reachable image URL is not proof that the photo depicts this recipe.
+    # Report the distinction so a repeated stock photo is not mistaken for a verified match.
+    print("RECIPE IMAGE URL CHECKED (visual relevance still requires review): " + recipe["title"] + " (" + content_type + ")")
     return {"url": source_url, "altText": alt_text}
 
 
