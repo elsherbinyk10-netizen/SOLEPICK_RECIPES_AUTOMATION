@@ -28,7 +28,10 @@
     "cook_minutes": 25,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
-    "image_alt": "Roasted lemon herb chicken with golden vegetables"
+    "image_alt": "Roasted lemon herb chicken with golden vegetables",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "creamy-tomato-spinach-pasta",
@@ -59,7 +62,10 @@
     "cook_minutes": 20,
     "servings": 3,
     "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
-    "image_alt": "Pasta with sauce and fresh herbs"
+    "image_alt": "Pasta with sauce and fresh herbs",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "roasted-chickpea-rainbow-bowls",
@@ -91,7 +97,10 @@
     "cook_minutes": 25,
     "servings": 2,
     "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
-    "image_alt": "Colorful chickpea bowl with fresh vegetables"
+    "image_alt": "Colorful chickpea bowl with fresh vegetables",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-garlic-salmon-bowls",
@@ -123,7 +132,10 @@
     "cook_minutes": 15,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288",
-    "image_alt": "Salmon served as a colorful dinner bowl"
+    "image_alt": "Salmon served as a colorful dinner bowl",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "crispy-black-bean-tacos",
@@ -156,7 +168,10 @@
     "cook_minutes": 15,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b",
-    "image_alt": "Tacos ready to serve with fresh toppings"
+    "image_alt": "Tacos ready to serve with fresh toppings",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-chickpea-salad",
@@ -189,7 +204,10 @@
     "cook_minutes": 0,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
-    "image_alt": "Fresh colorful salad with vegetables and greens"
+    "image_alt": "Fresh colorful salad with vegetables and greens",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "easy-roasted-vegetable-pasta",
@@ -223,7 +241,10 @@
     "cook_minutes": 25,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601",
-    "image_alt": "Pasta tossed with vegetables and herbs"
+    "image_alt": "Pasta tossed with vegetables and herbs",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "creamy-lentil-coconut-curry",
@@ -258,7 +279,10 @@
     "cook_minutes": 30,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398",
-    "image_alt": "A warm bowl of curry ready to serve"
+    "image_alt": "A warm bowl of curry ready to serve",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "sheet-pan-chicken-fajitas",
@@ -292,7 +316,10 @@
     "cook_minutes": 25,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1534352956036-cd81e27dd615",
-    "image_alt": "Colorful fajita ingredients prepared for dinner"
+    "image_alt": "Colorful fajita ingredients prepared for dinner",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "banana-oat-breakfast-pancakes",
@@ -325,7 +352,10 @@
     "cook_minutes": 12,
     "servings": 2,
     "image_url": "https://images.unsplash.com/photo-1528207776546-365bb710ee93",
-    "image_alt": "A stack of pancakes served for breakfast"
+    "image_alt": "A stack of pancakes served for breakfast",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "quick-greek-yogurt-parfaits",
@@ -356,7 +386,10 @@
     "cook_minutes": 0,
     "servings": 4,
     "image_url": "https://images.unsplash.com/photo-1488477181946-6428a0291777",
-    "image_alt": "Yogurt and fruit layered in a breakfast parfait"
+    "image_alt": "Yogurt and fruit layered in a breakfast parfait",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-rice-bowls",
@@ -388,8 +421,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-roasted-vegetable-tray",
@@ -421,8 +457,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-quick-pasta",
@@ -454,8 +493,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-warm-grain-salad",
@@ -487,8 +529,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-one-pot-soup",
@@ -520,8 +565,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-tacos",
@@ -553,8 +601,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Tacos",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-stuffed-sweet-potatoes",
@@ -586,8 +637,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-breakfast-hash",
@@ -619,8 +673,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-fresh-wraps",
@@ -652,8 +709,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-coconut-curry",
@@ -685,8 +745,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "lemon-garlic-chicken-loaded-salad",
@@ -718,8 +781,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Lemon Garlic Chicken Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Lemon Garlic Chicken Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-rice-bowls",
@@ -751,8 +817,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-roasted-vegetable-tray",
@@ -784,8 +853,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-quick-pasta",
@@ -817,8 +889,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-warm-grain-salad",
@@ -850,8 +925,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-one-pot-soup",
@@ -883,8 +961,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-tacos",
@@ -916,8 +997,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Tacos",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-stuffed-sweet-potatoes",
@@ -949,8 +1033,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-breakfast-hash",
@@ -982,8 +1069,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-fresh-wraps",
@@ -1015,8 +1105,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-coconut-curry",
@@ -1048,8 +1141,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "smoky-chickpeas-loaded-salad",
@@ -1081,8 +1177,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Smoky Chickpeas Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Smoky Chickpeas Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-rice-bowls",
@@ -1114,8 +1213,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-roasted-vegetable-tray",
@@ -1147,8 +1249,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-quick-pasta",
@@ -1180,8 +1285,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-warm-grain-salad",
@@ -1213,8 +1321,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-one-pot-soup",
@@ -1246,8 +1357,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-tacos",
@@ -1279,8 +1393,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Tacos",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-stuffed-sweet-potatoes",
@@ -1312,8 +1429,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-breakfast-hash",
@@ -1345,8 +1465,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-fresh-wraps",
@@ -1378,8 +1501,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-coconut-curry",
@@ -1411,8 +1537,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "ginger-soy-tofu-loaded-salad",
@@ -1444,8 +1573,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Ginger Soy Tofu Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Ginger Soy Tofu Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-rice-bowls",
@@ -1477,8 +1609,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-roasted-vegetable-tray",
@@ -1510,8 +1645,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-quick-pasta",
@@ -1543,8 +1681,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-warm-grain-salad",
@@ -1576,8 +1717,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-one-pot-soup",
@@ -1609,8 +1753,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-tacos",
@@ -1643,7 +1790,10 @@
     "cook_minutes": 15,
     "servings": 4,
     "image_alt": "Salmon tacos with fresh toppings",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-stuffed-sweet-potatoes",
@@ -1675,8 +1825,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-breakfast-hash",
@@ -1708,8 +1861,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-fresh-wraps",
@@ -1742,7 +1898,10 @@
     "cook_minutes": 10,
     "servings": 4,
     "image_alt": "Fresh salmon wraps with vegetables",
-    "image_url": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=1600&q=85"
+    "image_url": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-coconut-curry",
@@ -1775,7 +1934,10 @@
     "cook_minutes": 25,
     "servings": 4,
     "image_alt": "Salmon coconut curry in a bowl",
-    "image_url": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=1600&q=85"
+    "image_url": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "honey-mustard-salmon-loaded-salad",
@@ -1807,8 +1969,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Honey Mustard Salmon Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Honey Mustard Salmon Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-rice-bowls",
@@ -1840,8 +2005,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-roasted-vegetable-tray",
@@ -1873,8 +2041,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-quick-pasta",
@@ -1906,8 +2077,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-warm-grain-salad",
@@ -1939,8 +2113,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-one-pot-soup",
@@ -1972,8 +2149,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-tacos",
@@ -2005,8 +2185,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Tacos",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-stuffed-sweet-potatoes",
@@ -2038,8 +2221,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-breakfast-hash",
@@ -2071,8 +2257,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-fresh-wraps",
@@ -2104,8 +2293,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-coconut-curry",
@@ -2137,8 +2329,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "black-bean-corn-loaded-salad",
@@ -2170,8 +2365,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Black Bean and Corn Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Black Bean and Corn Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-rice-bowls",
@@ -2203,8 +2401,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-roasted-vegetable-tray",
@@ -2236,8 +2437,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-quick-pasta",
@@ -2269,8 +2473,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-warm-grain-salad",
@@ -2302,8 +2509,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-one-pot-soup",
@@ -2335,8 +2545,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-tacos",
@@ -2368,8 +2581,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Tacos",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-stuffed-sweet-potatoes",
@@ -2401,8 +2617,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-breakfast-hash",
@@ -2434,8 +2653,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-fresh-wraps",
@@ -2467,8 +2689,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-coconut-curry",
@@ -2500,8 +2725,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "turkey-herb-loaded-salad",
@@ -2533,8 +2761,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Turkey and Herb Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Turkey and Herb Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-rice-bowls",
@@ -2566,8 +2797,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-roasted-vegetable-tray",
@@ -2599,8 +2833,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-quick-pasta",
@@ -2632,8 +2869,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-warm-grain-salad",
@@ -2665,8 +2905,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-one-pot-soup",
@@ -2698,8 +2941,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-tacos",
@@ -2731,8 +2977,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Tacos",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-stuffed-sweet-potatoes",
@@ -2764,8 +3013,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-breakfast-hash",
@@ -2797,8 +3049,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-fresh-wraps",
@@ -2830,8 +3085,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-coconut-curry",
@@ -2863,8 +3121,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "red-lentil-loaded-salad",
@@ -2896,8 +3157,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Red Lentil Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Red Lentil Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-rice-bowls",
@@ -2929,8 +3193,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-roasted-vegetable-tray",
@@ -2962,8 +3229,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-quick-pasta",
@@ -2995,8 +3265,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-warm-grain-salad",
@@ -3028,8 +3301,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-one-pot-soup",
@@ -3061,8 +3337,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-tacos",
@@ -3094,8 +3373,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Tacos",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-stuffed-sweet-potatoes",
@@ -3127,8 +3409,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-breakfast-hash",
@@ -3160,8 +3445,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-fresh-wraps",
@@ -3193,8 +3481,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-coconut-curry",
@@ -3226,8 +3517,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "mediterranean-white-bean-loaded-salad",
@@ -3259,8 +3553,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Mediterranean White Bean Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Mediterranean White Bean Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-rice-bowls",
@@ -3292,8 +3589,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-roasted-vegetable-tray",
@@ -3325,8 +3625,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-quick-pasta",
@@ -3358,8 +3661,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-warm-grain-salad",
@@ -3391,8 +3697,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-one-pot-soup",
@@ -3424,8 +3733,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-tacos",
@@ -3457,8 +3769,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Tacos",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-stuffed-sweet-potatoes",
@@ -3490,8 +3805,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-breakfast-hash",
@@ -3523,8 +3841,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-fresh-wraps",
@@ -3556,8 +3877,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-coconut-curry",
@@ -3589,8 +3913,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "garlic-mushroom-loaded-salad",
@@ -3622,8 +3949,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Garlic Mushroom Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Garlic Mushroom Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-rice-bowls",
@@ -3655,8 +3985,11 @@
     "prep_minutes": 15,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Rice Bowls",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Rice Bowls, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-roasted-vegetable-tray",
@@ -3688,8 +4021,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Roasted Vegetable Tray",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Roasted Vegetable Tray, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-quick-pasta",
@@ -3721,8 +4057,11 @@
     "prep_minutes": 10,
     "cook_minutes": 20,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Quick Pasta",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Quick Pasta, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-warm-grain-salad",
@@ -3754,8 +4093,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Warm Grain Salad",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Warm Grain Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-one-pot-soup",
@@ -3787,8 +4129,11 @@
     "prep_minutes": 15,
     "cook_minutes": 30,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp One-Pot Soup",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp One-Pot Soup, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-tacos",
@@ -3820,8 +4165,11 @@
     "prep_minutes": 10,
     "cook_minutes": 15,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Tacos",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Tacos, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-stuffed-sweet-potatoes",
@@ -3853,8 +4201,11 @@
     "prep_minutes": 10,
     "cook_minutes": 35,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Stuffed Sweet Potatoes",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Stuffed Sweet Potatoes, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-breakfast-hash",
@@ -3886,8 +4237,11 @@
     "prep_minutes": 15,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Breakfast Hash",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Breakfast Hash, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-fresh-wraps",
@@ -3919,8 +4273,11 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Fresh Wraps",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Fresh Wraps, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-coconut-curry",
@@ -3952,8 +4309,11 @@
     "prep_minutes": 10,
     "cook_minutes": 25,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Coconut Curry",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Coconut Curry, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   },
   {
     "slug": "cajun-shrimp-loaded-salad",
@@ -3985,7 +4345,10 @@
     "prep_minutes": 15,
     "cook_minutes": 10,
     "servings": 4,
-    "image_alt": "Illustrative food photograph for Cajun Shrimp Loaded Salad",
-    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85"
+    "image_alt": "Finished Cajun Shrimp Loaded Salad, photographed as a complete serving",
+    "image_url": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1600&q=85",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
   }
 ]
