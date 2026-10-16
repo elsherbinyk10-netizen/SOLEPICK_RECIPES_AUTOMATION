@@ -64,6 +64,17 @@ def _video_title_is_compatible(recipe, video_title):
     found_proteins = [group for group in protein_groups if group & found_tokens]
     if wanted_proteins and not any(group in found_proteins for group in wanted_proteins):
         return False
+    # Reject videos whose titles introduce a different main protein (e.g. crab)
+    # that is not part of the recipe. A title match on salmon/wrap alone is not enough.
+    if found_proteins:
+        wanted_groups = set().union(*wanted_proteins) if wanted_proteins else set()
+        if not any(group in found_proteins for group in wanted_proteins):
+            return False
+        for group in found_proteins:
+            if not (group & wanted_tokens):
+                return False
+    # Reject title matches that omit important format or recipe identity words.
+    # This prevents a generic salmon video from being reused for pasta, curry, wraps, etc.
 
     # Require every named format anchor: salmon salad is not a salmon pasta.
     dish_formats = [
