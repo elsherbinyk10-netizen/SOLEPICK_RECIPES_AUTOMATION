@@ -177,7 +177,7 @@ def find_verified_recipe_video(recipe):
             f"VIDEO REVIEW REQUIRED: no video has been manually confirmed for '{recipe['title']}'."
         )
     video_url = str(recipe.get("video_url") or "").strip()
-    match = re.fullmatch(r"https?://(?:www\\.)?(?:youtube\\.com/watch\\?v=|youtu\\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?", video_url)
+    match = re.fullmatch(r"https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?", video_url)
     if not match:
         raise RuntimeError(
             f"VIDEO REVIEW REQUIRED: '{recipe['title']}' needs a valid manually reviewed YouTube video_url."
