@@ -57,8 +57,7 @@ def _video_title_is_compatible(recipe, video_title):
 
     protein_groups = [
         {"chicken"}, {"salmon"}, {"shrimp", "prawn", "prawns"}, {"tuna"},
-        {"beef"}, {"pork"}, {"turkey"}, {"tofu"}, {"tempeh"},
-        {"chickpea", "chickpeas"}, {"lentil", "lentils"}, {"egg", "eggs"},
+        {"beef"}, {"pork"}, {"turkey"}, {"tofu"}, {"tempeh"}, {"egg", "eggs"},
         {"crab"}, {"lobster"}, {"cod"}, {"tilapia"}, {"trout"}, {"mackerel"},
         {"whitefish"}, {"anchovy", "anchovies"}, {"sardine", "sardines"}
     ]
