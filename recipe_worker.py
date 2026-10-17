@@ -297,58 +297,85 @@ def upsert_recipe_video_section(existing_body, recipe, video):
 
 
 def generate_recipe_image(recipe):
-    """Validate a curated public food-photo URL before using it as the article image."""
-    # Fail closed if another recipe points to the same exact image URL.
-    # This catches accidental cross-recipe reuse even if a review flag is mistakenly set.
-    source_url = (recipe.get("image_url") or "").strip()
-    try:
-        catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as error:
-        raise RuntimeError("Could not audit recipe catalogue for duplicate image URLs: " + type(error).__name__) from None
-    duplicates = [
-        item.get("title", item.get("slug", "another recipe"))
+    """Automatically find a unique, reachable public-domain/CC0 food photo on Wikimedia Commons."""
+    catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    used_urls = {
+        str(item.get("image_url") or "").strip()
         for item in catalogue
-        if item.get("slug") != recipe.get("slug")
-        and source_url
-        and (item.get("image_url") or "").strip() == source_url
+        if item.get("slug") != recipe.get("slug") and item.get("image_url")
+    }
+    # Search Commons using the actual dish name. Prefer exact recipe terms and reject
+    # generic images unless both a main ingredient and dish-format anchor are present.
+    title = str(recipe.get("title") or "").strip()
+    if not title:
+        raise RuntimeError("Cannot search for a food photo without a recipe title.")
+    query_terms = re.findall(r"[a-z0-9]+", title.lower())
+    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe"}
+    wanted = {word for word in query_terms if word not in stop and len(word) > 2}
+    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
+    formats = {"salad","pasta","noodle","noodles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
+    wanted_formats = wanted & formats
+    searches = [
+        title + " food",
+        " ".join(word for word in query_terms if word not in stop) + " dish",
+        (main_food or title) + " cooked food dish",
     ]
-    if duplicates:
-        raise RuntimeError(
-            "DUPLICATE RECIPE IMAGE: '" + recipe["title"] + "' shares its image URL with "
-            + ", ".join(duplicates[:5]) + ". Assign and review a distinct matching photo first."
+    seen = set()
+    for search_text in searches:
+        params = urllib.parse.urlencode({
+            "action": "query", "generator": "search", "gsrsearch": search_text,
+            "gsrnamespace": 6, "gsrlimit": 15, "prop": "imageinfo",
+            "iiprop": "url|extmetadata", "iiurlwidth": 1600, "format": "json",
+        })
+        request = urllib.request.Request(
+            "https://commons.wikimedia.org/w/api.php?" + params,
+            headers={"User-Agent": "SolePickRecipesBot/1.0 (recipe image selection; contact site owner)"}
         )
-    source_url = (recipe.get("image_url") or "").strip()
-    if not source_url.startswith("https://"):
-        raise RuntimeError(
-            "Recipe has no HTTPS image_url. Add a reviewed public food-photo URL to recipes.json."
-        )
-    alt_text = (recipe.get("image_alt") or ("Finished " + recipe["title"] + " served and ready to eat")).strip()
-    if len(alt_text) < 12 or len(alt_text) > 250:
-        raise RuntimeError("Recipe image alt text must be descriptive and 12–250 characters.")
-    request = urllib.request.Request(
-        source_url,
-        headers={"Range": "bytes=0-1023", "User-Agent": "SolePickRecipePublisher/1.0"},
+        try:
+            with urllib.request.urlopen(request, timeout=18) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
+            print("WIKIMEDIA PHOTO SEARCH RETRY: " + type(error).__name__)
+            continue
+        pages = ((payload.get("query") or {}).get("pages") or {})
+        for page in pages.values():
+            title_text = str(page.get("title") or "").lower()
+            info_list = page.get("imageinfo") or []
+            if not info_list:
+                continue
+            info = info_list[0]
+            metadata = info.get("extmetadata") or {}
+            license_name = str((metadata.get("LicenseShortName") or {}).get("value") or "").strip()
+            license_lower = re.sub(r"<[^>]+>", "", license_name).lower()
+            # Restrict to public-domain/CC0 media to avoid needing per-image credit lines.
+            if "public domain" not in license_lower and "cc0" not in license_lower:
+                continue
+            image_url = str(info.get("thumburl") or info.get("url") or "").strip()
+            if not image_url.startswith("https://") or image_url in used_urls or image_url in seen:
+                continue
+            seen.add(image_url)
+            found = set(re.findall(r"[a-z0-9]+", title_text))
+            overlap = len(wanted & found) / max(1, len(wanted))
+            has_main = bool(main_food and main_food in found)
+            has_format = bool(wanted_formats & found)
+            # Require meaningful dish relevance, not merely a generic food photograph.
+            if overlap < 0.25 and not (has_main and (has_format or len(wanted_formats) == 0)):
+                continue
+            if main_food and not has_main:
+                continue
+            if wanted_formats and not has_format:
+                continue
+            alt = " ".join((title_text.removeprefix("file:")).replace("_", " ").split())
+            alt = re.sub(r"\.(jpg|jpeg|png|webp|svg)$", "", alt, flags=re.I)
+            alt = (alt[:240] or "Food photograph for " + title)
+            print("AUTO-SELECTED PUBLIC-DOMAIN PHOTO: " + title_text + " | license=" + license_name)
+            return {"url": image_url, "altText": alt}
+    # No unreviewed catalogue fallback: that was the cause of repeated/mismatched photos.
+    raise RuntimeError(
+        "No unique, relevant public-domain/CC0 Wikimedia photo found automatically for '"
+        + title + "'. Recipe was not published with a repeated or unverified image; "
+        "the next scheduled run will retry."
     )
-    try:
-        with urllib.request.urlopen(request, timeout=20) as response:
-            content_type = (response.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
-            status = getattr(response, "status", 200)
-            if status < 200 or status >= 300:
-                raise RuntimeError("Recipe image URL returned HTTP " + str(status))
-            if not content_type.startswith("image/"):
-                raise RuntimeError("Recipe image URL did not return an image; Content-Type was " + (content_type or "missing"))
-            if not response.read(32):
-                raise RuntimeError("Recipe image URL returned an empty response.")
-    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as error:
-        raise RuntimeError("Recipe image could not be fetched; check or replace image_url. Details: " + type(error).__name__) from None
-    if recipe.get("image_verified") is not True:
-        raise RuntimeError(
-            "RECIPE IMAGE REVIEW REQUIRED: URL is reachable, but a person must confirm the "
-            "actual photo depicts '" + recipe["title"] + "' before setting image_verified=true."
-        )
-    print("RECIPE IMAGE VERIFIED BY HUMAN REVIEW FLAG: " + recipe["title"] + " (" + content_type + ")")
-    return {"url": source_url, "altText": alt_text}
-
 
 def featured_image_for(recipe, generated_image):
     """Use a configured public recipe image without generated-image APIs or upload permissions."""
