@@ -214,7 +214,7 @@ def find_verified_recipe_video(recipe):
     # Re-check a configured video first, but do not make manual catalogue flags a blocker.
     configured = str(recipe.get("video_url") or "").strip()
     match = re.fullmatch(
-        r"https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?",
+        r"https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?",
         configured
     )
     if match:
