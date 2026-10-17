@@ -169,19 +169,18 @@ def make_recipe_specific(recipe):
         raise ValueError(f"Recipe '{title}' needs at least four clear, sequential instructions.")
     return result
 
-def find_verified_recipe_video(recipe):
-    """Verify a manually reviewed recipe video; never guess relevance from search-title overlap."""
-    if recipe.get("video_verified") is not True:
-        raise RuntimeError(
-            f"VIDEO REVIEW REQUIRED: no video has been manually confirmed for '{recipe['title']}'."
-        )
-    video_url = str(recipe.get("video_url") or "").strip()
-    match = re.fullmatch(r"https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?", video_url)
-    if not match:
-        raise RuntimeError(
-            f"VIDEO REVIEW REQUIRED: '{recipe['title']}' needs a valid manually reviewed YouTube video_url."
-        )
-    video_id = match.group(1)
+def _check_video_candidate(recipe, video_id, title):
+    """Validate a discovered YouTube candidate before it can be embedded."""
+    video_id = str(video_id or "").strip()
+    title = str(title or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id) or not title:
+        return None
+    if not _video_title_is_compatible(recipe, title):
+        return None
+    score = _video_title_score(recipe.get("title", ""), title)
+    if score < 0.60:
+        return None
+    # YouTube oEmbed rejects removed/private videos and many videos that disallow embedding.
     oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
         "url": "https://www.youtube.com/watch?v=" + video_id, "format": "json"
     })
@@ -190,33 +189,89 @@ def find_verified_recipe_video(recipe):
         headers={"Accept": "application/json", "User-Agent": "SolePickRecipePublisher/1.0"}
     )
     try:
-        with urllib.request.urlopen(request, timeout=15) as response:
+        with urllib.request.urlopen(request, timeout=12) as response:
             metadata = json.loads(response.read().decode("utf-8"))
-    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
-        raise RuntimeError(
-            f"VIDEO EMBED CHECK FAILED for '{recipe['title']}': {type(error).__name__}. "
-            "Check the video URL and that embedding is allowed."
-        ) from None
-    verified_title = str(metadata.get("title") or "").strip()
-    if not verified_title:
-        raise RuntimeError(f"VIDEO EMBED CHECK FAILED: YouTube returned no title for '{recipe['title']}'.")
-    if not _video_title_is_compatible(recipe, verified_title):
-        raise RuntimeError(
-            f"VIDEO TITLE MISMATCH: approved video title '{verified_title}' is not compatible "
-            f"with recipe '{recipe['title']}'."
-        )
-    score = _video_title_score(recipe["title"], verified_title)
-    if score < 0.60:
-        raise RuntimeError(
-            f"VIDEO TITLE MATCH TOO WEAK ({score:.2f}) for '{recipe['title']}' vs '{verified_title}'."
-        )
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError):
+        return None
+    # Trust the live YouTube metadata, not stale search-index data.
+    live_title = str(metadata.get("title") or "").strip()
+    if not live_title or not _video_title_is_compatible(recipe, live_title):
+        return None
+    live_score = _video_title_score(recipe.get("title", ""), live_title)
+    if live_score < 0.60:
+        return None
     return {
         "id": video_id,
-        "title": verified_title,
+        "title": live_title,
         "url": "https://www.youtube.com/watch?v=" + video_id,
         "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
-        "match_score": round(score, 2),
+        "match_score": round(live_score, 2),
     }
+
+
+def find_verified_recipe_video(recipe):
+    """Automatically discover and validate a matching, currently embeddable YouTube video."""
+    # Re-check a configured video first, but do not make manual catalogue flags a blocker.
+    configured = str(recipe.get("video_url") or "").strip()
+    match = re.fullmatch(
+        r"https?://(?:www\\.)?(?:youtube\\.com/watch\\?v=|youtu\\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?",
+        configured
+    )
+    if match:
+        candidate = _check_video_candidate(recipe, match.group(1), recipe.get("video_title", ""))
+        if candidate:
+            return candidate
+
+    # yt-dlp is installed by the scheduled GitHub Actions workflow. Search multiple
+    # results so a removed, private, or unrelated top result does not stop publishing.
+    try:
+        import yt_dlp
+    except ImportError:
+        raise RuntimeError("Automatic video search unavailable: install yt-dlp in the workflow.") from None
+
+    title = str(recipe.get("title") or "").strip()
+    if not title:
+        raise RuntimeError("Cannot search for a recipe video without a recipe title.")
+    queries = [
+        f"ytsearch12:{title} recipe",
+        f"ytsearch8:{title} cooking tutorial",
+    ]
+    seen = set()
+    failures = 0
+    for search_query in queries:
+        options = {
+            "quiet": True, "no_warnings": True, "skip_download": True,
+            "extract_flat": True, "noplaylist": True, "ignoreerrors": True,
+            "socket_timeout": 12, "retries": 1,
+        }
+        try:
+            with yt_dlp.YoutubeDL(options) as ydl:
+                result = ydl.extract_info(search_query, download=False)
+        except Exception as error:
+            print(f"VIDEO SEARCH RETRY: {search_query} failed ({type(error).__name__}).")
+            continue
+        entries = (result or {}).get("entries") or []
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            video_id = str(entry.get("id") or "").strip()
+            title_found = str(entry.get("title") or "").strip()
+            if video_id in seen:
+                continue
+            seen.add(video_id)
+            if not _video_title_is_compatible(recipe, title_found):
+                continue
+            if _video_title_score(title, title_found) < 0.60:
+                continue
+            candidate = _check_video_candidate(recipe, video_id, title_found)
+            if candidate:
+                print(f"AUTO-SELECTED VIDEO: {candidate['title']} | match={candidate['match_score']} | live oEmbed check passed.")
+                return candidate
+            failures += 1
+    raise RuntimeError(
+        f"No currently embeddable, title-matched video found for '{title}' after checking "
+        f"{len(seen)} search results ({failures} candidate checks failed). The workflow will retry tomorrow."
+    )
 
 def recipe_video_section_html(recipe, video):
     return (
