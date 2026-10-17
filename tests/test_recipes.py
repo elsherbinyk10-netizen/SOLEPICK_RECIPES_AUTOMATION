@@ -51,6 +51,9 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertTrue(recipe_worker._video_title_is_compatible(
             recipe, "Warm Grain Salad with Lemon Dijon Vinaigrette, Salmon and Crispy Chickpeas"
         ))
+        self.assertFalse(recipe_worker._video_title_is_compatible(
+            recipe, "Warm Grain Salad with Lemon Dijon Vinaigrette, Chicken and Crispy Chickpeas"
+        ))
 
     def test_video_compatibility_requires_named_dish_format(self):
         self.assertFalse(recipe_worker._video_title_is_compatible(
