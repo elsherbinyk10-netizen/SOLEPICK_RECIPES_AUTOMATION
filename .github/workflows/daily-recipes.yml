@@ -61,12 +61,25 @@ jobs:
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
           ONE_TIME_TEST: ${{ inputs.one_time_test }}
         run: |
-          # GitHub may delay scheduled jobs, so do not infer which cron fired from
-          # the runner's current clock. Both seasonal entries target 10:00 Cairo.
-          # The worker's Africa/Cairo publication-date guard is the single source
-          # of truth and prevents duplicate articles if both entries run.
+          # GitHub cron uses UTC. Both seasonal entries exist so publishing stays
+          # near 10:00 Cairo year-round, but only the cron matching today's Cairo
+          # UTC offset may publish. This prevents a second recipe run every day.
           if [[ -n "$GITHUB_EVENT_SCHEDULE" ]]; then
             echo "Scheduled trigger: $GITHUB_EVENT_SCHEDULE"
+            case "$GITHUB_EVENT_SCHEDULE" in
+              "0 7 * * *") EXPECTED_OFFSET="+0300" ;;
+              "0 8 * * *") EXPECTED_OFFSET="+0200" ;;
+              *)
+                echo "Unrecognized scheduled trigger; refusing to publish."
+                exit 1
+                ;;
+            esac
+            ACTUAL_OFFSET="$(python -c 'from datetime import datetime; from zoneinfo import ZoneInfo; print(datetime.now(ZoneInfo("Africa/Cairo")).strftime("%z"))')"
+            echo "Cairo UTC offset: $ACTUAL_OFFSET; expected for this trigger: $EXPECTED_OFFSET"
+            if [[ "$ACTUAL_OFFSET" != "$EXPECTED_OFFSET" ]]; then
+              echo "This is the off-season cron. Skipping to keep one publication near 10:00 AM Cairo."
+              exit 0
+            fi
           fi
           if [[ -n "$REPAIR_HANDLE" && "$ONE_TIME_TEST" == "true" ]]; then
             echo "Choose either repair_handle or one_time_test, not both."
