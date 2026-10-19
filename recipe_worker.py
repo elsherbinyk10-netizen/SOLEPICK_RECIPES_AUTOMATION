@@ -331,11 +331,31 @@ def generate_recipe_image(recipe):
             "https://commons.wikimedia.org/w/api.php?" + params,
             headers={"User-Agent": "SolePickRecipesBot/1.0 (recipe image selection; contact site owner)"}
         )
-        try:
-            with urllib.request.urlopen(request, timeout=18) as response:
-                payload = json.loads(response.read().decode("utf-8"))
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
-            print("WIKIMEDIA PHOTO SEARCH RETRY: " + type(error).__name__)
+        # Wikimedia Commons can briefly rate-limit or return 5xx errors.
+        # Retry transient failures with backoff before abandoning this search term.
+        payload = None
+        for attempt in range(3):
+            try:
+                with urllib.request.urlopen(request, timeout=25) as response:
+                    payload = json.loads(response.read().decode("utf-8"))
+                break
+            except urllib.error.HTTPError as error:
+                retryable = error.code == 429 or 500 <= error.code < 600
+                print(f"WIKIMEDIA PHOTO SEARCH attempt {attempt + 1}/3: HTTP {error.code}")
+                if not retryable or attempt == 2:
+                    break
+                retry_after = error.headers.get("Retry-After", "")
+                try:
+                    delay = min(12, max(2, int(retry_after)))
+                except (TypeError, ValueError):
+                    delay = 2 ** (attempt + 1)
+                time.sleep(delay)
+            except (urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
+                print(f"WIKIMEDIA PHOTO SEARCH attempt {attempt + 1}/3: {type(error).__name__}")
+                if attempt == 2:
+                    break
+                time.sleep(2 ** (attempt + 1))
+        if payload is None:
             continue
         pages = ((payload.get("query") or {}).get("pages") or {})
         for page in pages.values():
