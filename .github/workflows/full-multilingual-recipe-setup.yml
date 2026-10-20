@@ -1,0 +1,50 @@
+name: SolePick Full Multilingual Recipe Setup
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_run:
+        description: Confirm translation/video matching may use API quota and update existing published recipe article bodies.
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: solepick-full-multilingual-setup
+  cancel-in-progress: false
+jobs:
+  full-setup:
+    if: inputs.confirm_run == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install video matching dependency
+        run: python -m pip install yt-dlp
+      - name: Generate recipe translations
+        env:
+          GOOGLE_TRANSLATE_API_KEY: ${{ secrets.GOOGLE_TRANSLATE_API_KEY }}
+        run: python translate_recipe_library.py
+      - name: Find language-matched videos and verify embeddability
+        run: python build_localized_recipe_videos.py
+      - name: Save generated translation and video data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add localized_recipes.json localized_recipe_videos.json
+          if git diff --cached --quiet; then
+            echo "No new translation or video data to commit."
+          else
+            git commit -m "Build multilingual recipe translations and video matches"
+            git push
+          fi
+      - name: Apply verified video maps to existing published recipes
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+          SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
+        run: python repair_existing_recipe_video_languages.py
