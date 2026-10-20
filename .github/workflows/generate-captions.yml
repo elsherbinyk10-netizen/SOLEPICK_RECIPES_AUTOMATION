@@ -62,7 +62,7 @@ jobs:
           WHISPER_MODEL: ${{ inputs.model || 'small.en' }}
         run: |
           if [ -n "$VIDEO_URL" ]; then
-            python generate_captions.py --video-url "$VIDEO_URL" --video-id "$VIDEO_ID" --model "$WHISPER_MODEL"
+            python generate_captions.py --video-url="$VIDEO_URL" --video-id="$VIDEO_ID" --model="$WHISPER_MODEL"
           else
             echo "No media URL supplied. For YouTube-blocked videos, use the repository script locally with --media-file and --video-id."
             exit 1
