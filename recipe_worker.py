@@ -274,18 +274,54 @@ def find_verified_recipe_video(recipe):
     )
 
 def recipe_video_section_html(recipe, video):
-    # Request captions on first load. The language selector below updates the
-    # YouTube caption preference whenever a visitor chooses another language.
-    caption_url = video["embed_url"] + "?cc_load_policy=1&cc_lang_pref=en&hl=en"
+    """Render a YouTube video with a custom timed-caption overlay backed by public VTT files."""
+    video_id = str(video.get("id") or "")
+    frame_id = "solepick-video-" + video_id
+    vtt_base = "https://raw.githubusercontent.com/elsherbinyk10-netizen/SOLEPICK_RECIPES_AUTOMATION/main/captions/" + video_id + "/"
+    caption_url = video["embed_url"] + "?enablejsapi=1&origin=https%3A%2F%2Fsolepick.site&playsinline=1"
     return (
         "<h2>Recipe Video</h2>"
-        f"<p><a href=\\\"{esc(video['url'])}\\\" rel=\\\"noopener noreferrer\\\">Watch: {esc(video['title'])}</a></p>"
-        "<div class=\\\"solepick-recipe-video\\\" style=\\\"position:relative;width:100%;aspect-ratio:16/9;\\\">"
-        f"<iframe class=\\\"solepick-language-aware-video\\\" data-video-base=\\\"{esc(video['embed_url'])}\\\" src=\\\"{esc(caption_url)}\\\" title=\\\"{esc(recipe['title'])} recipe video\\\" "
-        "loading=\\\"lazy\\\" allow=\\\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\\\" "
-        "referrerpolicy=\\\"strict-origin-when-cross-origin\\\" allowfullscreen style=\\\"position:absolute;inset:0;width:100%;height:100%;border:0;\\\"></iframe></div>"
+        f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
+        f"<div class=\"solepick-recipe-video\" data-solepick-video-id=\"{esc(video_id)}\" data-vtt-base=\"{esc(vtt_base)}\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;\">"
+        f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(caption_url)}\" title=\"{esc(recipe['title'])} recipe video\" "
+        "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
+        "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe>"
+        "<div class=\"solepick-caption-overlay\" aria-live=\"polite\" aria-atomic=\"true\" style=\"position:absolute;left:5%;right:5%;bottom:12%;z-index:5;text-align:center;pointer-events:none;color:#fff;font-size:clamp(15px,2.5vw,25px);font-weight:700;line-height:1.35;text-shadow:0 2px 4px #000,0 0 8px #000;padding:0 4px;\"></div>"
+        "</div>"
+        "<div class=\"solepick-caption-controls\" style=\"display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 18px;\">"
+        "<label style=\"display:flex;gap:8px;align-items:center;\">Captions "
+        "<select class=\"solepick-caption-language\" aria-label=\"Caption language\" style=\"max-width:100%;padding:8px;border:1px solid #aaa;border-radius:6px;background:#fff;color:#222;\">"
+        "<option value=\"off\">Off</option><option value=\"en\" selected>English</option>"
+        "</select></label><span class=\"solepick-caption-status\" role=\"status\" aria-live=\"polite\" style=\"font-size:0.9em;\"></span>"
+        "</div>"
+        "<script>(function(){"
+        "var script=document.currentScript;var block=script&&script.previousElementSibling;"
+        "while(block&&!block.matches('.solepick-caption-controls'))block=block.previousElementSibling;"
+        "if(!block)return;var wrap=block.previousElementSibling;if(!wrap||!wrap.matches('.solepick-recipe-video'))return;"
+        "if(wrap.dataset.captionInit==='1')return;wrap.dataset.captionInit='1';"
+        "var frame=wrap.querySelector('iframe'),overlay=wrap.querySelector('.solepick-caption-overlay'),select=block.querySelector('select'),status=block.querySelector('.solepick-caption-status');"
+        "var cues=[],timer=null,last=-1,player=null,ready=false,active='en';"
+        "function say(s){status.textContent=s||'';}function parseVtt(s){var out=[];var rows=s.replace(/\\r/g,'').split('\\n');"
+        "for(var i=0;i<rows.length;i++){var m=rows[i].match(/(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s+-->\\s+(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})/);"
+        "if(!m)continue;function sec(t){var p=t.split(/[:.]/).map(Number);return p[0]*3600+p[1]*60+p[2]+p[3]/1000;}"
+        "var text=[];for(i++;i<rows.length&&rows[i].trim();i++)if(!/^(WEBVTT|NOTE|\\d+)$/.test(rows[i].trim()))text.push(rows[i].replace(/<[^>]*>/g,''));"
+        "if(text.length)out.push({start:sec(m[1]),end:sec(m[2]),text:text.join(' ').trim()});}return out;}"
+        "function load(lang){active=lang;overlay.textContent='';cues=[];last=-1;if(timer){clearInterval(timer);timer=null;}"
+        "if(lang==='off'){say('Captions off.');return;}var url=wrap.dataset.vttBase+encodeURIComponent(lang)+'.vtt';say('Loading '+lang.toUpperCase()+' captions…');"
+        "fetch(url,{cache:'no-cache'}).then(function(r){if(!r.ok)throw Error('not found');return r.text();}).then(function(t){if(active!==lang)return;cues=parseVtt(t);"
+        "if(!cues.length)throw Error('empty track');say(lang.toUpperCase()+' captions ready.');timer=setInterval(tick,200);tick();}).catch(function(){if(active!==lang)return;"
+        "say('Captions for '+lang.toUpperCase()+' are not generated yet.');overlay.textContent='';});}"
+        "function tick(){if(!ready||!player||!cues.length)return;var now;try{now=player.getCurrentTime();}catch(e){return;}"
+        "var idx=-1;for(var i=0;i<cues.length;i++){if(now>=cues[i].start&&now<cues[i].end){idx=i;break;}}if(idx!==last){last=idx;overlay.textContent=idx<0?'':cues[idx].text;}}"
+        "function initPlayer(){if(!window.YT||!window.YT.Player||player)return;try{player=new YT.Player(frame,{events:{onReady:function(){ready=true;tick();},onStateChange:function(){tick();}}});}catch(e){say('Video caption sync is unavailable in this browser.');}}"
+        "function loadApi(){if(window.YT&&window.YT.Player){initPlayer();return;}if(!document.querySelector('script[data-solepick-yt-api]')){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.dataset.solepickYtApi='1';document.head.appendChild(s);}"
+        "var prior=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=function(){if(typeof prior==='function')prior();initPlayer();};}"
+        "select.addEventListener('change',function(){load(this.value);});"
+        "var siteLang=document.querySelector('#SolePickTranslateSelect,#solepick-language-switcher,select[name=language],.language-selector select');"
+        "if(siteLang){siteLang.addEventListener('change',function(){var l=String(this.value||'en').split('-')[0].toLowerCase();if(Array.from(select.options).some(function(o){return o.value===l;}))select.value=l;});}"
+        "loadApi();load('en');"
+        "})();</script>"
     )
-
 
 def upsert_recipe_video_section(existing_body, recipe, video):
     """Insert or replace only the video section, preserving the article's other content."""
