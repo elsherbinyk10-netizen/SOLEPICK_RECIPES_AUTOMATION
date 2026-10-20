@@ -57,9 +57,9 @@ jobs:
 
       - name: Generate timed English captions
         env:
-          VIDEO_URL: \${{ inputs.video_url }}
-          VIDEO_ID: \${{ inputs.video_id }}
-          WHISPER_MODEL: \${{ inputs.model || 'small.en' }}
+          VIDEO_URL: ${{ inputs.video_url }}
+          VIDEO_ID: ${{ inputs.video_id }}
+          WHISPER_MODEL: ${{ inputs.model || 'small.en' }}
         run: |
           if [ -n "$VIDEO_URL" ]; then
             python generate_captions.py --video-url "$VIDEO_URL" --video-id "$VIDEO_ID" --model "$WHISPER_MODEL"
