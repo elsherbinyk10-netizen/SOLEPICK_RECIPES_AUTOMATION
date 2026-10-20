@@ -278,7 +278,7 @@ def recipe_video_section_html(recipe, video):
         "<h2>Recipe Video</h2>"
         f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
         "<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;\">"
-        f"<iframe src=\"{esc(video['embed_url'])}\" title=\"{esc(recipe['title'])} recipe video\" "
+        f"<iframe class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}\" title=\"{esc(recipe['title'])} recipe video\" "
         "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
         "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe></div>"
     )
