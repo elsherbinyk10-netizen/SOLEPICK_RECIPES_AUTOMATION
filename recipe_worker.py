@@ -319,7 +319,7 @@ def recipe_video_section_html(recipe, video):
         "select.addEventListener('change',function(){load(this.value);});"
         "var siteLang=document.querySelector('#SolePickTranslateSelect,#solepick-language-switcher,select[name=language],.language-selector select');"
         "if(siteLang){function syncSiteLanguage(){var l=String(siteLang.value||'en').split('-')[0].toLowerCase();if(Array.from(select.options).some(function(o){return o.value===l;})){select.value=l;load(l);}}siteLang.addEventListener('change',syncSiteLanguage);syncSiteLanguage();}"
-        "loadApi();load('en');"
+        "loadApi();load(select.value||'en');"
         "})();</script>"
     )
 
