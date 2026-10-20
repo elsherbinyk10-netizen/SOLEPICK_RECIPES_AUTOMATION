@@ -48,8 +48,8 @@ jobs:
 
       - name: Generate timed English captions locally
         env:
-          VIDEO_URL: \${{ inputs.video_url }}
-          WHISPER_MODEL: \${{ inputs.model }}
+          VIDEO_URL: ${{ inputs.video_url }}
+          WHISPER_MODEL: ${{ inputs.model }}
         run: python generate_captions.py --video-url "$VIDEO_URL" --model "$WHISPER_MODEL"
 
       - name: Commit generated WebVTT captions
