@@ -1,0 +1,65 @@
+name: SolePick Caption Generation
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: "YouTube video URL or ID to caption"
+        required: true
+        type: string
+        default: "https://www.youtube.com/watch?v=-upXWTgK1fo"
+      model:
+        description: "Open-source Whisper model (larger is more accurate but slower)"
+        required: true
+        type: choice
+        options:
+          - tiny.en
+          - base.en
+          - small.en
+          - medium.en
+        default: small.en
+
+permissions:
+  contents: write
+
+concurrency:
+  group: solepick-caption-generation
+  cancel-in-progress: false
+
+jobs:
+  captions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install FFmpeg and open-source caption tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check yt-dlp faster-whisper
+
+      - name: Generate timed English captions locally
+        env:
+          VIDEO_URL: \${{ inputs.video_url }}
+          WHISPER_MODEL: \${{ inputs.model }}
+        run: python generate_captions.py --video-url "$VIDEO_URL" --model "$WHISPER_MODEL"
+
+      - name: Commit generated WebVTT captions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add captions/
+          if git diff --cached --quiet; then
+            echo "No caption changes to commit."
+          else
+            git commit -m "Generate English captions for recipe video"
+            git push
+          fi
