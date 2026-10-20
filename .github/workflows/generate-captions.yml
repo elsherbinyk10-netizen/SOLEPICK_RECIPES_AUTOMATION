@@ -1,20 +1,20 @@
 name: SolePick Caption Generation
-# Trigger refresh for initial salmon captions
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/generate-captions.yml'
   workflow_dispatch:
     inputs:
       video_url:
-        description: "YouTube video URL or ID to caption"
-        required: true
+        description: "YouTube URL/ID or permitted direct media URL"
+        required: false
         type: string
         default: "https://www.youtube.com/watch?v=-upXWTgK1fo"
+      video_id:
+        description: "YouTube ID when using an uploaded media file"
+        required: false
+        type: string
+        default: "-upXWTgK1fo"
       model:
-        description: "Open-source Whisper model (larger is more accurate but slower)"
+        description: "Open-source Whisper model"
         required: true
         type: choice
         options:
@@ -23,6 +23,11 @@ on:
           - small.en
           - medium.en
         default: small.en
+  push:
+    branches: [main]
+    paths:
+      - 'generate_captions.py'
+      - '.github/workflows/generate-captions.yml'
 
 permissions:
   contents: write
@@ -50,11 +55,18 @@ jobs:
           sudo apt-get install -y ffmpeg
           python -m pip install --disable-pip-version-check yt-dlp faster-whisper
 
-      - name: Generate timed English captions locally
+      - name: Generate timed English captions
         env:
-          VIDEO_URL: ${{ inputs.video_url || 'https://www.youtube.com/watch?v=-upXWTgK1fo' }}
-          WHISPER_MODEL: ${{ inputs.model || 'small.en' }}
-        run: python generate_captions.py --video-url "$VIDEO_URL" --model "$WHISPER_MODEL"
+          VIDEO_URL: \${{ inputs.video_url }}
+          VIDEO_ID: \${{ inputs.video_id }}
+          WHISPER_MODEL: \${{ inputs.model || 'small.en' }}
+        run: |
+          if [ -n "$VIDEO_URL" ]; then
+            python generate_captions.py --video-url "$VIDEO_URL" --video-id "$VIDEO_ID" --model "$WHISPER_MODEL"
+          else
+            echo "No media URL supplied. For YouTube-blocked videos, use the repository script locally with --media-file and --video-id."
+            exit 1
+          fi
 
       - name: Commit generated WebVTT captions
         run: |
