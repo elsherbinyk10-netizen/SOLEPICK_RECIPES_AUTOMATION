@@ -1,4 +1,5 @@
 name: SolePick Caption Generation
+# Trigger refresh for initial salmon captions
 
 on:
   push:
