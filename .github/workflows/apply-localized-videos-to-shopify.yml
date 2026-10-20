@@ -1,0 +1,31 @@
+name: Apply localized videos to existing SolePick recipes
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_shopify_update:
+        description: Confirm this updates existing published recipe article bodies only; no articles are created.
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: solepick-shopify-video-map-repair
+  cancel-in-progress: false
+jobs:
+  apply-maps:
+    if: inputs.confirm_shopify_update == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Apply verified video maps to existing published recipes
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+          SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
+        run: python repair_existing_recipe_video_languages.py
