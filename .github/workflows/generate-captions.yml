@@ -1,6 +1,10 @@
 name: SolePick Caption Generation
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/generate-captions.yml'
   workflow_dispatch:
     inputs:
       video_url:
