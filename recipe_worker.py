@@ -274,13 +274,16 @@ def find_verified_recipe_video(recipe):
     )
 
 def recipe_video_section_html(recipe, video):
+    # Request captions on first load. The language selector below updates the
+    # YouTube caption preference whenever a visitor chooses another language.
+    caption_url = video["embed_url"] + "?cc_load_policy=1&cc_lang_pref=en&hl=en"
     return (
         "<h2>Recipe Video</h2>"
-        f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
-        "<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;\">"
-        f"<iframe class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}\" title=\"{esc(recipe['title'])} recipe video\" "
-        "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
-        "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe></div>"
+        f"<p><a href=\\\"{esc(video['url'])}\\\" rel=\\\"noopener noreferrer\\\">Watch: {esc(video['title'])}</a></p>"
+        "<div class=\\\"solepick-recipe-video\\\" style=\\\"position:relative;width:100%;aspect-ratio:16/9;\\\">"
+        f"<iframe class=\\\"solepick-language-aware-video\\\" data-video-base=\\\"{esc(video['embed_url'])}\\\" src=\\\"{esc(caption_url)}\\\" title=\\\"{esc(recipe['title'])} recipe video\\\" "
+        "loading=\\\"lazy\\\" allow=\\\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\\\" "
+        "referrerpolicy=\\\"strict-origin-when-cross-origin\\\" allowfullscreen style=\\\"position:absolute;inset:0;width:100%;height:100%;border:0;\\\"></iframe></div>"
     )
 
 
@@ -427,7 +430,7 @@ def article_html(recipe, video=None):
     video_data = esc(json.dumps(video_map, ensure_ascii=False, separators=(",", ":")))
     switcher = (
         f'<div class="solepick-video-language-map" data-recipe-slug="{esc(recipe.get("slug", ""))}" data-video-map="{video_data}" hidden></div>'
-        '<script>(function(){function apply(){var maps=document.querySelectorAll(".solepick-video-language-map");var sel=document.querySelector("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select");var lang=sel&&sel.value?sel.value.split("-")[0]:"en";maps.forEach(function(m){var map={};try{map=JSON.parse(m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");if(frame&&map[lang]){frame.src=map[lang];frame.setAttribute("data-active-language",lang)}})}document.addEventListener("change",function(e){if(e.target&&e.target.matches("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select"))apply()});document.addEventListener("DOMContentLoaded",apply);})();</script>'
+        '<script>(function(){function apply(){var maps=document.querySelectorAll(".solepick-video-language-map");var sel=document.querySelector("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select");var lang=sel&&sel.value?sel.value.split("-")[0]:"en";maps.forEach(function(m){var map={};try{map=JSON.parse(m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");if(frame){var base=frame.getAttribute("data-video-base")||frame.src;var target=map[lang]||base;try{var u=new URL(target);u.searchParams.set("cc_load_policy","1");u.searchParams.set("cc_lang_pref",lang);u.searchParams.set("hl",lang);frame.src=u.toString();frame.setAttribute("data-active-language",lang)}catch(e){}}})}document.addEventListener("change",function(e){if(e.target&&e.target.matches("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select"))apply()});document.addEventListener("DOMContentLoaded",apply);})();</script>'
     )
     return (
         f"<p>{esc(recipe['description'])}</p>"
