@@ -409,12 +409,28 @@ def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
     video_html = recipe_video_section_html(recipe, video) if video else ""
+    # Embed verified language-specific candidates when the cache exists. The client
+    # script switches only to verified candidates and otherwise retains the base video.
+    video_map = {}
+    try:
+        cache_path = Path(__file__).resolve().parent / "localized_recipe_videos.json"
+        cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
+        for code, candidate in cache.get(recipe.get("slug", ""), {}).items():
+            if candidate.get("verified") and candidate.get("embed_url", "").startswith("https://www.youtube-nocookie.com/embed/"):
+                video_map[code] = candidate["embed_url"]
+    except (OSError, ValueError, TypeError):
+        video_map = {}
+    video_data = esc(json.dumps(video_map, ensure_ascii=False, separators=(",", ":")))
+    switcher = (
+        f'<div class="solepick-video-language-map" data-recipe-slug="{esc(recipe.get("slug", ""))}" data-video-map="{video_data}" hidden></div>'
+        '<script>(function(){function apply(){var maps=document.querySelectorAll(".solepick-video-language-map");var sel=document.querySelector("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select");var lang=sel&&sel.value?sel.value.split("-")[0]:"en";maps.forEach(function(m){var map={};try{map=JSON.parse(m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");if(frame&&map[lang]){frame.src=map[lang];frame.setAttribute("data-active-language",lang)}})}document.addEventListener("change",function(e){if(e.target&&e.target.matches("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select"))apply()});document.addEventListener("DOMContentLoaded",apply);})();</script>'
+    )
     return (
         f"<p>{esc(recipe['description'])}</p>"
         f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
-        f"{video_html}"
+        f"{video_html}{switcher}"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         "<p><em>Check labels for allergens and follow safe food-handling practices. "
