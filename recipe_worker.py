@@ -278,7 +278,7 @@ def recipe_video_section_html(recipe, video):
     video_id = str(video.get("id") or "")
     frame_id = "solepick-video-" + video_id
     vtt_base = "https://raw.githubusercontent.com/elsherbinyk10-netizen/SOLEPICK_RECIPES_AUTOMATION/main/captions/" + video_id + "/"
-    caption_url = video["embed_url"] + "?enablejsapi=1&origin=https%3A%2F%2Fsolepick.site&playsinline=1&cc_load_policy=1&cc_lang_pref=en&hl=en"
+    caption_url = video["embed_url"] + "?enablejsapi=1&origin=https%3A%2F%2Fsolepick.site&playsinline=1&cc_load_policy=1"
     return (
         "<h2>Recipe Video</h2>"
         f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
@@ -291,7 +291,7 @@ def recipe_video_section_html(recipe, video):
         "<div class=\"solepick-caption-controls\" style=\"display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 18px;\">"
         "<label style=\"display:flex;gap:8px;align-items:center;\">Captions "
         "<select class=\"solepick-caption-language\" aria-label=\"Caption language\" style=\"max-width:100%;padding:8px;border:1px solid #aaa;border-radius:6px;background:#fff;color:#222;\">"
-        "<option value=\"off\">Off</option><option value=\"en\" selected>English</option>"
+        "<option value=\"off\">Off</option><option value=\"en\" selected>English</option><option value=\"es\">Español</option><option value=\"fr\">Français</option><option value=\"de\">Deutsch</option><option value=\"it\">Italiano</option><option value=\"pt\">Português</option><option value=\"ar\">العربية</option><option value=\"hi\">हिन्दी</option><option value=\"zh\">中文</option><option value=\"ja\">日本語</option><option value=\"ko\">한국어</option><option value=\"ru\">Русский</option><option value=\"tr\">Türkçe</option><option value=\"nl\">Nederlands</option><option value=\"pl\">Polski</option><option value=\"id\">Bahasa Indonesia</option><option value=\"vi\">Tiếng Việt</option><option value=\"th\">ไทย</option><option value=\"uk\">Українська</option>"
         "</select></label><span class=\"solepick-caption-status\" role=\"status\" aria-live=\"polite\" style=\"font-size:0.9em;\"></span>"
         "</div>"
         "<script>(function(){"
@@ -310,7 +310,7 @@ def recipe_video_section_html(recipe, video):
         "if(lang==='off'){say('Captions off.');return;}var url=wrap.dataset.vttBase+encodeURIComponent(lang)+'.vtt';say('Loading '+lang.toUpperCase()+' captions…');"
         "fetch(url,{cache:'no-cache'}).then(function(r){if(!r.ok)throw Error('not found');return r.text();}).then(function(t){if(active!==lang)return;cues=parseVtt(t);"
         "if(!cues.length)throw Error('empty track');say(lang.toUpperCase()+' captions ready.');timer=setInterval(tick,200);tick();}).catch(function(){if(active!==lang)return;"
-        "overlay.textContent='';try{if(player&&player.loadModule){player.loadModule('captions');player.setOption('captions','track',{languageCode:lang});player.setOption('captions','reload',true);say('Using YouTube captions if available. Use CC in the video player.');return;}}catch(e){}say('No separate caption file yet. Try CC in the YouTube player.');});}"
+        "overlay.textContent='';try{var base=frame.getAttribute('data-video-base')||frame.src;var u=new URL(base,window.location.href);u.searchParams.set('enablejsapi','1');u.searchParams.set('origin',window.location.origin);u.searchParams.set('playsinline','1');u.searchParams.set('cc_load_policy','1');u.searchParams.set('cc_lang_pref',lang);u.searchParams.set('hl',lang);frame.src=u.toString();if(player&&player.loadModule){player.loadModule('captions');player.setOption('captions','track',{languageCode:lang});player.setOption('captions','reload',true);}say('Requested '+lang.toUpperCase()+' captions from YouTube. If that language is not available for this video, YouTube may keep the original language.');return;}catch(e){}say('No separate '+lang.toUpperCase()+' caption file and native language selection failed.');});}"
         "function tick(){if(!ready||!player||!cues.length)return;var now;try{now=player.getCurrentTime();}catch(e){return;}"
         "var idx=-1;for(var i=0;i<cues.length;i++){if(now>=cues[i].start&&now<cues[i].end){idx=i;break;}}if(idx!==last){last=idx;overlay.textContent=idx<0?'':cues[idx].text;}}"
         "function initPlayer(){if(!window.YT||!window.YT.Player||player)return;try{player=new YT.Player(frame,{events:{onReady:function(){ready=true;tick();},onStateChange:function(){tick();}}});}catch(e){say('Video caption sync is unavailable in this browser.');}}"
@@ -318,7 +318,7 @@ def recipe_video_section_html(recipe, video):
         "var prior=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=function(){if(typeof prior==='function')prior();initPlayer();};}"
         "select.addEventListener('change',function(){load(this.value);});"
         "var siteLang=document.querySelector('#SolePickTranslateSelect,#solepick-language-switcher,select[name=language],.language-selector select');"
-        "if(siteLang){siteLang.addEventListener('change',function(){var l=String(this.value||'en').split('-')[0].toLowerCase();if(Array.from(select.options).some(function(o){return o.value===l;}))select.value=l;});}"
+        "if(siteLang){function syncSiteLanguage(){var l=String(siteLang.value||'en').split('-')[0].toLowerCase();if(Array.from(select.options).some(function(o){return o.value===l;})){select.value=l;load(l);}}siteLang.addEventListener('change',syncSiteLanguage);syncSiteLanguage();}"
         "loadApi();load('en');"
         "})();</script>"
     )
