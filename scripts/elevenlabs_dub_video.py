@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
 """Run ElevenLabs dubbing for a user-authorized, publicly reachable direct video URL.
 
-This creates local MP4s for review. It does not publish media to Shopify or download
-videos from YouTube/social embeds. Input URL must point directly to a video file.
+Creates MP4s for review. Does not scrape YouTube/social embeds or publish to Shopify.
 """
-import json
-import os
-import pathlib
-import subprocess
-import sys
-import time
-import urllib.error
-import urllib.parse
-import urllib.request
+import json, os, pathlib, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 
 API = "https://api.elevenlabs.io/v1"
 OUT = pathlib.Path("dubbed-output")
@@ -30,12 +21,12 @@ def http(url, *, method="GET", headers=None, body=None, timeout=120):
 
 
 def download_source(url, path):
-    request = urllib.request.Request(url, headers={"User-Agent": "SolePickDubbing/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "SolePickDubbing/1.0"})
     total = 0
-    with urllib.request.urlopen(request, timeout=120) as response:
-        content_type = (response.headers.get("Content-Type") or "").lower()
-        if not (content_type.startswith("video/") or "octet-stream" in content_type):
-            raise RuntimeError(f"Source URL did not return a video file (Content-Type: {content_type or 'unknown'}). Use a direct MP4 URL.")
+    with urllib.request.urlopen(req, timeout=120) as response:
+        ctype = (response.headers.get("Content-Type") or "").lower()
+        if not (ctype.startswith("video/") or "octet-stream" in ctype):
+            raise RuntimeError(f"Source URL did not return a video file (Content-Type: {ctype or 'unknown'}). Use a direct MP4 URL.")
         with path.open("wb") as handle:
             while True:
                 chunk = response.read(1024 * 1024)
@@ -59,20 +50,18 @@ def main():
     parsed = urllib.parse.urlparse(source_url)
     if parsed.scheme != "https" or not parsed.netloc:
         raise RuntimeError("SOURCE_VIDEO_URL must be a public HTTPS direct video URL.")
-    if not targets:
-        raise RuntimeError("TARGET_LANGUAGES must include at least one language code.")
-    if len(targets) > 8:
-        raise RuntimeError("Limit one run to 8 target languages.")
+    if not targets or len(targets) > 8:
+        raise RuntimeError("Provide between 1 and 8 target language codes.")
     OUT.mkdir(parents=True, exist_ok=True)
     source_path = OUT / "source-video.mp4"
-    print("Downloading the supplied direct video file (no social-site scraping).", flush=True)
+    print("Downloading the supplied direct video file. No social-site scraping is performed.", flush=True)
     download_source(source_url, source_path)
     headers = {"xi-api-key": key, "Accept": "application/json"}
-    manifest = {"source_url": source_url, "source_language": source_lang, "targets": []}
+    manifest = {"source_language": source_lang, "targets": []}
     for lang in targets:
         print(f"Submitting ElevenLabs dubbing job for {lang}.", flush=True)
         payload = json.dumps({
-            "url": source_url,
+            "source_url": source_url,
             "source_lang": source_lang,
             "target_lang": lang,
             "name": f"SolePick recipe dubbing {lang}"
@@ -88,8 +77,8 @@ def main():
         deadline = time.time() + 3600
         while time.time() < deadline:
             raw, _ = http(f"{API}/dubbing/{encoded_id}", headers=headers)
-            state_data = json.loads(raw.decode("utf-8"))
-            state = str(state_data.get("status", "unknown")).lower()
+            status_data = json.loads(raw.decode("utf-8"))
+            state = str(status_data.get("status", "unknown")).lower()
             print(f"{lang}: {state}", flush=True)
             if state in ("dubbed", "completed", "complete"):
                 break
@@ -98,29 +87,33 @@ def main():
             time.sleep(15)
         else:
             raise RuntimeError(f"Timed out waiting for ElevenLabs job for {lang}.")
-        audio_url = f"{API}/dubbing/{encoded_id}/audio/{urllib.parse.quote(lang, safe='')}"
-        audio, content_type = http(audio_url, headers={"xi-api-key": key, "Accept": "*/*"}, timeout=240)
-        audio_path = OUT / f"audio-{lang}.mp3"
-        audio_path.write_bytes(audio)
-        if len(audio) < 1024:
-            raise RuntimeError(f"Returned audio for {lang} is unexpectedly small (Content-Type: {content_type}).")
+        url = f"{API}/dubbing/{encoded_id}/audio/{urllib.parse.quote(lang, safe='')}"
+        result_bytes, ctype = http(url, headers={"xi-api-key": key, "Accept": "*/*"}, timeout=240)
         output_path = OUT / f"solepick-dubbed-{lang}.mp4"
-        cmd = [
-            "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-            "-i", str(source_path), "-i", str(audio_path),
-            "-map", "0:v:0", "-map", "1:a:0",
-            "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-            "-shortest", "-movflags", "+faststart", str(output_path)
-        ]
-        subprocess.run(cmd, check=True)
+        if ctype.lower().split(";", 1)[0] in ("video/mp4", "video/mpeg", "application/octet-stream") and result_bytes[:4] != b"PK\\x03\\x04":
+            # ElevenLabs can return a complete dubbed video, depending on output type.
+            output_path.write_bytes(result_bytes)
+        else:
+            audio_path = OUT / f"audio-{lang}.bin"
+            audio_path.write_bytes(result_bytes)
+            if audio_path.stat().st_size < 1024:
+                raise RuntimeError(f"Returned media for {lang} is unexpectedly small (Content-Type: {ctype}).")
+            subprocess.run([
+                "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                "-i", str(source_path), "-i", str(audio_path),
+                "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy",
+                "-c:a", "aac", "-b:a", "192k", "-shortest",
+                "-movflags", "+faststart", str(output_path)
+            ], check=True)
+        if not output_path.exists() or output_path.stat().st_size < 1024:
+            raise RuntimeError(f"Output MP4 for {lang} was not created correctly.")
         manifest["targets"].append({"language": lang, "job_id": job_id, "output": output_path.name})
         print(f"Created {output_path}", flush=True)
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (OUT / "README.txt").write_text(
-        "Review every dubbed MP4 for translation quality, voice, timing, and audio/video sync before publishing. "
-        "Files are temporary workflow artifacts, not a public media host and not automatically connected to Shopify. "
-        "Workflow artifact retention is 7 days.\n",
-        encoding="utf-8"
+        "Review dubbed videos for translation quality, pronunciation, timing, and sync before publishing. "
+        "These are temporary workflow artifacts, not public hosting and not automatically connected to Shopify. "
+        "Retention: 7 days.\n", encoding="utf-8"
     )
 
 
