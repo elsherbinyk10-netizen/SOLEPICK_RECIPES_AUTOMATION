@@ -62,7 +62,7 @@ def main():
         print(f"Submitting ElevenLabs dubbing job for {lang}.", flush=True)
         boundary = "----SolePickElevenLabsBoundary7MA4YWxk"
         fields = {
-            "source_url": source_url,
+            "url": source_url,
             "source_lang": source_lang,
             "target_lang": lang,
             "name": f"SolePick recipe dubbing {lang}",
