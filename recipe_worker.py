@@ -328,7 +328,7 @@ def upsert_recipe_video_section(existing_body, recipe, video):
     section = recipe_video_section_html(recipe, video)
     pattern = r"<h2>Recipe Video</h2>.*?(?=<h2\b|$)"
     if re.search(pattern, existing_body, flags=re.IGNORECASE | re.DOTALL):
-        return re.sub(pattern, section, existing_body, count=1, flags=re.IGNORECASE | re.DOTALL)
+        return re.sub(pattern, lambda _match: section, existing_body, count=1, flags=re.IGNORECASE | re.DOTALL)
     match = re.search(r"<h2\b", existing_body, flags=re.IGNORECASE)
     if match:
         return existing_body[:match.start()] + section + existing_body[match.start():]
