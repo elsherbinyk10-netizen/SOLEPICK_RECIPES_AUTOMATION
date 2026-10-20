@@ -32,3 +32,10 @@ The dry run selects a recipe offline and does not call Shopify. The scheduled wo
 
 ## Recipe library
 The worker rotates through `recipes.json`, skips recipes already published by handle, and stops when no eligible recipe remains. It does not invent new recipes from the internet. Review recipe accuracy, food safety, allergens, and any generated or third-party media before scaling the library.
+
+## ElevenLabs video dubbing (manual, safe-by-default)
+- The GitHub Actions workflow `.github/workflows/elevenlabs-dubbing.yml` can generate target-language video versions using the `ELEVENLABS_API_KEY` Actions secret and FFmpeg.
+- Run it from **Actions → SolePick ElevenLabs Video Dubbing → Run workflow**. Supply a public direct HTTPS video-file URL that you own or are licensed to dub, source language (default `en`), and target codes (default `ar,es,fr`).
+- Outputs are uploaded as the `solepick-dubbed-videos` workflow artifact for 7 days. Download and review each video before use.
+- This does not scrape or download YouTube/social embeds, publish anything to Shopify, or alter the live theme. The normal daily recipe publisher remains a separate workflow.
+- A source video URL is required to run the dubbing API. Saving the API key and installing the workflow does not itself generate dubbed media. Do not use third-party videos without permission.
