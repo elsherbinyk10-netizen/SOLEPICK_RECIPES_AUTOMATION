@@ -22,6 +22,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Validate required configuration before spending API quota
+        env:
+          GOOGLE_TRANSLATE_API_KEY: ${{ secrets.GOOGLE_TRANSLATE_API_KEY }}
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+          SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
+        run: |
+          python - <<'PY'
+          import os, sys
+          required = ["GOOGLE_TRANSLATE_API_KEY", "SHOPIFY_STORE_DOMAIN", "SHOPIFY_CLIENT_ID", "SHOPIFY_CLIENT_SECRET", "SHOPIFY_BLOG_ID"]
+          missing = [name for name in required if not os.getenv(name, "").strip()]
+          if missing:
+              print("Missing GitHub Actions repository secrets: " + ", ".join(missing))
+              print("Add these under Settings > Secrets and variables > Actions. Secret values are never printed.")
+              sys.exit(1)
+          print("Required configuration is present.")
+          PY
       - name: Install video matching dependency
         run: python -m pip install yt-dlp
       - name: Generate recipe translations
