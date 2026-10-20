@@ -278,7 +278,7 @@ def recipe_video_section_html(recipe, video):
     video_id = str(video.get("id") or "")
     frame_id = "solepick-video-" + video_id
     vtt_base = "https://raw.githubusercontent.com/elsherbinyk10-netizen/SOLEPICK_RECIPES_AUTOMATION/main/captions/" + video_id + "/"
-    caption_url = video["embed_url"] + "?enablejsapi=1&origin=https%3A%2F%2Fsolepick.site&playsinline=1"
+    caption_url = video["embed_url"] + "?enablejsapi=1&origin=https%3A%2F%2Fsolepick.site&playsinline=1&cc_load_policy=1&cc_lang_pref=en&hl=en"
     return (
         "<h2>Recipe Video</h2>"
         f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
@@ -310,7 +310,7 @@ def recipe_video_section_html(recipe, video):
         "if(lang==='off'){say('Captions off.');return;}var url=wrap.dataset.vttBase+encodeURIComponent(lang)+'.vtt';say('Loading '+lang.toUpperCase()+' captions…');"
         "fetch(url,{cache:'no-cache'}).then(function(r){if(!r.ok)throw Error('not found');return r.text();}).then(function(t){if(active!==lang)return;cues=parseVtt(t);"
         "if(!cues.length)throw Error('empty track');say(lang.toUpperCase()+' captions ready.');timer=setInterval(tick,200);tick();}).catch(function(){if(active!==lang)return;"
-        "say('Captions for '+lang.toUpperCase()+' are not generated yet.');overlay.textContent='';});}"
+        "overlay.textContent='';try{if(player&&player.loadModule){player.loadModule('captions');player.setOption('captions','track',{languageCode:lang});player.setOption('captions','reload',true);say('Using YouTube captions if available. Use CC in the video player.');return;}}catch(e){}say('No separate caption file yet. Try CC in the YouTube player.');});}"
         "function tick(){if(!ready||!player||!cues.length)return;var now;try{now=player.getCurrentTime();}catch(e){return;}"
         "var idx=-1;for(var i=0;i<cues.length;i++){if(now>=cues[i].start&&now<cues[i].end){idx=i;break;}}if(idx!==last){last=idx;overlay.textContent=idx<0?'':cues[idx].text;}}"
         "function initPlayer(){if(!window.YT||!window.YT.Player||player)return;try{player=new YT.Player(frame,{events:{onReady:function(){ready=true;tick();},onStateChange:function(){tick();}}});}catch(e){say('Video caption sync is unavailable in this browser.');}}"
