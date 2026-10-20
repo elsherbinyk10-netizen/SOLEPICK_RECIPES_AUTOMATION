@@ -312,15 +312,16 @@ def generate_recipe_image(recipe):
     query_terms = re.findall(r"[a-z0-9]+", title.lower())
     stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe"}
     wanted = {word for word in query_terms if word not in stop and len(word) > 2}
-    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
+    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
     formats = {"salad","pasta","noodle","noodles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
     wanted_formats = wanted & formats
     searches = [
-        title + " food",
-        " ".join(word for word in query_terms if word not in stop) + " dish",
-        (main_food or title) + " cooked food dish",
+        title + " real food photograph",
+        " ".join(word for word in query_terms if word not in stop) + " plated recipe food photo",
+        (main_food or title) + " cooked meal photograph",
     ]
     seen = set()
+    reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies"}
     for search_text in searches:
         params = urllib.parse.urlencode({
             "action": "query", "generator": "search", "gsrsearch": search_text,
@@ -375,11 +376,14 @@ def generate_recipe_image(recipe):
                 continue
             seen.add(image_url)
             found = set(re.findall(r"[a-z0-9]+", title_text))
+            if found & reject_terms:
+                print("REJECTED UNRELATED IMAGE TITLE: " + title_text)
+                continue
             overlap = len(wanted & found) / max(1, len(wanted))
             has_main = bool(main_food and main_food in found)
             has_format = bool(wanted_formats & found)
             # Require meaningful dish relevance, not merely a generic food photograph.
-            if overlap < 0.25 and not (has_main and (has_format or len(wanted_formats) == 0)):
+            if overlap < 0.40 and not (has_main and (has_format or len(wanted_formats) == 0)):
                 continue
             if main_food and not has_main:
                 continue
