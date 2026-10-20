@@ -1,0 +1,54 @@
+name: SolePick ElevenLabs Video Dubbing
+on:
+  workflow_dispatch:
+    inputs:
+      source_video_url:
+        description: 'Public direct HTTPS MP4 URL for a video you own or are licensed to dub'
+        required: true
+        type: string
+      source_language:
+        description: 'Source language code (for example en)'
+        required: true
+        default: en
+        type: string
+      target_languages:
+        description: 'Comma-separated target language codes (for example ar,es,fr)'
+        required: true
+        default: ar,es,fr
+        type: string
+permissions:
+  contents: read
+jobs:
+  dub:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Validate input and download authorized source
+        env:
+          SOURCE_VIDEO_URL: ${{ inputs.source_video_url }}
+        run: |
+          python - <<'PY'
+          import os, urllib.parse
+          u=urllib.parse.urlparse(os.environ['SOURCE_VIDEO_URL'])
+          if u.scheme != 'https' or not u.netloc:
+              raise SystemExit('Source must be a public HTTPS URL.')
+          print('Source URL format validated. Use only media you own or are licensed to dub.')
+          PY
+      - name: Generate dubbed video versions
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          SOURCE_VIDEO_URL: ${{ inputs.source_video_url }}
+          SOURCE_LANGUAGE: ${{ inputs.source_language }}
+          TARGET_LANGUAGES: ${{ inputs.target_languages }}
+        run: python scripts/elevenlabs_dub_video.py
+      - name: Upload dubbed videos as a downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: solepick-dubbed-videos
+          path: dubbed-output/
+          if-no-files-found: error
+          retention-days: 7
