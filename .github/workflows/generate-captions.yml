@@ -43,7 +43,6 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: pip
 
       - name: Install FFmpeg and open-source caption tools
         run: |
@@ -53,8 +52,8 @@ jobs:
 
       - name: Generate timed English captions locally
         env:
-          VIDEO_URL: ${{ inputs.video_url }}
-          WHISPER_MODEL: ${{ inputs.model }}
+          VIDEO_URL: ${{ inputs.video_url || 'https://www.youtube.com/watch?v=-upXWTgK1fo' }}
+          WHISPER_MODEL: ${{ inputs.model || 'small.en' }}
         run: python generate_captions.py --video-url "$VIDEO_URL" --model "$WHISPER_MODEL"
 
       - name: Commit generated WebVTT captions
