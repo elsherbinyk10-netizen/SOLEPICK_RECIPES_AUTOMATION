@@ -60,14 +60,25 @@ def main():
     manifest = {"source_language": source_lang, "targets": []}
     for lang in targets:
         print(f"Submitting ElevenLabs dubbing job for {lang}.", flush=True)
-        payload = json.dumps({
+        boundary = "----SolePickElevenLabsBoundary7MA4YWxk"
+        fields = {
             "source_url": source_url,
             "source_lang": source_lang,
             "target_lang": lang,
-            "name": f"SolePick recipe dubbing {lang}"
-        }).encode()
+            "name": f"SolePick recipe dubbing {lang}",
+        }
+        chunks = []
+        for field, value in fields.items():
+            chunks.extend([
+                f"--{boundary}\r\n".encode(),
+                f'Content-Disposition: form-data; name="{field}"\r\n\r\n'.encode(),
+                str(value).encode(),
+                b"\r\n",
+            ])
+        chunks.append(f"--{boundary}--\r\n".encode())
+        payload = b"".join(chunks)
         raw, _ = http(API + "/dubbing", method="POST",
-                      headers={**headers, "Content-Type": "application/json"},
+                      headers={**headers, "Content-Type": f"multipart/form-data; boundary={boundary}"},
                       body=payload, timeout=180)
         result = json.loads(raw.decode("utf-8"))
         job_id = result.get("dubbing_id")
