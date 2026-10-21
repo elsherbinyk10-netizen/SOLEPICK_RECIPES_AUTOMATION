@@ -187,6 +187,7 @@ def main():
             else:
                 updated_body = body_without_video.rstrip() + "\n" + replacement
             print("INFO created standard Recipe Video section from existing embed:", article.get("handle"))
+        updated_body = ensure_recipe_hero_image(updated_body, article.get("image"), article.get("title", recipe["title"]))
         if updated_body == body:
             skipped += 1
             print("SKIP already current:", article.get("handle"))
