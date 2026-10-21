@@ -26,7 +26,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: solepick-caption-repair-${{ inputs.video_id }}
+  group: solepick-caption-repair-${{ inputs.video_id || 'EPc5l3nPoxU' }}
   cancel-in-progress: false
 
 jobs:
@@ -40,7 +40,6 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: "pip"
       - name: Install open-source caption tools
         run: |
           sudo apt-get update
@@ -52,9 +51,9 @@ jobs:
           python -m unittest discover -s tests -v
       - name: Generate genuine timed captions and translations
         env:
-          VIDEO_ID: ${{ inputs.video_id }}
-          MEDIA_URL: ${{ inputs.media_url }}
-          LANGUAGES: ${{ inputs.languages }}
+          VIDEO_ID: ${{ inputs.video_id || 'EPc5l3nPoxU' }}
+          MEDIA_URL: ${{ inputs.media_url || '' }}
+          LANGUAGES: ${{ inputs.languages || 'en,ar,es,fr,de,it,pt,ja,ko,ru,tr,nl,pl,id,vi,th,uk,hi,zh' }}
         run: |
           args=(--video-id "$VIDEO_ID" --languages "$LANGUAGES")
           if [[ -n "$MEDIA_URL" ]]; then args+=(--media-url "$MEDIA_URL"); fi
@@ -64,10 +63,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [[ -d "captions/${{ inputs.video_id }}" ]]; then git add -A -- "captions/${{ inputs.video_id }}"; fi
-          if [[ -f "caption-repair-report-${{ inputs.video_id }}.json" ]]; then git add -- "caption-repair-report-${{ inputs.video_id }}.json"; fi
+          VIDEO_ID="${{ inputs.video_id || 'EPc5l3nPoxU' }}"
+          if [[ -d "captions/$VIDEO_ID" ]]; then git add -A -- "captions/$VIDEO_ID"; fi
+          if [[ -f "caption-repair-report-$VIDEO_ID.json" ]]; then git add -- "caption-repair-report-$VIDEO_ID.json"; fi
           if ! git diff --cached --quiet; then
-            git commit -m "Repair validated captions for video ${{ inputs.video_id }}"
+            git commit -m "Repair validated captions for video $VIDEO_ID"
             git push
           else
             echo "No validated caption files or report changes to commit."
@@ -76,10 +76,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: solepick-caption-repair-${{ inputs.video_id }}
+          name: solepick-caption-repair-${{ inputs.video_id || 'EPc5l3nPoxU' }}
           path: |
-            caption-repair-report-${{ inputs.video_id }}.json
-            captions/${{ inputs.video_id }}/*.vtt
-            captions/${{ inputs.video_id }}/translation-report.json
+            caption-repair-report-${{ inputs.video_id || 'EPc5l3nPoxU' }}.json
+            captions/${{ inputs.video_id || 'EPc5l3nPoxU' }}/*.vtt
+            captions/${{ inputs.video_id || 'EPc5l3nPoxU' }}/translation-report.json
           if-no-files-found: warn
           retention-days: 30
