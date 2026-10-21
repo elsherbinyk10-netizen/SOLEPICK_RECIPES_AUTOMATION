@@ -1,9 +1,6 @@
 name: SolePick Single-Video Caption Repair
 
 on:
-  push:
-    paths:
-      - 'caption_repair_one.py'
   workflow_dispatch:
     inputs:
       video_id:
