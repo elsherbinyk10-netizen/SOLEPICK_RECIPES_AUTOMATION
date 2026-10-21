@@ -90,6 +90,15 @@ def main():
             target_path.write_text(source.read_text(encoding="utf-8-sig"), encoding="utf-8")
             report["results"][raw_code] = {"status": "ok", "file": str(target_path), "cues": len(cues), "method": "source-copy"}
             continue
+        target_path = out / f"{code}.vtt"
+        if target_path.is_file():
+            try:
+                existing_cues = parse_vtt(target_path)
+                if existing_cues:
+                    report["results"][raw_code] = {"status": "ok", "file": str(target_path), "cues": len(existing_cues), "method": "existing-youtube-track"}
+                    continue
+            except Exception:
+                target_path.unlink(missing_ok=True)
         target_lang = by_code.get(code)
         translation = en.get_translation(target_lang) if target_lang else None
         if translation is None:
