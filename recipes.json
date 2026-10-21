@@ -1724,6 +1724,53 @@
     "video_url": ""
   },
   {
+    "slug": "creamy-lemon-garlic-chicken-orzo",
+    "title": "Creamy Lemon Garlic Chicken Orzo",
+    "description": "Make creamy lemon garlic chicken orzo in one pan with tender chicken, spinach, Parmesan, and a fresh lemon sauce. This easy weeknight dinner is ready in about 40 minutes.",
+    "tags": [
+      "chicken",
+      "pasta",
+      "dinner",
+      "quick-and-easy",
+      "one-pan"
+    ],
+    "ingredients": [
+      "500 g boneless, skinless chicken breast, cut into bite-sized pieces",
+      "250 g dry orzo pasta",
+      "2 tablespoons olive oil",
+      "1 small onion, finely chopped",
+      "3 garlic cloves, minced",
+      "750 ml chicken broth, plus extra as needed",
+      "120 ml cooking cream",
+      "50 g freshly grated Parmesan cheese",
+      "2 cups fresh baby spinach",
+      "Zest of 1 lemon",
+      "2 tablespoons fresh lemon juice",
+      "1 teaspoon dried oregano",
+      "1/2 teaspoon paprika",
+      "Salt and black pepper, to taste",
+      "Chopped fresh parsley, for garnish"
+    ],
+    "instructions": [
+      "Pat the chicken dry and season with salt, black pepper, paprika, and oregano.",
+      "Heat olive oil in a large deep skillet over medium-high heat. Brown the chicken for 5–7 minutes, turning occasionally. Transfer to a plate; it will finish cooking later.",
+      "Add the onion to the same skillet and cook for 2–3 minutes until softened. Stir in the garlic and cook for 30 seconds.",
+      "Add the dry orzo and stir for 1 minute to coat it in the oil and aromatics.",
+      "Pour in the chicken broth, scraping up browned bits from the pan. Bring to a gentle simmer and cook for 8–10 minutes, stirring often and adding a splash more broth if needed.",
+      "Return the chicken and any juices to the skillet. Stir in the cream and simmer gently until the orzo is tender and the chicken reaches 74°C (165°F) at its thickest part.",
+      "Stir in the Parmesan and spinach until the spinach wilts. Add lemon zest and lemon juice, then taste and adjust the seasoning.",
+      "Garnish with parsley and extra Parmesan if desired. Serve immediately while creamy."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 25,
+    "servings": 4,
+    "image_alt": "Creamy lemon garlic chicken orzo with golden chicken, baby spinach, Parmesan, and fresh parsley",
+    "image_url": "",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": ""
+  },
+  {
     "slug": "honey-mustard-salmon-one-pot-soup",
     "title": "Honey Mustard Salmon One-Pot Soup",
     "description": "A practical one-pot soup featuring honey mustard salmon, everyday ingredients, and clear steps for an easy homemade meal.",
