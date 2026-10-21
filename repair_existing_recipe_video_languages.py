@@ -147,13 +147,13 @@ def main():
         else:
             # Remove only the iframe whose video ID was reused, so it is not duplicated.
             video_id = re.escape(current["id"])
-            iframe_pattern = re.compile(r'<iframe\\b(?=[^>]*youtube(?:-nocookie)?\\.com/embed/' + video_id + r')[^>]*>\\s*</iframe>', re.I | re.S)
+            iframe_pattern = re.compile(r'<iframe\b(?=[^>]*youtube(?:-nocookie)?\.com/embed/' + video_id + r')[^>]*>\s*</iframe>', re.I | re.S)
             body_without_video = iframe_pattern.sub("", body, count=1)
-            insert_at = re.search(r"<h2\\b", body_without_video, re.I)
+            insert_at = re.search(r"<h2\b", body_without_video, re.I)
             if insert_at:
                 updated_body = body_without_video[:insert_at.start()] + replacement + body_without_video[insert_at.start():]
             else:
-                updated_body = body_without_video.rstrip() + "\\n" + replacement
+                updated_body = body_without_video.rstrip() + "\n" + replacement
             print("INFO created standard Recipe Video section from existing embed:", article.get("handle"))
         if updated_body == body:
             skipped += 1
