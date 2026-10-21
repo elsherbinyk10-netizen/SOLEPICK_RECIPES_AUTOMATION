@@ -37,23 +37,25 @@ def main():
     output = ROOT / "localized_recipe_videos.json"
     results = json.loads(output.read_text(encoding="utf-8")) if output.exists() else {}
 
+    # Match the 12 non-English languages exposed in the visitor-facing video selector.
+    target_languages = {code: languages[code] for code in
+                        ("ar", "es", "fr", "de", "it", "pt", "ja", "ko", "tr", "ru", "zh-CN", "zh-TW")
+                        if code in languages}
     for recipe in recipes:
         slug, title = recipe.get("slug"), str(recipe.get("title", "")).strip()
         if not slug or not title:
             continue
         results.setdefault(slug, {})
-        for code, language_name in languages.items():
-            if code == "en":
-                continue
+        for code, language_name in target_languages.items():
             old = results[slug].get(code)
             if isinstance(old, dict) and old.get("reviewed") is True and old.get("verified") is True:
                 continue
             chosen, seen = None, set()
-            for query in (f"ytsearch8:{title} recipe {language_name}",
-                          f"ytsearch8:{title} cooking {language_name}"):
+            for query in (f"ytsearch5:{title} recipe {language_name}",
+                          f"ytsearch5:{title} cooking {language_name}"):
                 options = {"quiet": True, "no_warnings": True, "skip_download": True,
                            "extract_flat": True, "noplaylist": True, "ignoreerrors": True,
-                           "socket_timeout": 15, "retries": 1}
+                           "socket_timeout": 12, "retries": 1}
                 try:
                     with yt_dlp.YoutubeDL(options) as ydl:
                         found = ydl.extract_info(query, download=False) or {}
