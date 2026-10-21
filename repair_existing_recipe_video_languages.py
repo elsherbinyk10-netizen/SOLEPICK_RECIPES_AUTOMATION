@@ -128,11 +128,13 @@ def main():
         body = article.get("body") or ""
         section = re.compile(r"<h2>Recipe Video</h2>.*?(?=<h2\b|$)", re.I | re.S)
         match = section.search(body)
-        if not match:
-            skipped += 1
-            print("SKIP no known Recipe Video section:", article.get("handle"))
-            continue
-        current = existing_video(match.group(0), article.get("title", recipe["title"]))
+        if match:
+            current = existing_video(match.group(0), article.get("title", recipe["title"]))
+        else:
+            # Some older published recipes have a YouTube embed but no standard
+            # Recipe Video heading. Reuse that exact existing video and wrap it in
+            # the standard section; preserve all other article HTML.
+            current = existing_video(body, article.get("title", recipe["title"]))
         if not current:
             skipped += 1
             print("SKIP no recognizable YouTube video; preserving article:", article.get("handle"))
@@ -140,7 +142,19 @@ def main():
 
         approved = approved_candidates(catalogue, recipe["slug"], language_names)
         replacement = worker.recipe_video_section_html(recipe, current) + build_switcher(recipe["slug"], approved)
-        updated_body = section.sub(lambda _m: replacement, body, count=1)
+        if match:
+            updated_body = section.sub(lambda _m: replacement, body, count=1)
+        else:
+            # Remove only the iframe whose video ID was reused, so it is not duplicated.
+            video_id = re.escape(current["id"])
+            iframe_pattern = re.compile(r'<iframe\\b(?=[^>]*youtube(?:-nocookie)?\\.com/embed/' + video_id + r')[^>]*>\\s*</iframe>', re.I | re.S)
+            body_without_video = iframe_pattern.sub("", body, count=1)
+            insert_at = re.search(r"<h2\\b", body_without_video, re.I)
+            if insert_at:
+                updated_body = body_without_video[:insert_at.start()] + replacement + body_without_video[insert_at.start():]
+            else:
+                updated_body = body_without_video.rstrip() + "\\n" + replacement
+            print("INFO created standard Recipe Video section from existing embed:", article.get("handle"))
         if updated_body == body:
             skipped += 1
             print("SKIP already current:", article.get("handle"))
