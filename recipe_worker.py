@@ -441,12 +441,18 @@ def generate_recipe_image(recipe):
     )
 
 def featured_image_for(recipe, generated_image):
-    """Use a configured public recipe image without generated-image APIs or upload permissions."""
+    """Use only a dish-relevant image returned by the verified image search; never silently fall back to generic catalogue photos."""
     image = generated_image or {}
-    url = (image.get("url") or recipe.get("image_url") or "").strip()
-    if not url.startswith(("https://", "http://")):
-        raise RuntimeError("No configured public featured image URL for " + recipe["title"])
-    return {"url": url, "altText": image.get("altText") or recipe.get("image_alt") or ("Finished " + recipe["title"])}
+    url = str(image.get("url") or "").strip()
+    if not url.startswith("https://"):
+        raise RuntimeError(
+            "No verified, dish-relevant featured image found for " + recipe["title"]
+            + ". Refusing to publish a mismatched fallback photo."
+        )
+    alt = str(image.get("altText") or "").strip()
+    if not alt:
+        raise RuntimeError("Verified image is missing descriptive alt text for " + recipe["title"])
+    return {"url": url, "altText": alt}
 
 def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
