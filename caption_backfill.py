@@ -82,6 +82,7 @@ def main():
     if not video_map:
         raise RuntimeError("No YouTube video IDs were found in published recipe article HTML; no files were changed.")
     report = {"articles_checked": len(articles), "videos_found": len(video_map), "videos": {}, "languages": LANGUAGES.split(",")}
+    models_install_attempted = False
     for vid, handles in sorted(video_map.items()):
         directory = CAPTIONS / vid
         english = directory / "en.vtt"
@@ -98,8 +99,12 @@ def main():
                 print(f"SKIP {vid}: could not generate genuine English captions; will not fabricate.")
                 continue
         trans_cmd = [sys.executable, str(ROOT / "translate_captions.py"), "--source", str(english),
-                     "--out-dir", str(directory), "--languages", LANGUAGES, "--install-models",
+                     "--out-dir", str(directory), "--languages", LANGUAGES,
                      "--report", str(directory / "translation-report.json")]
+        # Model downloads persist for this runner job. Attempt installation once, not once per video.
+        if not models_install_attempted:
+            trans_cmd.append("--install-models")
+            models_install_attempted = True
         result = subprocess.run(trans_cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1200)
         item["translation_log"] = result.stdout[-3000:]
         item["translations"] = "processed" if result.returncode == 0 else "failed"
