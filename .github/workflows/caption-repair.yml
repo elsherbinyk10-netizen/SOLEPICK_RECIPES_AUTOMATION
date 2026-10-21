@@ -1,0 +1,81 @@
+name: SolePick Single-Video Caption Repair
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_id:
+        description: "YouTube ID for the recipe video (11 characters)"
+        required: true
+        type: string
+        default: "EPc5l3nPoxU"
+      media_url:
+        description: "Optional HTTPS URL to a media file you own or are authorized to caption; leave blank to try public YouTube tracks"
+        required: false
+        type: string
+        default: ""
+      languages:
+        description: "Caption language codes matching the SolePick selector"
+        required: true
+        type: string
+        default: "en,ar,es,fr,de,it,pt,ja,ko,ru,tr,nl,pl,id,vi,th,uk,hi,zh"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: solepick-caption-repair-${{ inputs.video_id }}
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Install open-source caption tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check yt-dlp faster-whisper argostranslate
+      - name: Validate script syntax and tests
+        run: |
+          python -m py_compile caption_repair_one.py caption_backfill.py generate_captions.py translate_captions.py
+          python -m unittest discover -s tests -v
+      - name: Generate genuine timed captions and translations
+        env:
+          VIDEO_ID: ${{ inputs.video_id }}
+          MEDIA_URL: ${{ inputs.media_url }}
+          LANGUAGES: ${{ inputs.languages }}
+        run: |
+          args=(--video-id "$VIDEO_ID" --languages "$LANGUAGES")
+          if [[ -n "$MEDIA_URL" ]]; then args+=(--media-url "$MEDIA_URL"); fi
+          python caption_repair_one.py "${args[@]}"
+      - name: Commit validated caption files and report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "captions/${{ inputs.video_id }}" "caption-repair-report-${{ inputs.video_id }}.json" || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Repair validated captions for video ${{ inputs.video_id }}"
+            git push
+          else
+            echo "No validated caption files or report changes to commit."
+          fi
+      - name: Upload repair report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: solepick-caption-repair-${{ inputs.video_id }}
+          path: |
+            caption-repair-report-${{ inputs.video_id }}.json
+            captions/${{ inputs.video_id }}/*.vtt
+            captions/${{ inputs.video_id }}/translation-report.json
+          if-no-files-found: warn
+          retention-days: 30
