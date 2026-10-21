@@ -112,9 +112,18 @@ def main():
             title = article.get("title", "").casefold().strip()
             recipe = next((r for r in recipes if r.get("title", "").casefold().strip() == title), None)
         if not recipe:
-            skipped += 1
-            print("SKIP no source recipe match:", article.get("handle"))
-            continue
+            # Existing Shopify articles may predate or be absent from recipes.json.
+            # Use their own stable Shopify handle/title for video UI repair only; do not
+            # invent recipe ingredients, create articles, or approve any video candidates.
+            article_handle = str(article.get("handle") or "").strip()
+            article_title = str(article.get("title") or "").strip()
+            if article_handle and article_title:
+                recipe = {"slug": article_handle, "title": article_title}
+                print("INFO using Shopify article identity (not recipes.json):", article_handle)
+            else:
+                skipped += 1
+                print("SKIP article lacks handle/title:", article.get("id"))
+                continue
 
         body = article.get("body") or ""
         section = re.compile(r"<h2>Recipe Video</h2>.*?(?=<h2\b|$)", re.I | re.S)
