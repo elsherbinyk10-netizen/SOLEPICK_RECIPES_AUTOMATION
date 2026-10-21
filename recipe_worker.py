@@ -274,54 +274,17 @@ def find_verified_recipe_video(recipe):
     )
 
 def recipe_video_section_html(recipe, video):
-    """Render a YouTube video with a custom timed-caption overlay backed by public VTT files."""
+    """Render the base recipe video without the custom caption-selection box."""
     video_id = str(video.get("id") or "")
     frame_id = "solepick-video-" + video_id
-    vtt_base = "https://raw.githubusercontent.com/elsherbinyk10-netizen/SOLEPICK_RECIPES_AUTOMATION/main/captions/" + video_id + "/"
-    caption_url = video["embed_url"] + "?enablejsapi=1&origin=https%3A%2F%2Fsolepick.site&playsinline=1&cc_load_policy=1"
     return (
         "<h2>Recipe Video</h2>"
         f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
-        f"<div class=\"solepick-recipe-video\" data-solepick-video-id=\"{esc(video_id)}\" data-vtt-base=\"{esc(vtt_base)}\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;\">"
-        f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(caption_url)}\" title=\"{esc(recipe['title'])} recipe video\" "
+        f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;\">"
+        f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}?playsinline=1\" title=\"{esc(recipe['title'])} recipe video\" "
         "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
         "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe>"
-        "<div class=\"solepick-caption-overlay\" aria-live=\"polite\" aria-atomic=\"true\" style=\"position:absolute;left:5%;right:5%;bottom:12%;z-index:5;text-align:center;pointer-events:none;color:#fff;font-size:clamp(15px,2.5vw,25px);font-weight:700;line-height:1.35;text-shadow:0 2px 4px #000,0 0 8px #000;padding:0 4px;\"></div>"
         "</div>"
-        "<div class=\"solepick-caption-controls\" style=\"display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 18px;\">"
-        "<label style=\"display:flex;gap:8px;align-items:center;\">Captions "
-        "<select class=\"solepick-caption-language\" aria-label=\"Caption language\" style=\"max-width:100%;padding:8px;border:1px solid #aaa;border-radius:6px;background:#fff;color:#222;\">"
-        "<option value=\"off\">Off</option><option value=\"en\" selected>English</option><option value=\"es\">Español</option><option value=\"fr\">Français</option><option value=\"de\">Deutsch</option><option value=\"it\">Italiano</option><option value=\"pt\">Português</option><option value=\"ar\">العربية</option><option value=\"hi\">हिन्दी</option><option value=\"zh\">中文</option><option value=\"ja\">日本語</option><option value=\"ko\">한국어</option><option value=\"ru\">Русский</option><option value=\"tr\">Türkçe</option><option value=\"nl\">Nederlands</option><option value=\"pl\">Polski</option><option value=\"id\">Bahasa Indonesia</option><option value=\"vi\">Tiếng Việt</option><option value=\"th\">ไทย</option><option value=\"uk\">Українська</option>"
-        "</select></label><span class=\"solepick-caption-status\" role=\"status\" aria-live=\"polite\" style=\"font-size:0.9em;\"></span>"
-        "</div>"
-        "<script>(function(){"
-        "var script=document.currentScript;var block=script&&script.previousElementSibling;"
-        "while(block&&!block.matches('.solepick-caption-controls'))block=block.previousElementSibling;"
-        "if(!block)return;var wrap=block.previousElementSibling;if(!wrap||!wrap.matches('.solepick-recipe-video'))return;"
-        "if(wrap.dataset.captionInit==='1')return;wrap.dataset.captionInit='1';"
-        "var frame=wrap.querySelector('iframe'),overlay=wrap.querySelector('.solepick-caption-overlay'),select=block.querySelector('select'),status=block.querySelector('.solepick-caption-status');"
-        "var cues=[],timer=null,last=-1,player=null,ready=false,active='en',requestSeq=0,nativeRequested='';"
-        "function say(s){status.textContent=s||'';}function parseVtt(s){var out=[];var rows=s.replace(/\\r/g,'').split('\\n');"
-        "for(var i=0;i<rows.length;i++){var m=rows[i].match(/(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s+-->\\s+(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})/);"
-        "if(!m)continue;function sec(t){var p=t.split(/[:.]/).map(Number);return p[0]*3600+p[1]*60+p[2]+p[3]/1000;}"
-        "var text=[];for(i++;i<rows.length&&rows[i].trim();i++)if(!/^(WEBVTT|NOTE|\\d+)$/.test(rows[i].trim()))text.push(rows[i].replace(/<[^>]*>/g,''));"
-        "if(text.length)out.push({start:sec(m[1]),end:sec(m[2]),text:text.join(' ').trim()});}return out;}"
-        "function load(lang){active=lang;var seq=++requestSeq;overlay.textContent='';cues=[];last=-1;if(timer){clearInterval(timer);timer=null;}"
-        "if(lang==='off'){nativeRequested='';say('Captions off.');return;}var url=wrap.dataset.vttBase+encodeURIComponent(lang)+'.vtt';say('Loading '+lang.toUpperCase()+' captions…');"
-        "fetch(url,{cache:'force-cache'}).then(function(r){if(!r.ok)throw Error('No saved subtitle file');return r.text();}).then(function(t){if(active!==lang||seq!==requestSeq)return;if(!/^WEBVTT(?:\\s|$)/.test(t))throw Error('Invalid WebVTT');cues=parseVtt(t);"
-        "if(!cues.length)throw Error('empty track');say(lang.toUpperCase()+' captions ready.');loadApi();timer=setInterval(tick,100);tick();}).catch(function(){nativeFallback(lang,seq);});}"
-        "function tick(){if(!ready||!player||!cues.length)return;var now;try{now=player.getCurrentTime();}catch(e){return;}"
-        "var idx=-1;for(var i=0;i<cues.length;i++){if(now>=cues[i].start&&now<cues[i].end){idx=i;break;}}if(idx!==last){last=idx;overlay.textContent=idx<0?'':cues[idx].text;}}"
-        "function applyNative(lang){if(!player||!ready)return;try{player.loadModule('captions');player.setOption('captions','track',{languageCode:lang});say('YouTube caption track requested for '+lang.toUpperCase()+'. If no text appears, this video may not provide that track; use the player CC control.');}catch(e){say('YouTube could not activate '+lang.toUpperCase()+' captions; use the player CC control if available.');}}"
-        "function nativeFallback(lang,seq){if(active!==lang||seq!==requestSeq)return;overlay.textContent='';nativeRequested=lang;player=null;ready=false;try{var u=new URL(frame.getAttribute('data-video-base')||frame.src,location.href);u.searchParams.set('enablejsapi','1');u.searchParams.set('origin',location.origin);u.searchParams.set('playsinline','1');u.searchParams.set('cc_load_policy','1');u.searchParams.set('cc_lang_pref',lang);u.searchParams.set('hl',lang);frame.src=u.toString();say('No hosted '+lang.toUpperCase()+' caption file; requested YouTube captions. If available, turn on CC in the video player.');}catch(e){say('No hosted '+lang.toUpperCase()+' caption file. Use the YouTube player CC control if captions are available.')}loadApi();}"
-        "function initPlayer(){if(!window.YT||!window.YT.Player||player)return;try{player=new YT.Player(frame,{events:{onReady:function(){ready=true;if(nativeRequested)applyNative(nativeRequested);tick();},onStateChange:function(){tick();}}});}catch(e){say('Video caption sync is unavailable in this browser.');}}"
-        "function loadApi(){if(window.YT&&window.YT.Player){initPlayer();return;}if(!document.querySelector('script[data-solepick-yt-api]')){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.dataset.solepickYtApi='1';document.head.appendChild(s);}"
-        "var prior=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=function(){if(typeof prior==='function')prior();initPlayer();};}"
-        "select.addEventListener('change',function(){load(this.value);});"
-        "var siteLang=document.querySelector('#SolePickTranslateSelect,#solepick-language-switcher,select[name=language],.language-selector select');"
-        "if(siteLang){function syncSiteLanguage(){var l=String(siteLang.value||'en').split('-')[0].toLowerCase();if(Array.from(select.options).some(function(o){return o.value===l;})){select.value=l;load(l);}}siteLang.addEventListener('change',syncSiteLanguage);syncSiteLanguage();}"
-        "load(select.value||'en');"
-        "})();</script>"
     )
 
 def upsert_recipe_video_section(existing_body, recipe, video):
@@ -459,21 +422,26 @@ def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
     video_html = recipe_video_section_html(recipe, video) if video else ""
-    # Embed verified language-specific candidates when the cache exists. The client
-    # script switches only to verified candidates and otherwise retains the base video.
+    # Only human-reviewed verified mappings are eligible; language selection is independent of captions.
     video_map = {}
     try:
         cache_path = Path(__file__).resolve().parent / "localized_recipe_videos.json"
         cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
         for code, candidate in cache.get(recipe.get("slug", ""), {}).items():
-            if candidate.get("verified") and candidate.get("embed_url", "").startswith("https://www.youtube-nocookie.com/embed/"):
+            if candidate.get("verified") is True and candidate.get("reviewed") is True and candidate.get("recipe_slug", recipe.get("slug")) == recipe.get("slug") and candidate.get("language") == code and candidate.get("embed_url", "").startswith("https://www.youtube-nocookie.com/embed/"):
                 video_map[code] = candidate["embed_url"]
     except (OSError, ValueError, TypeError):
         video_map = {}
+    video_options = "".join(f'<option value="{esc(code)}">{esc(code.upper())}</option>' for code in sorted(video_map) if code != "en")
     video_data = esc(json.dumps(video_map, ensure_ascii=False, separators=(",", ":")))
     switcher = (
         f'<div class="solepick-video-language-map" data-recipe-slug="{esc(recipe.get("slug", ""))}" data-video-map="{video_data}" hidden></div>'
-        '<script>(function(){function apply(){var maps=document.querySelectorAll(".solepick-video-language-map");var sel=document.querySelector("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select");var lang=sel&&sel.value?sel.value.split("-")[0]:"en";maps.forEach(function(m){var map={};try{map=JSON.parse(m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");if(frame){var base=frame.getAttribute("data-video-base")||frame.src;var target=map[lang]||base;try{var u=new URL(target);u.searchParams.set("cc_load_policy","1");u.searchParams.set("cc_lang_pref",lang);u.searchParams.set("hl",lang);frame.src=u.toString();frame.setAttribute("data-active-language",lang)}catch(e){}}})}document.addEventListener("change",function(e){if(e.target&&e.target.matches("#SolePickTranslateSelect,#solepick-language-switcher,#vm-language-switcher,select[name=language],.language-selector select"))apply()});document.addEventListener("DOMContentLoaded",apply);})();</script>'
+        '<div class="solepick-video-language-control" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 18px;">'
+        '<label for="solepick-video-language">Video language</label>'
+        '<select id="solepick-video-language" class="solepick-video-language-select" aria-label="Video language">'
+        '<option value="en">English</option>' + video_options + '</select></div>'
+        '<p class="solepick-video-language-fallback" role="status" aria-live="polite" hidden></p>'
+        '<script>(function(){var selector=".solepick-video-language-select";function apply(sel){var m=sel.closest(".solepick-video-language-control")?.previousElementSibling;var map={};try{map=JSON.parse(m&&m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");var note=document.querySelector(".solepick-video-language-fallback");if(!frame)return;var lang=sel&&sel.value||"en";var base=frame.getAttribute("data-video-base")||frame.src;var target=lang==="en"?base:(map[lang]||map[lang.split("-")[0]]);if(target){if(frame.src!==target)frame.src=target;frame.setAttribute("data-active-video-language",lang);if(note){note.hidden=true;note.textContent=""}}else if(note){note.hidden=false;note.textContent="A verified video in this language is not available for this recipe yet. The English recipe video remains available."}}document.addEventListener("change",function(e){if(e.target&&e.target.matches(selector))apply(e.target)});document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(selector).forEach(apply)})})();</script>'
     )
     return (
         f"<p>{esc(recipe['description'])}</p>"
