@@ -37,10 +37,13 @@ def main():
     output = ROOT / "localized_recipe_videos.json"
     results = json.loads(output.read_text(encoding="utf-8")) if output.exists() else {}
 
-    # Match the 12 non-English languages exposed in the visitor-facing video selector.
-    target_languages = {code: languages[code] for code in
-                        ("ar", "es", "fr", "de", "it", "pt", "ja", "ko", "tr", "ru", "zh-CN", "zh-TW")
-                        if code in languages}
+    # Discover candidates for every non-English language configured for the site.
+    # Keep the language catalogue as the single source of truth instead of a hard-coded
+    # 12-language subset. English remains the safe default when no verified match exists.
+    target_languages = {
+        code: name for code, name in languages.items()
+        if code != "en" and isinstance(name, str) and name.strip()
+    }
     for recipe in recipes:
         slug, title = recipe.get("slug"), str(recipe.get("title", "")).strip()
         if not slug or not title:
