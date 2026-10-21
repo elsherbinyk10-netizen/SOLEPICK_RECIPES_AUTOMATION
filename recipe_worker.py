@@ -424,33 +424,13 @@ def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
     video_html = recipe_video_section_html(recipe, video) if video else ""
-    # Only human-reviewed verified mappings are eligible; language selection is independent of captions.
-    video_map = {}
-    try:
-        cache_path = Path(__file__).resolve().parent / "localized_recipe_videos.json"
-        cache = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
-        for code, candidate in cache.get(recipe.get("slug", ""), {}).items():
-            if candidate.get("verified") is True and candidate.get("reviewed") is True and candidate.get("recipe_slug", recipe.get("slug")) == recipe.get("slug") and candidate.get("language") == code and candidate.get("embed_url", "").startswith("https://www.youtube-nocookie.com/embed/"):
-                video_map[code] = candidate["embed_url"]
-    except (OSError, ValueError, TypeError):
-        video_map = {}
-    video_options = "".join(f'<option value="{esc(code)}">{esc(code.upper())}</option>' for code in sorted(video_map) if code != "en")
-    video_data = esc(json.dumps(video_map, ensure_ascii=False, separators=(",", ":")))
-    switcher = (
-        f'<div class="solepick-video-language-map" data-recipe-slug="{esc(recipe.get("slug", ""))}" data-video-map="{video_data}" hidden></div>'
-        '<div class="solepick-video-language-control" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 18px;">'
-        '<label for="solepick-video-language">Video language</label>'
-        '<select id="solepick-video-language" class="solepick-video-language-select" aria-label="Video language">'
-        '<option value="en">English</option>' + video_options + '</select></div>'
-        '<p class="solepick-video-language-fallback" role="status" aria-live="polite" hidden></p>'
-        '<script>(function(){var selector=".solepick-video-language-select";function apply(sel){var m=sel.closest(".solepick-video-language-control")?.previousElementSibling;var map={};try{map=JSON.parse(m&&m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");var note=document.querySelector(".solepick-video-language-fallback");if(!frame)return;var lang=sel&&sel.value||"en";var base=frame.getAttribute("data-video-base")||frame.src;var target=lang==="en"?base:(map[lang]||map[lang.split("-")[0]]);if(target){if(frame.src!==target)frame.src=target;frame.setAttribute("data-active-video-language",lang);if(note){note.hidden=true;note.textContent=""}}else if(note){note.hidden=false;note.textContent="A verified video in this language is not available for this recipe yet. The English recipe video remains available."}}document.addEventListener("change",function(e){if(e.target&&e.target.matches(selector))apply(e.target)});document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(selector).forEach(apply)})})();</script>'
-    )
+    # Do not add the deprecated visible Video language selector or fallback warning.
     return (
         f"<p>{esc(recipe['description'])}</p>"
         f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
-        f"{video_html}{switcher}"
+        f"{video_html}"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         "<p><em>Check labels for allergens and follow safe food-handling practices. "
