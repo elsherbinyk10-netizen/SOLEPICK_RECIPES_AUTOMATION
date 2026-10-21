@@ -673,9 +673,17 @@ def main():
         print(f"ONE-TIME TEST MODE: allowing one additional eligible recipe despite today's existing article '{published_today.get('handle')}'. Normal daily guard remains enabled for all other runs.")
     start = day_number % len(recipes)
 
+    target_slug = os.environ.get("TARGET_RECIPE_SLUG", "").strip()
+    target_recipe = None
+    if target_slug:
+        target_recipe = next((recipe for recipe in recipes if recipe["slug"] == target_slug), None)
+        if target_recipe is None:
+            raise RuntimeError(f"Requested target recipe '{target_slug}' is not in recipes.json.")
+
     eligible = [
         recipe for recipe in recipes
-        if not (articles.get(recipe["slug"]) and articles[recipe["slug"]].get("isPublished"))
+        if (not target_slug or recipe["slug"] == target_slug)
+        and not (articles.get(recipe["slug"]) and articles[recipe["slug"]].get("isPublished"))
     ]
     print(f"Recipe library status: {len(eligible)} of {len(recipes)} recipes remain eligible.")
 
@@ -687,9 +695,11 @@ def main():
             "Recipe library exhausted. Add new original recipes to recipes.json."
         )
 
-    # Rotate from today's recipe, skipping already-published recipes.
-    for offset in range(len(recipes)):
-        recipe = recipes[(start + offset) % len(recipes)]
+    # A one-time targeted run processes only the requested recipe; normal runs rotate.
+    candidates = [target_recipe] if target_slug else [
+        recipes[(start + offset) % len(recipes)] for offset in range(len(recipes))
+    ]
+    for recipe in candidates:
         existing = articles.get(recipe["slug"])
 
         if existing and existing.get("isPublished"):
