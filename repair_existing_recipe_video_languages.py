@@ -81,6 +81,32 @@ def existing_video(body, article_title):
             "title": article_title + " recipe video", "embed_url": base}
 
 
+
+def ensure_recipe_hero_image(body, article_image, article_title):
+    """Ensure every published recipe article has a responsive, accessible in-body hero image."""
+    if re.search(r"<img\\b", body or "", re.I):
+        return body
+    image = article_image if isinstance(article_image, dict) else {}
+    url = html.unescape(str(image.get("url") or "").strip())
+    if not url.startswith("https://cdn.shopify.com/") and not url.startswith("https://images.unsplash.com/"):
+        return body
+    alt = str(image.get("altText") or article_title or "Recipe photo").strip()
+    # Request a bounded CDN rendition instead of downloading a full-size original.
+    if "width=" not in url:
+        url += ("&" if "?" in url else "?") + "width=1400"
+    hero = (
+        '<figure class="solepick-recipe-hero-image" style="margin:0 0 1.5rem;">'
+        f'<img src="{html.escape(url, quote=True)}" alt="{html.escape(alt, quote=True)}" '
+        'width="1400" height="933" loading="eager" fetchpriority="high" decoding="async" '
+        'style="display:block;width:100%;max-width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:12px;">'
+        '</figure>'
+    )
+    # Place the food photo before the first content element, without removing article text.
+    first_tag = re.search(r"<(?:p|h2|h3|ul|ol|div)\\b", body or "", re.I)
+    if first_tag:
+        return body[:first_tag.start()] + hero + body[first_tag.start():]
+    return hero + (body or "")
+
 def main():
     video_file = ROOT / "localized_recipe_videos.json"
     catalogue = json.loads(video_file.read_text(encoding="utf-8")) if video_file.exists() else {}
@@ -92,7 +118,7 @@ def main():
         raise SystemExit("Set SHOPIFY_BLOG_ID in GitHub Actions Secrets.")
     query = """query Articles($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
-        nodes { id title handle body isPublished }
+        nodes { id title handle body isPublished image { url altText } }
         pageInfo { hasNextPage endCursor }
       } }
     }"""
