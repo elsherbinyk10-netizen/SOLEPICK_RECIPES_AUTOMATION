@@ -72,6 +72,44 @@ def video_ids(html):
         ids.add(vid)
     return sorted(ids)
 
+def fetch_native_tracks(vid, directory):
+    """Prefer genuine YouTube subtitle tracks in every available language."""
+    import shutil
+    import tempfile
+    from generate_captions import clean_youtube_vtt
+    temp = Path(tempfile.mkdtemp(prefix="solepick-subs-" + vid + "-"))
+    template = str(temp / "source.%(language)s.%(ext)s")
+    cmd = [sys.executable, "-m", "yt_dlp", "--no-warnings", "--no-progress",
+           "--skip-download", "--write-subs", "--write-auto-subs",
+           "--sub-langs", "all", "--sub-format", "vtt", "--output", template,
+           "https://www.youtube.com/watch?v=" + vid]
+    try:
+        result = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=240)
+        count = 0
+        for source in sorted(temp.glob("source.*.vtt")):
+            parts = source.name.split(".")
+            if len(parts) < 3:
+                continue
+            raw_code = parts[1].lower().replace("_", "-")
+            code = raw_code.split("-")[0]
+            if not re.fullmatch(r"[a-z]{2,3}", code):
+                continue
+            target = directory / (code + ".vtt")
+            if target.exists():
+                continue
+            try:
+                cues = clean_youtube_vtt(source, target)
+                if cues:
+                    count += 1
+                    print("Saved existing YouTube caption track " + raw_code + " -> " + str(target))
+            except Exception as exc:
+                print("Could not validate " + source.name + ": " + type(exc).__name__ + ": " + str(exc))
+        return {"tracks_saved": count, "returncode": result.returncode, "log": result.stdout[-1500:]}
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        return {"tracks_saved": 0, "error": type(exc).__name__ + ": " + str(exc)}
+    finally:
+        shutil.rmtree(temp, ignore_errors=True)
+
 def main():
     articles = shopify_articles()
     video_map = {}
@@ -85,8 +123,10 @@ def main():
     models_install_attempted = False
     for vid, handles in sorted(video_map.items()):
         directory = CAPTIONS / vid
+        directory.mkdir(parents=True, exist_ok=True)
         english = directory / "en.vtt"
         item = {"handles": handles, "english_status": "existing" if english.is_file() else "missing", "translations": "not_started"}
+        item["native_caption_tracks"] = fetch_native_tracks(vid, directory)
         if not english.is_file():
             cmd = [sys.executable, str(ROOT / "generate_captions.py"), "--video-url", f"https://www.youtube.com/watch?v={vid}"]
             result = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=360)
