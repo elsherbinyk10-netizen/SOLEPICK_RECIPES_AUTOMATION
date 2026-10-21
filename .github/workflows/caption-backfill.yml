@@ -8,9 +8,12 @@ on:
       - 'generate_captions.py'
       - 'translate_captions.py'
       - '.github/workflows/caption-backfill.yml'
+  workflow_run:
+    workflows: ["SolePick Daily Recipe Publishing"]
+    types: [completed]
   workflow_dispatch:
   schedule:
-    # Daily sweep for newly published recipes; manual dispatch can start the first backfill immediately.
+    # Daily safety sweep; workflow_run also scans immediately after daily publishing finishes.
     - cron: "30 12 * * *"
 
 permissions:
