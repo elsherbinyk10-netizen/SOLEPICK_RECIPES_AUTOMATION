@@ -45,7 +45,8 @@ def shopify_articles():
         if not blog:
             raise RuntimeError("Shopify blog not found; verify SHOPIFY_BLOG_ID.")
         conn = blog["articles"]
-        articles.extend(conn["nodes"])
+        # The Admin API can return drafts in the blog connection; only process live articles.
+        articles.extend(article for article in conn["nodes"] if article.get("publishedAt"))
         if not conn["pageInfo"]["hasNextPage"]:
             return articles
         after = conn["pageInfo"]["endCursor"]
