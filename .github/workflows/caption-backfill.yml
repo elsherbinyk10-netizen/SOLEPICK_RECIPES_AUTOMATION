@@ -1,7 +1,7 @@
 name: SolePick Recipe Caption Backfill
 
 on:
-  workflow_dispatch:
+  push:\n    branches: [main]\n    paths:\n      - 'caption_backfill.py'\n      - 'generate_captions.py'\n      - 'translate_captions.py'\n      - '.github/workflows/caption-backfill.yml'\n  workflow_dispatch:
   schedule:
     # Daily sweep for newly published recipes; manual dispatch can start the first backfill immediately.
     - cron: "30 12 * * *"
