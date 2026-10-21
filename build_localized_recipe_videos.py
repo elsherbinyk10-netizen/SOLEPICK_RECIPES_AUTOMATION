@@ -51,11 +51,10 @@ def main():
             if isinstance(old, dict) and old.get("reviewed") is True and old.get("verified") is True:
                 continue
             chosen, seen = None, set()
-            for query in (f"ytsearch5:{title} recipe {language_name}",
-                          f"ytsearch5:{title} cooking {language_name}"):
+            for query in (f"ytsearch2:{title} recipe {language_name}",):
                 options = {"quiet": True, "no_warnings": True, "skip_download": True,
                            "extract_flat": True, "noplaylist": True, "ignoreerrors": True,
-                           "socket_timeout": 12, "retries": 1}
+                           "socket_timeout": 8, "retries": 0, "extractor_retries": 0}
                 try:
                     with yt_dlp.YoutubeDL(options) as ydl:
                         found = ydl.extract_info(query, download=False) or {}
