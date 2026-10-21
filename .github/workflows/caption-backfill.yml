@@ -7,7 +7,8 @@ on:
       - 'caption_backfill.py'
       - 'generate_captions.py'
       - 'translate_captions.py'
-      - '.github/workflows/caption-backfill.yml'\n  workflow_dispatch:
+      - '.github/workflows/caption-backfill.yml'
+  workflow_dispatch:
   schedule:
     # Daily sweep for newly published recipes; manual dispatch can start the first backfill immediately.
     - cron: "30 12 * * *"
