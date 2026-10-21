@@ -58,7 +58,7 @@ jobs:
           python -m pip install --disable-pip-version-check faster-whisper
 
       - name: Publish daily Shopify recipe
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]'))
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
@@ -66,7 +66,8 @@ jobs:
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
-          ONE_TIME_TEST: ${{ inputs.one_time_test }}
+          ONE_TIME_TEST: ${{ inputs.one_time_test || (github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]')) }}
+          TARGET_RECIPE_SLUG: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]') && 'creamy-lemon-garlic-chicken-orzo' || '' }}
         run: |
           # GitHub cron uses UTC. Both seasonal entries exist so publishing stays
           # near 10:00 Cairo year-round, but only the cron matching today's Cairo
