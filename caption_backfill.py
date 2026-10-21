@@ -106,7 +106,7 @@ def main():
         report["videos"][vid] = item
         print(f"Processed {vid} ({', '.join(handles)}): English={item['english_status']}; translation step={item['translations']}")
     report_path = ROOT / "caption-backfill-report.json"
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Report written: {report_path}")
     print("A language is usable only when its validated captions/<video-id>/<language>.vtt file exists.")
 if __name__ == "__main__":
