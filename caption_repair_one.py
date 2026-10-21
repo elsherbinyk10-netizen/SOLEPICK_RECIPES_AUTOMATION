@@ -11,6 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+SCRIPT_VERSION = "1.0.1"
 ROOT = Path(__file__).resolve().parent
 CAPTIONS = ROOT / "captions"
 DEFAULT_LANGUAGES = "en,ar,es,fr,de,it,pt,ja,ko,ru,tr,nl,pl,id,vi,th,uk,hi,zh"
