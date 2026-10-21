@@ -31,12 +31,16 @@ def approved_candidates(catalogue, slug, language_names):
     return approved
 
 
-def build_switcher(slug, approved):
+def build_switcher(slug, approved, language_names):
+    # Keep the video selector aligned with the site's 12 non-English language rollout.
+    # All languages remain selectable even when no video is approved; missing matches
+    # deliberately fall back to the recipe's own English video.
+    priority = ["ar", "es", "fr", "de", "it", "pt", "ja", "ko", "tr", "ru", "zh-CN", "zh-TW"]
     mapping = json.dumps({code: row["embed_url"] for code, row in approved.items()},
                          ensure_ascii=False, separators=(",", ":"))
     options = ['<option value="en" selected>English</option>']
-    options.extend(f'<option value="{worker.esc(code)}">{worker.esc(row["label"])}</option>'
-                   for code, row in sorted(approved.items(), key=lambda item: item[1]["label"].casefold()))
+    for code in priority:
+        options.append(f'<option value="{worker.esc(code)}">{worker.esc(language_names.get(code, code))}</option>')
     encoded = worker.esc(mapping)
     return (
         f'<div class="solepick-video-language-map" data-recipe-slug="{worker.esc(slug)}" data-video-map="{encoded}" hidden></div>'
@@ -54,10 +58,12 @@ def build_switcher(slug, approved):
         'var lang=s.value||"en";var base=f.getAttribute("data-video-base")||f.src;'
         'var target=lang==="en"?base:(map[lang]||map[lang.split("-")[0]]);'
         'if(target){if(f.src!==target)f.src=target;f.setAttribute("data-active-video-language",lang);'
-        'if(note)note.hidden=true}else if(note){note.hidden=false;note.textContent='
-        '"A verified video in this language is not available for this recipe yet. The English recipe video remains available."}}'
+        'if(note)note.hidden=true}else{if(f.src!==base)f.src=base;f.setAttribute("data-active-video-language","en");'
+        'if(note){note.hidden=false;note.textContent='
+        '"A verified video in this language is not available for this recipe yet. The English recipe video remains available."}}}'
         'document.addEventListener("change",function(e){if(e.target&&e.target.matches(selector))apply(e.target)});'
-        'document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(selector).forEach(apply)})})();</script>'
+        'function init(){document.querySelectorAll(selector).forEach(apply)}'
+        'if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init()})();</script>'
     )
 
 
@@ -141,7 +147,7 @@ def main():
             continue
 
         approved = approved_candidates(catalogue, recipe["slug"], language_names)
-        replacement = worker.recipe_video_section_html(recipe, current) + build_switcher(recipe["slug"], approved)
+        replacement = worker.recipe_video_section_html(recipe, current) + build_switcher(recipe["slug"], approved, language_names)
         if match:
             updated_body = section.sub(lambda _m: replacement, body, count=1)
         else:
