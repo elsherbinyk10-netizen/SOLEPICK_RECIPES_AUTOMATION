@@ -25,6 +25,9 @@ concurrency:
 
 jobs:
   caption-backfill:
+    # Avoid a loop: this workflow commits caption files, which triggers the daily workflow's push/test run.
+    # Only re-run on workflow_run after the daily publisher actually ran by schedule or manual dispatch.
+    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && (github.event.workflow_run.event == 'schedule' || github.event.workflow_run.event == 'workflow_dispatch')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
