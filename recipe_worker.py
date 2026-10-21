@@ -308,9 +308,9 @@ def recipe_video_section_html(recipe, video):
         "if(text.length)out.push({start:sec(m[1]),end:sec(m[2]),text:text.join(' ').trim()});}return out;}"
         "function load(lang){active=lang;overlay.textContent='';cues=[];last=-1;if(timer){clearInterval(timer);timer=null;}"
         "if(lang==='off'){say('Captions off.');return;}var url=wrap.dataset.vttBase+encodeURIComponent(lang)+'.vtt';say('Loading '+lang.toUpperCase()+' captions…');"
-        "fetch(url,{cache:'no-cache'}).then(function(r){if(!r.ok)throw Error('not found');return r.text();}).then(function(t){if(active!==lang)return;cues=parseVtt(t);"
-        "if(!cues.length)throw Error('empty track');say(lang.toUpperCase()+' captions ready.');timer=setInterval(tick,200);tick();}).catch(function(){if(active!==lang)return;"
-        "overlay.textContent='';try{var base=frame.getAttribute('data-video-base')||frame.src;var u=new URL(base,window.location.href);u.searchParams.set('enablejsapi','1');u.searchParams.set('origin',window.location.origin);u.searchParams.set('playsinline','1');u.searchParams.set('cc_load_policy','1');u.searchParams.set('cc_lang_pref',lang);u.searchParams.set('hl',lang);frame.src=u.toString();if(player&&player.loadModule){try{player.loadModule('captions');player.setOption('captions','track',{languageCode:lang});player.setOption('captions','reload',true);}catch(e){}}say(lang.toUpperCase()+' caption file is missing. YouTube does not reliably auto-translate through embedded-player controls. For translated captions, open the video CC menu, choose Auto-translate, then '+(lang==='es'?'Spanish':lang.toUpperCase())+'.');return;}catch(e){}say('No separate '+lang.toUpperCase()+' caption file. Use the video CC menu → Auto-translate.');});}"
+        "fetch(url,{cache:'force-cache'}).then(function(r){if(!r.ok)throw Error('not found');return r.text();}).then(function(t){if(active!==lang)return;cues=parseVtt(t);"
+        "if(!cues.length)throw Error('empty track');say(lang.toUpperCase()+' captions ready.');timer=setInterval(tick,100);tick();}).catch(function(){if(active!==lang)return;"
+        "overlay.textContent='';try{var base=frame.getAttribute('data-video-base')||frame.src;var u=new URL(base,window.location.href);u.searchParams.set('enablejsapi','1');u.searchParams.set('origin',window.location.origin);u.searchParams.set('playsinline','1');u.searchParams.set('cc_load_policy','1');u.searchParams.set('cc_lang_pref',lang);u.searchParams.set('hl',lang);frame.src=u.toString();if(player&&player.loadModule){try{player.loadModule('captions');player.setOption('captions','track',{languageCode:lang});player.setOption('captions','reload',true);}catch(e){}}loadApi();say(lang.toUpperCase()+' caption file is missing. YouTube does not reliably auto-translate through embedded-player controls. For translated captions, open the video CC menu, choose Auto-translate, then '+(lang==='es'?'Spanish':lang.toUpperCase())+'.');return;}catch(e){}say('No separate '+lang.toUpperCase()+' caption file. Use the video CC menu → Auto-translate.');});}"
         "function tick(){if(!ready||!player||!cues.length)return;var now;try{now=player.getCurrentTime();}catch(e){return;}"
         "var idx=-1;for(var i=0;i<cues.length;i++){if(now>=cues[i].start&&now<cues[i].end){idx=i;break;}}if(idx!==last){last=idx;overlay.textContent=idx<0?'':cues[idx].text;}}"
         "function initPlayer(){if(!window.YT||!window.YT.Player||player)return;try{player=new YT.Player(frame,{events:{onReady:function(){ready=true;tick();},onStateChange:function(){tick();}}});}catch(e){say('Video caption sync is unavailable in this browser.');}}"
@@ -319,7 +319,7 @@ def recipe_video_section_html(recipe, video):
         "select.addEventListener('change',function(){load(this.value);});"
         "var siteLang=document.querySelector('#SolePickTranslateSelect,#solepick-language-switcher,select[name=language],.language-selector select');"
         "if(siteLang){function syncSiteLanguage(){var l=String(siteLang.value||'en').split('-')[0].toLowerCase();if(Array.from(select.options).some(function(o){return o.value===l;})){select.value=l;load(l);}}siteLang.addEventListener('change',syncSiteLanguage);syncSiteLanguage();}"
-        "loadApi();load(select.value||'en');"
+        "load(select.value||'en');"
         "})();</script>"
     )
 
