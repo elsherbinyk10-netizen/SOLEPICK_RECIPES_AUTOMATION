@@ -1,6 +1,9 @@
 name: SolePick Single-Video Caption Repair
 
 on:
+  push:
+    paths:
+      - 'caption_repair_one.py'
   workflow_dispatch:
     inputs:
       video_id:
@@ -61,7 +64,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "captions/${{ inputs.video_id }}" "caption-repair-report-${{ inputs.video_id }}.json" || true
+          if [[ -d "captions/${{ inputs.video_id }}" ]]; then git add -A -- "captions/${{ inputs.video_id }}"; fi
+          if [[ -f "caption-repair-report-${{ inputs.video_id }}.json" ]]; then git add -- "caption-repair-report-${{ inputs.video_id }}.json"; fi
           if ! git diff --cached --quiet; then
             git commit -m "Repair validated captions for video ${{ inputs.video_id }}"
             git push
