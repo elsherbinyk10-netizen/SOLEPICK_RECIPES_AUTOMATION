@@ -432,13 +432,14 @@ def article_html(recipe, video=None):
                 video_map[code] = candidate["embed_url"]
     except (OSError, ValueError, TypeError):
         video_map = {}
+    video_options = "".join(f'<option value="{esc(code)}">{esc(code.upper())}</option>' for code in sorted(video_map) if code != "en")
     video_data = esc(json.dumps(video_map, ensure_ascii=False, separators=(",", ":")))
     switcher = (
         f'<div class="solepick-video-language-map" data-recipe-slug="{esc(recipe.get("slug", ""))}" data-video-map="{video_data}" hidden></div>'
         '<div class="solepick-video-language-control" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 18px;">'
         '<label for="solepick-video-language">Video language</label>'
         '<select id="solepick-video-language" class="solepick-video-language-select" aria-label="Video language">'
-        '<option value="en">English</option></select></div>'
+        '<option value="en">English</option>' + video_options + '</select></div>'
         '<p class="solepick-video-language-fallback" role="status" aria-live="polite" hidden></p>'
         '<script>(function(){var selector=".solepick-video-language-select";function apply(sel){var m=sel.closest(".solepick-video-language-control")?.previousElementSibling;var map={};try{map=JSON.parse(m&&m.getAttribute("data-video-map")||"{}")}catch(e){}var frame=document.querySelector(".solepick-language-aware-video");var note=document.querySelector(".solepick-video-language-fallback");if(!frame)return;var lang=sel&&sel.value||"en";var base=frame.getAttribute("data-video-base")||frame.src;var target=lang==="en"?base:(map[lang]||map[lang.split("-")[0]]);if(target){if(frame.src!==target)frame.src=target;frame.setAttribute("data-active-video-language",lang);if(note){note.hidden=true;note.textContent=""}}else if(note){note.hidden=false;note.textContent="A verified video in this language is not available for this recipe yet. The English recipe video remains available."}}document.addEventListener("change",function(e){if(e.target&&e.target.matches(selector))apply(e.target)});document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(selector).forEach(apply)})})();</script>'
     )
