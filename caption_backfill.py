@@ -52,7 +52,7 @@ def shopify_articles():
 
 def video_ids(html):
     ids = set()
-    for src in re.findall(r'''(?:src|href)\\s*=\\s*["']([^"']+)["']''', html or "", flags=re.I):
+    for src in re.findall(r'''(?:src|href)\s*=\s*["']([^"']+)["']''', html or "", flags=re.I):
         try:
             u = urlparse(src.replace("&amp;", "&"))
             host = u.netloc.lower()
@@ -68,7 +68,7 @@ def video_ids(html):
         except Exception:
             continue
     # Also catch iframe URLs embedded with escaped slashes.
-    for vid in re.findall(r"(?:youtube(?:-nocookie)?\\.com/embed/|youtu\\.be/)([A-Za-z0-9_-]{11})", html or ""):
+    for vid in re.findall(r"(?:youtube(?:-nocookie)?\.com/embed/|youtu\.be/)([A-Za-z0-9_-]{11})", html or ""):
         ids.add(vid)
     return sorted(ids)
 
