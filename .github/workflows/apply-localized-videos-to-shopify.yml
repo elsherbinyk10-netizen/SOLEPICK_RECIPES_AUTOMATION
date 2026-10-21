@@ -1,5 +1,10 @@
 name: Apply localized videos to existing SolePick recipes
 on:
+  push:
+    branches: [main]
+    paths:
+      - "repair_existing_recipe_video_languages.py"
+      - ".github/workflows/apply-localized-videos-to-shopify.yml"
   workflow_dispatch:
     inputs:
       confirm_shopify_update:
@@ -14,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   apply-maps:
-    if: inputs.confirm_shopify_update == true
+    if: github.event_name == 'push' || inputs.confirm_shopify_update == true
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
