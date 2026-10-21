@@ -107,16 +107,16 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(image["url"], generated_image["url"])
         self.assertEqual(image["altText"], generated_image["altText"])
 
-    def test_featured_image_falls_back_to_recipe_public_url_without_api(self):
+    def test_featured_image_rejects_unverified_recipe_fallback(self):
         recipe = {
             "title": "Sample Dish",
             "image_url": "https://images.example.com/sample-dish.jpg",
             "image_alt": "Sample dish on a plate",
         }
-        self.assertEqual(
-            recipe_worker.featured_image_for(recipe, None),
-            {"url": recipe["image_url"], "altText": recipe["image_alt"]},
-        )
+        # An image URL in recipe data is not proof that the photo matches the dish.
+        # Keep the publisher's no-mismatched-image safeguard in place.
+        with self.assertRaisesRegex(RuntimeError, "Refusing to publish a mismatched fallback photo"):
+            recipe_worker.featured_image_for(recipe, None)
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
 
