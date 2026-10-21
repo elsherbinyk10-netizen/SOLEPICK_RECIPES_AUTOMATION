@@ -40,6 +40,7 @@ def main():
     ap.add_argument("--out-dir", required=True, help="Output directory for translated .vtt files")
     ap.add_argument("--languages", required=True, help="Comma-separated target language codes, e.g. es,fr,de")
     ap.add_argument("--report", default="caption-translation-report.json")
+    ap.add_argument("--install-models", action="store_true", help="Download available open-source Argos English-to-target models before translating.")
     args = ap.parse_args()
     source = Path(args.source)
     out = Path(args.out_dir)
@@ -49,6 +50,33 @@ def main():
         import argostranslate.translate as translate
     except ImportError as exc:
         raise SystemExit("Install the open-source argostranslate package first.") from exc
+    if args.install_models:
+        try:
+            import argostranslate.package as package
+            print("Refreshing Argos open-source package index…")
+            package.update_package_index()
+            available = package.get_available_packages()
+            for raw_code in dict.fromkeys(x.strip().lower() for x in args.languages.split(",") if x.strip()):
+                code = raw_code.split("-")[0]
+                if code == "en":
+                    continue
+                installed_codes = {lang.code for lang in translate.get_installed_languages()}
+                if code in installed_codes and translate.get_installed_languages():
+                    source_lang = next((lang for lang in translate.get_installed_languages() if lang.code == "en"), None)
+                    target_lang = next((lang for lang in translate.get_installed_languages() if lang.code == code), None)
+                    if source_lang and source_lang.get_translation(target_lang):
+                        continue
+                match = next((p for p in available if p.from_code == "en" and p.to_code == code), None)
+                if match is None:
+                    print(f"No direct Argos English-to-{code} model is published; marking unavailable.")
+                    continue
+                try:
+                    print(f"Installing open-source English-to-{code} model…")
+                    package.install_from_path(match.download())
+                except Exception as exc:
+                    print(f"Could not install model {code}: {type(exc).__name__}: {exc}")
+        except Exception as exc:
+            print(f"Argos package index/model installation problem: {type(exc).__name__}: {exc}")
     installed = translate.get_installed_languages()
     by_code = {lang.code: lang for lang in installed}
     en = by_code.get("en")
