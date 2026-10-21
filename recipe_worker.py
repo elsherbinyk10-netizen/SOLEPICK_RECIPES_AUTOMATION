@@ -321,6 +321,7 @@ def generate_recipe_image(recipe):
     searches = [
         title + " real food photograph",
         " ".join(word for word in query_terms if word not in stop) + " plated recipe food photo",
+        (main_food or title) + " lemon garlic pasta food photograph",
         (main_food or title) + " cooked meal photograph",
     ]
     seen = set()
