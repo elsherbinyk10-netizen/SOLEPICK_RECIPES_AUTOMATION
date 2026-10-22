@@ -642,6 +642,17 @@ def main():
     if args.one_time_test and args.repair_handle:
         parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
+    # Two UTC cron entries cover Cairo's seasonal UTC+2/UTC+3 offsets.
+    # Only the entry matching today's Cairo offset may publish; this avoids
+    # duplicate runs and keeps the effective schedule at 10:00 Cairo year-round.
+    event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
+    event_schedule = os.environ.get("GITHUB_EVENT_SCHEDULE", "").strip()
+    if event_name == "schedule" and event_schedule and event_schedule != expected_schedule_cron(now):
+        print(
+            f"Seasonal schedule guard: ignoring cron {event_schedule}; "
+            f"today's Cairo offset requires {expected_schedule_cron(now)}."
+        )
+        return
     # GitHub may delay scheduled workflows well beyond their cron time.
     # Do not reject a scheduled run based on the runner's current clock or seasonal
     # offset: the Shopify same-Cairo-day idempotency guard below prevents duplicate
