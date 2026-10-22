@@ -88,7 +88,19 @@ def _video_title_is_compatible(recipe, video_title):
         {"risotto"}, {"dumpling", "dumplings"}, {"skillet"}
     ]
     wanted_formats = [group for group in dish_formats if group & wanted_tokens]
-    if any(not (group & found_tokens) for group in wanted_formats):
+    for group in wanted_formats:
+        if group & found_tokens:
+            continue
+        # Common video-title wording varies even when the dish format is equivalent.
+        # These aliases do not waive the protein/starch checks below.
+        if "stuffed" in group and ({"filled", "loaded"} & found_tokens):
+            continue
+        if "tray" in group and ({"sheet", "pan", "roasted"} & found_tokens):
+            continue
+        if "hash" in group and ({"skillet", "breakfast"} & found_tokens):
+            continue
+        if "grain" in group and ({"quinoa", "farro", "rice", "barley"} & found_tokens):
+            continue
         return False
 
     # Core starch/vegetable identity must be present in the candidate title.
@@ -178,7 +190,7 @@ def _check_video_candidate(recipe, video_id, title):
     if not _video_title_is_compatible(recipe, title):
         return None
     score = _video_title_score(recipe.get("title", ""), title)
-    if score < 0.60:
+    if score < 0.45:
         return None
     # YouTube oEmbed rejects removed/private videos and many videos that disallow embedding.
     oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
@@ -198,7 +210,7 @@ def _check_video_candidate(recipe, video_id, title):
     if not live_title or not _video_title_is_compatible(recipe, live_title):
         return None
     live_score = _video_title_score(recipe.get("title", ""), live_title)
-    if live_score < 0.60:
+    if live_score < 0.45:
         return None
     return {
         "id": video_id,
@@ -232,9 +244,12 @@ def find_verified_recipe_video(recipe):
     title = str(recipe.get("title") or "").strip()
     if not title:
         raise RuntimeError("Cannot search for a recipe video without a recipe title.")
+    # Search the exact dish and common cooking phrasing. Compatibility checks
+    # still require the correct protein and dish format before embedding.
     queries = [
-        f"ytsearch12:{title} recipe",
-        f"ytsearch8:{title} cooking tutorial",
+        f"ytsearch15:{title} recipe",
+        f"ytsearch10:{title} how to cook",
+        f"ytsearch10:{title} easy dinner tutorial",
     ]
     seen = set()
     failures = 0
@@ -318,49 +333,49 @@ def generate_recipe_image(recipe):
     main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
     formats = {"salad","pasta","noodle","noodles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
     wanted_formats = wanted & formats
+    # Wikimedia added global API rate limits in 2026. Use three distinct
+    # searches instead of five near-duplicates for every recipe.
     searches = [
-        title + " real food photograph",
-        " ".join(word for word in query_terms if word not in stop) + " plated recipe food photo",
-        (main_food or title) + " pasta",
-        (main_food or title) + " lemon garlic pasta food photograph",
-        (main_food or title) + " cooked meal photograph",
+        title + " food",
+        " ".join(word for word in query_terms if word not in stop) + " plated meal",
+        (main_food or title) + " " + (" ".join(sorted(wanted_formats)) if wanted_formats else "cooked dish"),
     ]
     seen = set()
     reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies"}
     for search_text in searches:
         params = urllib.parse.urlencode({
             "action": "query", "generator": "search", "gsrsearch": search_text,
-            "gsrnamespace": 6, "gsrlimit": 15, "prop": "imageinfo",
+            "gsrnamespace": 6, "gsrlimit": 10, "prop": "imageinfo",
             "iiprop": "url|extmetadata", "iiurlwidth": 1600, "format": "json",
         })
         request = urllib.request.Request(
             "https://commons.wikimedia.org/w/api.php?" + params,
-            headers={"User-Agent": "SolePickRecipesBot/1.0 (recipe image selection; contact site owner)"}
+            headers={"User-Agent": "SolePickRecipesBot/1.1 (https://solepick.site; recipe image selection)"}
         )
-        # Wikimedia Commons can briefly rate-limit or return 5xx errors.
-        # Retry transient failures with backoff before abandoning this search term.
+        # Respect Retry-After and avoid retry storms. If Commons is still
+        # rate-limiting after one retry, move to the next distinct search term.
         payload = None
-        for attempt in range(3):
+        for attempt in range(2):
             try:
                 with urllib.request.urlopen(request, timeout=25) as response:
                     payload = json.loads(response.read().decode("utf-8"))
                 break
             except urllib.error.HTTPError as error:
                 retryable = error.code == 429 or 500 <= error.code < 600
-                print(f"WIKIMEDIA PHOTO SEARCH attempt {attempt + 1}/3: HTTP {error.code}")
-                if not retryable or attempt == 2:
+                print(f"WIKIMEDIA PHOTO SEARCH attempt {attempt + 1}/2: HTTP {error.code}")
+                if not retryable or attempt == 1:
                     break
                 retry_after = error.headers.get("Retry-After", "")
                 try:
-                    delay = min(12, max(2, int(retry_after)))
+                    delay = min(30, max(5, int(retry_after)))
                 except (TypeError, ValueError):
-                    delay = 2 ** (attempt + 1)
+                    delay = 5 * (attempt + 1)
                 time.sleep(delay)
             except (urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
-                print(f"WIKIMEDIA PHOTO SEARCH attempt {attempt + 1}/3: {type(error).__name__}")
-                if attempt == 2:
+                print(f"WIKIMEDIA PHOTO SEARCH attempt {attempt + 1}/2: {type(error).__name__}")
+                if attempt == 1:
                     break
-                time.sleep(2 ** (attempt + 1))
+                time.sleep(5)
         if payload is None:
             continue
         pages = ((payload.get("query") or {}).get("pages") or {})
