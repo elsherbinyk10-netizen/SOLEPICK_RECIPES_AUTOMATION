@@ -244,12 +244,15 @@ def find_verified_recipe_video(recipe):
     title = str(recipe.get("title") or "").strip()
     if not title:
         raise RuntimeError("Cannot search for a recipe video without a recipe title.")
-    # Search the exact dish and common cooking phrasing. Compatibility checks
-    # still require the correct protein and dish format before embedding.
+    # Search broadly enough to recover from sparse YouTube results without
+    # weakening the strict protein/dish-format and live-embeddability checks.
+    # A recipe is published only after a title-compatible video passes oEmbed.
     queries = [
-        f"ytsearch15:{title} recipe",
-        f"ytsearch10:{title} how to cook",
-        f"ytsearch10:{title} easy dinner tutorial",
+        f"ytsearch20:{title} recipe",
+        f"ytsearch15:how to make {title}",
+        f"ytsearch15:{title} step by step cooking",
+        f"ytsearch15:{title} easy recipe tutorial",
+        f"ytsearch10:{title} home cooking",
     ]
     seen = set()
     failures = 0
