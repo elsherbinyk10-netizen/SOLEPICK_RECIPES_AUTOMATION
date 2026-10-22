@@ -293,19 +293,19 @@ def recipe_video_section_html(recipe, video):
     video_id = str(video.get("id") or "")
     frame_id = "solepick-video-" + video_id
     return (
-        "<h2>Recipe Video</h2>"
-        f"<p><a href=\"{esc(video['url'])}\" rel=\"noopener noreferrer\">Watch: {esc(video['title'])}</a></p>"
-        f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;\">"
+        "<h2>Watch the Recipe Video Here</h2>"
+        f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;margin:0 0 1rem;overflow:hidden;\">"
         f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}?playsinline=1\" title=\"{esc(recipe['title'])} recipe video\" "
-        "loading=\"lazy\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
-        "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;\"></iframe>"
+        "loading=\"eager\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
+        "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen style=\"position:absolute;inset:0;width:100%;height:100%;border:0;display:block;\"></iframe>"
         "</div>"
+        f"<p><small>If the player does not load, <a href=\"{esc(video['url'])}\" target=\"_blank\" rel=\"noopener noreferrer\">watch this video on YouTube</a>.</small></p>"
     )
 
 def upsert_recipe_video_section(existing_body, recipe, video):
     """Insert or replace only the video section, preserving the article's other content."""
     section = recipe_video_section_html(recipe, video)
-    pattern = r"<h2>Recipe Video</h2>.*?(?=<h2\b|$)"
+    pattern = r"<h2\b[^>]*>\s*(?:Recipe Video|Watch the Recipe Video Here)\s*</h2>.*?(?=<h2\b|$)"
     if re.search(pattern, existing_body, flags=re.IGNORECASE | re.DOTALL):
         return re.sub(pattern, lambda _match: section, existing_body, count=1, flags=re.IGNORECASE | re.DOTALL)
     match = re.search(r"<h2\b", existing_body, flags=re.IGNORECASE)
@@ -586,8 +586,11 @@ def repair_existing_article_video(blog_id, handle, recipes):
     updated = result.get("article")
     if not updated or updated.get("handle") != handle or not updated.get("isPublished"):
         raise RuntimeError("Shopify did not confirm the existing published article was updated.")
-    if video["embed_url"] not in (updated.get("body") or ""):
-        raise RuntimeError("Shopify update response did not contain the verified video embed URL.")
+    saved_body = updated.get("body") or ""
+    if video["embed_url"] not in saved_body or "<iframe" not in saved_body.lower():
+        raise RuntimeError("Shopify update response did not contain the verified embedded video iframe.")
+    if re.search(r"<h[1-6][^>]*>\s*Recipe Video\s*</h[1-6]>", saved_body, flags=re.IGNORECASE):
+        raise RuntimeError("Shopify saved the legacy Recipe Video heading that the storefront cleanup script removes.")
     print(f"REPAIR VERIFIED: existing article updated without creating a new article | handle={handle} | video={video['url']}")
     return updated
 
