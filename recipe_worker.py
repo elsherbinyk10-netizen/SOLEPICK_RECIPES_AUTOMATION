@@ -276,7 +276,7 @@ def find_verified_recipe_video(recipe):
             seen.add(video_id)
             if not _video_title_is_compatible(recipe, title_found):
                 continue
-            if _video_title_score(title, title_found) < 0.60:
+            if _video_title_score(title, title_found) < 0.45:
                 continue
             candidate = _check_video_candidate(recipe, video_id, title_found)
             if candidate:
