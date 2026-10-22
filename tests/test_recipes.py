@@ -199,6 +199,23 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn("<iframe", repaired_again)
         self.assertIn("<h2>Instructions</h2>", repaired_again)
 
+    def test_catalogue_image_fallback_requires_relevant_alt_text(self):
+        relevant = {
+            "title": "Creamy Tomato Spinach Pasta",
+            "image_url": "https://images.example.com/pasta.jpg",
+            "image_alt": "Pasta with sauce and fresh herbs",
+        }
+        fallback = recipe_worker.catalogue_image_fallback(relevant)
+        self.assertEqual(fallback["url"], relevant["image_url"])
+        self.assertTrue(fallback["altText"])
+
+        unrelated = {
+            "title": "Honey Garlic Salmon Bowls",
+            "image_url": "https://images.example.com/salad.jpg",
+            "image_alt": "Fresh colorful salad with vegetables and greens",
+        }
+        self.assertIsNone(recipe_worker.catalogue_image_fallback(unrelated))
+
 
 if __name__ == "__main__":
     unittest.main()
