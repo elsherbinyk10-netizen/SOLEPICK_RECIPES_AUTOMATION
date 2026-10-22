@@ -421,6 +421,36 @@ def generate_recipe_image(recipe):
         "the next scheduled run will retry."
     )
 
+def catalogue_image_fallback(recipe):
+    """Use a pre-curated catalogue photo only when its alt text matches the recipe's main food and dish style."""
+    url = str(recipe.get("image_url") or "").strip()
+    alt = str(recipe.get("image_alt") or "").strip()
+    if not url.startswith("https://") or not alt:
+        return None
+
+    title_words = set(re.findall(r"[a-z0-9]+", str(recipe.get("title") or "").lower()))
+    alt_words = set(re.findall(r"[a-z0-9]+", alt.lower()))
+    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe", "fresh", "colorful", "served", "ready"}
+    wanted = {word for word in title_words if word not in stop and len(word) > 2}
+    formats = {"salad","pasta","noodle","noodles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
+    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
+    wanted_formats = wanted & formats
+    overlap = len(wanted & alt_words) / max(1, len(wanted))
+    has_main = bool(main_food and main_food in alt_words)
+    has_format = bool(wanted_formats & alt_words)
+
+    # Do not use a generic or clearly unrelated catalogue image just to force a post.
+    if main_food and not has_main:
+        return None
+    if wanted_formats and not has_format and overlap < 0.45:
+        return None
+    if overlap < 0.25 and not has_main:
+        return None
+
+    print("USING RELEVANT PRE-CURATED CATALOGUE PHOTO AS FALLBACK: " + recipe["title"])
+    return {"url": url, "altText": alt}
+
+
 def featured_image_for(recipe, generated_image):
     """Use only a dish-relevant image returned by the verified image search; never silently fall back to generic catalogue photos."""
     image = generated_image or {}
@@ -768,8 +798,11 @@ def main():
         try:
             generated_image = generate_recipe_image(recipe)
         except RuntimeError as error:
-            print(f"SKIPPING recipe with unavailable/invalid image: {recipe['title']}. {error}")
-            continue
+            print(f"PHOTO SEARCH FALLBACK: {recipe['title']}. {error}")
+            generated_image = catalogue_image_fallback(recipe)
+            if not generated_image:
+                print(f"SKIPPING recipe with no relevant verified photo: {recipe['title']}.")
+                continue
         if existing:
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
               articleUpdate(id: $id, article: $article) { article { id title handle isPublished body } userErrors { field message } }
