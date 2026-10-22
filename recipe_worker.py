@@ -705,7 +705,7 @@ def main():
         video_is_saved = (
             "<iframe" in body.lower()
             and "youtube-nocookie.com/embed/" in body
-            and bool(re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE))
+            and bool(re.search(r"<h2\b[^>]*>\s*Watch the Recipe Video Here\s*</h2>", body, flags=re.IGNORECASE))
         )
         if video_is_saved:
             print(f"Daily idempotency guard: already published '{published_today.get('handle')}' with embedded video on {now.date()} Cairo time; no second recipe will be published.")
