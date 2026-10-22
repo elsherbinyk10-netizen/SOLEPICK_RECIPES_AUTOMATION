@@ -151,6 +151,27 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn(video["url"], html)
 
 
+    def test_saved_article_verification_requires_embedded_iframe(self):
+        recipe = {"title": "Sample Pasta"}
+        video = {
+            "title": "Sample Pasta Recipe",
+            "url": "https://www.youtube.com/watch?v=abcdefghijk",
+            "embed_url": "https://www.youtube-nocookie.com/embed/abcdefghijk",
+        }
+        article = {
+            "isPublished": True,
+            "body": (
+                "<h2>Watch the Recipe Video Here</h2>"
+                "<div><iframe src=\"https://www.youtube-nocookie.com/embed/abcdefghijk?playsinline=1\"></iframe></div>"
+                "<h2>Ingredients</h2><ul><li>pasta</li></ul>"
+                "<h2>Instructions</h2><ol><li>Cook pasta.</li></ol>"
+            ),
+        }
+        self.assertIs(recipe_worker.verify_published_article(article, recipe, video), article)
+        article["body"] = "<p>Watch on YouTube</p><h2>Ingredients</h2><h2>Instructions</h2>"
+        with self.assertRaisesRegex(RuntimeError, "missing the embedded"):
+            recipe_worker.verify_published_article(article, recipe, video)
+
     def test_repair_upserts_video_and_preserves_other_article_content(self):
         original = (
             "<p>Original recipe introduction.</p>"
