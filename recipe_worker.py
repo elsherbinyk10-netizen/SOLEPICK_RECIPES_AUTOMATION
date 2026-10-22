@@ -625,7 +625,7 @@ def verify_published_article(article, recipe, video):
         raise RuntimeError(
             f"Shopify did not return the expected embed URL in the saved body for '{recipe['title']}'."
         )
-    if not re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE):
+    if not re.search(r"<h2\b[^>]*>\s*Watch the Recipe Video Here\s*</h2>", body, flags=re.IGNORECASE):
         raise RuntimeError(
             f"Shopify did not return the expected visible video heading for '{recipe['title']}'."
         )
