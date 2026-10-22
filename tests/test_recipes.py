@@ -169,7 +169,7 @@ class RecipeLibraryTests(unittest.TestCase):
         }
         self.assertIs(recipe_worker.verify_published_article(article, recipe, video), article)
         article["body"] = "<p>Watch on YouTube</p><h2>Ingredients</h2><h2>Instructions</h2>"
-        with self.assertRaisesRegex(RuntimeError, "missing the embedded"):
+        with self.assertRaisesRegex(RuntimeError, "did not return an iframe"):
             recipe_worker.verify_published_article(article, recipe, video)
 
     def test_repair_upserts_video_and_preserves_other_article_content(self):
