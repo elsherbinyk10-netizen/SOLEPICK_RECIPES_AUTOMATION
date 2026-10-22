@@ -173,7 +173,9 @@ class RecipeLibraryTests(unittest.TestCase):
         repaired_again = recipe_worker.upsert_recipe_video_section(updated, recipe, second_video)
         self.assertIn(second_video["embed_url"], repaired_again)
         self.assertNotIn(first_video["embed_url"], repaired_again)
-        self.assertEqual(repaired_again.count("<h2>Recipe Video</h2>"), 1)
+        self.assertEqual(repaired_again.count("<h2>Watch the Recipe Video Here</h2>"), 1)
+        self.assertNotIn("<h2>Recipe Video</h2>", repaired_again)
+        self.assertIn("<iframe", repaired_again)
         self.assertIn("<h2>Instructions</h2>", repaired_again)
 
 
