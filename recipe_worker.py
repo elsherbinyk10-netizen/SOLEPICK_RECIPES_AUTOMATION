@@ -701,7 +701,20 @@ def main():
     articles = existing_articles(blog_id)
     published_today = already_published_today(articles, now)
     if published_today and not args.one_time_test:
-        print(f"Daily idempotency guard: already published '{published_today.get('handle')}' on {now.date()} Cairo time; no second recipe will be published.")
+        body = str(published_today.get("body") or "")
+        video_is_saved = (
+            "<iframe" in body.lower()
+            and "youtube-nocookie.com/embed/" in body
+            and bool(re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE))
+        )
+        if video_is_saved:
+            print(f"Daily idempotency guard: already published '{published_today.get('handle')}' with embedded video on {now.date()} Cairo time; no second recipe will be published.")
+            return
+        print(
+            f"Daily guard found today's article '{published_today.get('handle')}' but its saved body is missing the verified embed. "
+            "Repairing that existing article instead of creating a duplicate."
+        )
+        repair_existing_article_video(blog_id, published_today["handle"], recipes)
         return
     if published_today and args.one_time_test:
         print(f"ONE-TIME TEST MODE: allowing one additional eligible recipe despite today's existing article '{published_today.get('handle')}'. Normal daily guard remains enabled for all other runs.")
