@@ -73,7 +73,7 @@ jobs:
           exit 1
 
       - name: Publish daily Shopify recipe
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (contains(github.event.head_commit.message, '[publish-today-solepick]') || contains(github.event.head_commit.message, '[repair-video:')))
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[repair-video:'))
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
@@ -83,14 +83,14 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-          ONE_TIME_TEST: ${{ inputs.one_time_test || (github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]')) }}
+          ONE_TIME_TEST: ${{ inputs.one_time_test || false }}
           # For an explicitly marked one-time publish, let the worker select today's eligible recipe; do not hard-code yesterday's recipe slug.
           TARGET_RECIPE_SLUG: ''
         run: |
           # Allow a narrowly scoped video repair from a commit message such as
           # [repair-video:black-bean-corn-loaded-salad], without publishing a new article.
           # Targeted repair dispatches preserve the existing recipe and update only its video. Mobile embed visibility fix applied. [repair-video:black-bean-corn-loaded-salad]
-          # One-time live publish/repair verification trigger; normal daily duplicate protection remains enabled.
+          # One-time duplicate-guard bypass is available only through an explicit manual workflow_dispatch input.
           if [[ -z "$REPAIR_HANDLE" && "$COMMIT_MESSAGE" =~ \[repair-video:([a-z0-9-]+)\] ]]; then
             REPAIR_HANDLE="${BASH_REMATCH[1]}"
           fi
