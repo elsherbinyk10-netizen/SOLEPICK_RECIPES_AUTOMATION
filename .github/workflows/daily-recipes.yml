@@ -67,7 +67,8 @@ jobs:
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
           ONE_TIME_TEST: ${{ inputs.one_time_test || (github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]')) }}
-          TARGET_RECIPE_SLUG: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]') && 'creamy-lemon-garlic-chicken-orzo' || '' }}
+          # For an explicitly marked one-time publish, let the worker select today's eligible recipe; do not hard-code yesterday's recipe slug.
+          TARGET_RECIPE_SLUG: ''
         run: |
           # The single daily UTC trigger is intentional. Cairo local time shifts
           # by one hour seasonally; publishing remains once daily without a
