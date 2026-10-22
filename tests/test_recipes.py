@@ -55,6 +55,21 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe, "Warm Grain Salad with Lemon Dijon Vinaigrette, Chicken and Crispy Chickpeas"
         ))
 
+    def test_video_format_aliases_allow_equivalent_wording(self):
+        recipe = {"title": "Honey Mustard Salmon Stuffed Sweet Potatoes"}
+        self.assertTrue(recipe_worker._video_title_is_compatible(
+            recipe, "Honey Mustard Salmon Stuffed Sweet Potato Recipe"
+        ))
+
+    def test_video_title_score_supports_partial_but_relevant_titles(self):
+        self.assertGreaterEqual(
+            recipe_worker._video_title_score(
+                "Honey Mustard Salmon Stuffed Sweet Potatoes",
+                "Honey Mustard Salmon Sweet Potato Recipe"
+            ),
+            0.45
+        )
+
     def test_video_compatibility_requires_named_dish_format(self):
         self.assertFalse(recipe_worker._video_title_is_compatible(
             {"title": "Creamy Tomato Spinach Pasta"}, "Creamy Tomato Spinach Soup Recipe"
