@@ -88,6 +88,7 @@ jobs:
         run: |
           # Allow a narrowly scoped video repair from a commit message such as
           # [repair-video:black-bean-corn-loaded-salad], without publishing a new article.
+          # Targeted repair dispatches preserve the existing recipe and update only its video.
           if [[ -z "$REPAIR_HANDLE" && "$COMMIT_MESSAGE" =~ \[repair-video:([a-z0-9-]+)\] ]]; then
             REPAIR_HANDLE="${BASH_REMATCH[1]}"
           fi
