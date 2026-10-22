@@ -18,10 +18,10 @@ on:
         type: boolean
         default: false
   schedule:
-    # Run once daily at 07:00 UTC (10:00 AM Cairo during UTC+3,
-    # 09:00 AM Cairo during UTC+2). One fixed trigger avoids seasonal
-    # duplicate/skip behavior and keeps daily publishing predictable.
+    # Both triggers are filtered by the worker against Cairo's current UTC offset:
+    # 07:00 UTC = 10:00 Cairo in UTC+3; 08:00 UTC = 10:00 Cairo in UTC+2.
     - cron: "0 7 * * *"
+    - cron: "0 8 * * *"
 
 permissions:
   contents: write
@@ -80,6 +80,7 @@ jobs:
           SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           ONE_TIME_TEST: ${{ inputs.one_time_test || (github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-today-solepick]')) }}
@@ -99,9 +100,25 @@ jobs:
             echo "Choose either repair_handle or one_time_test, not both."
             exit 2
           elif [[ -n "$REPAIR_HANDLE" ]]; then
-            python recipe_worker.py --repair-handle "$REPAIR_HANDLE"
+            command=(python recipe_worker.py --repair-handle "$REPAIR_HANDLE")
           elif [[ "$ONE_TIME_TEST" == "true" ]]; then
-            python recipe_worker.py --one-time-test
+            command=(python recipe_worker.py --one-time-test)
           else
-            python recipe_worker.py
+            command=(python recipe_worker.py)
           fi
+
+          # Retry transient network/API/search failures. The worker's Cairo-day
+          # idempotency guard prevents a retry from creating a second daily post.
+          for attempt in 1 2 3; do
+            if "${command[@]}"; then
+              exit 0
+            fi
+            status=$?
+            if [[ "$attempt" -lt 3 ]]; then
+              echo "Publishing attempt $attempt failed (exit $status); retrying in 45 seconds."
+              sleep 45
+            else
+              echo "Publishing failed after 3 attempts."
+              exit "$status"
+            fi
+          done
