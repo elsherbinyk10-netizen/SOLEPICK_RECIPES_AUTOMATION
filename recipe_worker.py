@@ -521,7 +521,7 @@ def graphql(query, variables):
 def existing_articles(blog_id):
     query = """query ArticleHandles($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
-        nodes { id handle isPublished publishedAt }
+        nodes { id title handle body isPublished publishedAt }
         pageInfo { hasNextPage endCursor }
       } }
     }"""
@@ -611,10 +611,33 @@ def publish_existing(article):
     return published
 
 
+def verify_published_article(article, recipe, video):
+    """Fail the workflow unless Shopify saved the actual embedded player in the published body."""
+    if not article or not article.get("isPublished"):
+        raise RuntimeError("Shopify did not confirm the recipe article is published.")
+    body = str(article.get("body") or "")
+    if "<iframe" not in body.lower():
+        raise RuntimeError(
+            f"Shopify did not return an iframe in the saved body for '{recipe['title']}'. "
+            "The workflow will not report a successful video publication."
+        )
+    if video["embed_url"] not in body:
+        raise RuntimeError(
+            f"Shopify did not return the expected embed URL in the saved body for '{recipe['title']}'."
+        )
+    if not re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE):
+        raise RuntimeError(
+            f"Shopify did not return the expected visible video heading for '{recipe['title']}'."
+        )
+    if "<h2>Ingredients</h2>" not in body or "<h2>Instructions</h2>" not in body:
+        raise RuntimeError(f"Shopify's saved body is missing recipe sections for '{recipe['title']}'.")
+    return article
+
+
 def create_published(blog_id, recipe, video, generated_image):
     mutation = """mutation CreatePublishedArticle($article: ArticleCreateInput!) {
       articleCreate(article: $article) {
-        article { id title handle isPublished }
+        article { id title handle isPublished body }
         userErrors { field message }
       }
     }"""
@@ -736,7 +759,7 @@ def main():
             continue
         if existing:
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
-              articleUpdate(id: $id, article: $article) { article { id title handle isPublished } userErrors { field message } }
+              articleUpdate(id: $id, article: $article) { article { id title handle isPublished body } userErrors { field message } }
             }"""
             result = graphql(mutation, {"id": existing["id"], "article": {
                 "body": article_html(recipe, video),
@@ -748,9 +771,11 @@ def main():
             article = result.get("article")
             if not article or not article.get("isPublished"):
                 raise RuntimeError("Shopify did not confirm recipe article publication.")
+            verify_published_article(article, recipe, video)
         else:
             article = create_published(blog_id, recipe, video, generated_image)
-        print(f"Published recipe with verified video: {article['title']} | handle={article['handle']} | published={article['isPublished']} | video={video['url']}")
+            verify_published_article(article, recipe, video)
+        print(f"Published recipe with verified embedded video: {article['title']} | handle={article['handle']} | published={article['isPublished']} | iframe=verified | video={video['url']}")
         return
 
     raise RuntimeError("No eligible recipe found. Review recipes.json and Shopify article handles.")
