@@ -450,11 +450,26 @@ def generate_recipe_image(recipe, published_articles=None):
         "the next scheduled run will retry."
     )
 
-def catalogue_image_fallback(recipe):
-    """Use a pre-curated catalogue photo only when its alt text matches the recipe's main food and dish style."""
+def catalogue_image_fallback(recipe, published_articles=None):
+    """Use a relevant catalogue photo only if its source is unique across catalogue and published articles."""
     url = str(recipe.get("image_url") or "").strip()
     alt = str(recipe.get("image_alt") or "").strip()
     if not url.startswith("https://") or not alt:
+        return None
+
+    catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    used_urls = {
+        str(item.get("image_url") or "").strip()
+        for item in catalogue
+        if item.get("slug") != recipe.get("slug") and item.get("image_url")
+    }
+    for article in (published_articles or []):
+        image = article.get("image") or {}
+        if image.get("url"):
+            used_urls.add(str(image["url"]).strip())
+    image_id = _image_identity(url)
+    if url in used_urls or (image_id and image_id in {_image_identity(item) for item in used_urls}):
+        print("REJECTED DUPLICATE CATALOGUE PHOTO: " + recipe.get("title", "(untitled)"))
         return None
 
     title_words = set(re.findall(r"[a-z0-9]+", str(recipe.get("title") or "").lower()))
@@ -828,7 +843,7 @@ def main():
             generated_image = generate_recipe_image(recipe, articles.values())
         except RuntimeError as error:
             print(f"PHOTO SEARCH FALLBACK: {recipe['title']}. {error}")
-            generated_image = catalogue_image_fallback(recipe)
+            generated_image = catalogue_image_fallback(recipe, articles.values())
             if not generated_image:
                 print(f"SKIPPING recipe with no relevant verified photo: {recipe['title']}.")
                 continue
