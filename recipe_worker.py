@@ -317,14 +317,33 @@ def upsert_recipe_video_section(existing_body, recipe, video):
     return existing_body.rstrip() + "\n" + section
 
 
-def generate_recipe_image(recipe):
-    """Automatically find a unique, reachable public-domain/CC0 food photo on Wikimedia Commons."""
+def _image_identity(url):
+    """Normalize CDN copies of the same source photo to one stable identity."""
+    value = str(url or "").strip()
+    if not value:
+        return ""
+    parsed = urllib.parse.urlparse(value)
+    path = urllib.parse.unquote(parsed.path).lower()
+    filename = path.rsplit("/", 1)[-1]
+    # Shopify appends a unique UUID to each imported copy, so strip it to detect
+    # the same original photo across different articles.
+    filename = re.sub(r"_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?=\.)", "", filename)
+    return filename
+
+
+def generate_recipe_image(recipe, published_articles=None):
+    """Find a dish-relevant public-domain/CC0 photo unique across catalogue and published Shopify articles."""
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
     used_urls = {
         str(item.get("image_url") or "").strip()
         for item in catalogue
         if item.get("slug") != recipe.get("slug") and item.get("image_url")
     }
+    for article in (published_articles or []):
+        image = article.get("image") or {}
+        if image.get("url"):
+            used_urls.add(str(image["url"]).strip())
+    used_identities = {_image_identity(url) for url in used_urls if _image_identity(url)}
     # Search Commons using the actual dish name. Prefer exact recipe terms and reject
     # generic images unless both a main ingredient and dish-format anchor are present.
     title = str(recipe.get("title") or "").strip()
@@ -395,7 +414,14 @@ def generate_recipe_image(recipe):
             if "public domain" not in license_lower and "cc0" not in license_lower:
                 continue
             image_url = str(info.get("thumburl") or info.get("url") or "").strip()
-            if not image_url.startswith("https://") or image_url in used_urls or image_url in seen:
+            if (
+                not image_url.startswith("https://")
+                or image_url in used_urls
+                or _image_identity(image_url) in used_identities
+                or image_url in seen
+                or _image_identity(image_url) in {_image_identity(item) for item in seen}
+            ):
+                print("REJECTED DUPLICATE PHOTO: " + title_text)
                 continue
             seen.add(image_url)
             found = set(re.findall(r"[a-z0-9]+", title_text))
@@ -554,7 +580,7 @@ def graphql(query, variables):
 def existing_articles(blog_id):
     query = """query ArticleHandles($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
-        nodes { id title handle body isPublished publishedAt }
+        nodes { id title handle body isPublished publishedAt image { url altText } }
         pageInfo { hasNextPage endCursor }
       } }
     }"""
@@ -799,7 +825,7 @@ def main():
             continue
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         try:
-            generated_image = generate_recipe_image(recipe)
+            generated_image = generate_recipe_image(recipe, articles.values())
         except RuntimeError as error:
             print(f"PHOTO SEARCH FALLBACK: {recipe['title']}. {error}")
             generated_image = catalogue_image_fallback(recipe)
