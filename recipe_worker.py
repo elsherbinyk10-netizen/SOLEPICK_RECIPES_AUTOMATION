@@ -860,12 +860,12 @@ def main():
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         try:
             generated_image = generate_recipe_image(recipe, articles.values())
+            # Fail closed: never substitute a pre-saved image when live search
+            # cannot verify a suitable photo for this exact recipe.
+            generated_image = featured_image_for(recipe, generated_image)
         except RuntimeError as error:
-            print(f"PHOTO SEARCH FALLBACK: {recipe['title']}. {error}")
-            generated_image = catalogue_image_fallback(recipe, articles.values())
-            if not generated_image:
-                print(f"SKIPPING recipe with no relevant verified photo: {recipe['title']}.")
-                continue
+            print(f"SKIPPING recipe without a verified dish-relevant photo: {recipe['title']}. {error}")
+            continue
         if existing:
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
               articleUpdate(id: $id, article: $article) { article { id title handle isPublished body } userErrors { field message } }
