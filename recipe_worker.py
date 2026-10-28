@@ -331,6 +331,28 @@ def _image_identity(url):
     return filename
 
 
+def _is_document_like_image(title_text, image_url, metadata):
+    """Reject document scans and PDF-preview thumbnails using filename and descriptive metadata."""
+    path = urllib.parse.unquote(urllib.parse.urlparse(str(image_url or "")).path).lower()
+    if ".pdf." in path or path.endswith(".pdf"):
+        return True
+    reject_terms = {
+        "document", "archived", "archive", "historic", "historical", "scientific",
+        "policy", "policies", "practice", "practices", "pdf", "scan", "scanned",
+        "manuscript", "book", "journal", "report", "form", "letter", "newspaper",
+        "magazine", "blueprint", "screenshot", "screengrab",
+    }
+    parts = [str(title_text or "")]
+    for key in ("ObjectName", "ImageDescription", "Description", "Categories"):
+        item = metadata.get(key) or {}
+        value = item.get("value", "") if isinstance(item, dict) else item
+        if isinstance(value, list):
+            value = " ".join(map(str, value))
+        parts.append(re.sub(r"<[^>]+>", " ", str(value or "")))
+    tokens = set(re.findall(r"[a-z0-9]+", " ".join(parts).lower()))
+    return bool(tokens & reject_terms)
+
+
 def generate_recipe_image(recipe, published_articles=None):
     """Find a dish-relevant public-domain/CC0 photo unique across catalogue and published Shopify articles."""
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
@@ -415,10 +437,19 @@ def generate_recipe_image(recipe, published_articles=None):
             if "public domain" not in license_lower and "cc0" not in license_lower:
                 continue
             image_url = str(info.get("thumburl") or info.get("url") or "").strip()
-            image_path = urllib.parse.unquote(urllib.parse.urlparse(image_url).path).lower()
-            # Commons can expose PDF pages as JPEG thumbnails; never use those as recipe photos.
-            if ".pdf." in image_path or image_path.endswith(".pdf"):
-                print("REJECTED DOCUMENT/PDF THUMBNAIL: " + title_text)
+            # Commons can expose scans and PDF pages as ordinary JPEG thumbnails.
+            # Reject candidates based on URL plus descriptive metadata, not extension alone.
+            if _is_document_like_image(title_text, image_url, metadata):
+                print("REJECTED DOCUMENT/ARCHIVE/SCAN IMAGE: " + title_text)
+                continue
+            mime = str(info.get("mime") or "").lower()
+            width = int(info.get("thumbwidth") or info.get("width") or 0)
+            height = int(info.get("thumbheight") or info.get("height") or 0)
+            if mime and not mime.startswith("image/"):
+                print("REJECTED NON-IMAGE MEDIA: " + title_text + " | mime=" + mime)
+                continue
+            if width and height and (width < 500 or height < 350):
+                print("REJECTED LOW-RESOLUTION IMAGE: " + title_text + f" | {width}x{height}")
                 continue
             if (
                 not image_url.startswith("https://")
