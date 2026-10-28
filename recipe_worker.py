@@ -363,7 +363,8 @@ def generate_recipe_image(recipe, published_articles=None):
         (main_food or title) + " " + (" ".join(sorted(wanted_formats)) if wanted_formats else "cooked dish"),
     ]
     seen = set()
-    reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies"}
+    # Reject non-food scans and document thumbnails, including PDF previews Shopify can show as .pdf.jpg.
+    reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
     for search_text in searches:
         params = urllib.parse.urlencode({
             "action": "query", "generator": "search", "gsrsearch": search_text,
@@ -414,6 +415,11 @@ def generate_recipe_image(recipe, published_articles=None):
             if "public domain" not in license_lower and "cc0" not in license_lower:
                 continue
             image_url = str(info.get("thumburl") or info.get("url") or "").strip()
+            image_path = urllib.parse.unquote(urllib.parse.urlparse(image_url).path).lower()
+            # Commons can expose PDF pages as JPEG thumbnails; never use those as recipe photos.
+            if ".pdf." in image_path or image_path.endswith(".pdf"):
+                print("REJECTED DOCUMENT/PDF THUMBNAIL: " + title_text)
+                continue
             if (
                 not image_url.startswith("https://")
                 or image_url in used_urls
@@ -455,6 +461,14 @@ def catalogue_image_fallback(recipe, published_articles=None):
     url = str(recipe.get("image_url") or "").strip()
     alt = str(recipe.get("image_alt") or "").strip()
     if not url.startswith("https://") or not alt:
+        return None
+    # A catalogue alt-text describing a PDF/archive is not a food photo.
+    alt_tokens = set(re.findall(r"[a-z0-9]+", alt.lower()))
+    if alt_tokens & {"document", "archived", "archive", "historic", "historical", "scientific", "policy", "practice", "pdf", "scan", "scanned", "manuscript"}:
+        print("REJECTED NON-FOOD CATALOGUE IMAGE: " + recipe.get("title", "(untitled)"))
+        return None
+    if ".pdf." in urllib.parse.unquote(urllib.parse.urlparse(url).path).lower():
+        print("REJECTED PDF THUMBNAIL FROM CATALOGUE: " + recipe.get("title", "(untitled)"))
         return None
 
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
@@ -499,6 +513,11 @@ def featured_image_for(recipe, generated_image):
     """Use only a dish-relevant image returned by the verified image search; never silently fall back to generic catalogue photos."""
     image = generated_image or {}
     url = str(image.get("url") or "").strip()
+    image_path = urllib.parse.unquote(urllib.parse.urlparse(url).path).lower()
+    alt_tokens = set(re.findall(r"[a-z0-9]+", str(image.get("altText") or "").lower()))
+    forbidden_alt = {"document", "archived", "archive", "historic", "historical", "scientific", "policy", "practice", "pdf", "scan", "scanned", "manuscript"}
+    if ".pdf." in image_path or image_path.endswith(".pdf") or (alt_tokens & forbidden_alt):
+        raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"] + "; refusing to publish without a real food photo.")
     if not url.startswith("https://"):
         raise RuntimeError(
             "No verified, dish-relevant featured image found for " + recipe["title"]
