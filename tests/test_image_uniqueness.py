@@ -37,5 +37,38 @@ class ImageUniquenessTests(unittest.TestCase):
         self.assertIsNone(result)
 
 
+    def test_catalogue_fallback_rejects_archived_document_image(self):
+        with tempfile.TemporaryDirectory() as directory:
+            catalogue_path = Path(directory) / "recipes.json"
+            catalogue_path.write_text(json.dumps([
+                {"slug": "today", "image_url": "https://cdn.shopify.com/articles/page1.pdf.jpg",
+                 "image_alt": "Historic archived document PDF page"}
+            ]), encoding="utf-8")
+            with patch.object(recipe_worker, "RECIPES_PATH", catalogue_path):
+                result = recipe_worker.catalogue_image_fallback(
+                    {"slug": "today", "title": "Turkey and Herb Breakfast Hash",
+                     "image_url": "https://cdn.shopify.com/articles/page1.pdf.jpg",
+                     "image_alt": "Historic archived document PDF page"},
+                    [],
+                )
+        self.assertIsNone(result)
+
+    def test_featured_image_rejects_pdf_thumbnail_even_if_named_as_food(self):
+        with self.assertRaisesRegex(RuntimeError, "document/PDF-style image"):
+            recipe_worker.featured_image_for(
+                {"title": "Turkey and Herb Breakfast Hash"},
+                {"url": "https://cdn.shopify.com/articles/page1.pdf.jpg",
+                 "altText": "Turkey breakfast hash"},
+            )
+
+    def test_featured_image_rejects_archived_document_alt_text(self):
+        with self.assertRaisesRegex(RuntimeError, "document/PDF-style image"):
+            recipe_worker.featured_image_for(
+                {"title": "Turkey and Herb Breakfast Hash"},
+                {"url": "https://cdn.shopify.com/articles/food.jpg",
+                 "altText": "Historic archived document"},
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
