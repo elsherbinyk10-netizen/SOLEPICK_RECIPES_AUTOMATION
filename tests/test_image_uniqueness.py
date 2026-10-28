@@ -61,6 +61,27 @@ class ImageUniquenessTests(unittest.TestCase):
                  "altText": "Turkey breakfast hash"},
             )
 
+    def test_document_like_image_rejects_pdf_thumbnail_even_when_jpeg(self):
+        self.assertTrue(recipe_worker._is_document_like_image(
+            "File: scanned_recipe.pdf.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/scanned_recipe.pdf.jpg",
+            {},
+        ))
+
+    def test_document_like_image_rejects_scan_from_metadata_without_pdf_url(self):
+        self.assertTrue(recipe_worker._is_document_like_image(
+            "File: old archive scan.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/food-photo.jpg",
+            {"ImageDescription": {"value": "Scanned page from a historical archive"}},
+        ))
+
+    def test_document_like_image_allows_food_photo_with_clean_metadata(self):
+        self.assertFalse(recipe_worker._is_document_like_image(
+            "File: turkey breakfast hash.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/turkey-hash.jpg",
+            {"ImageDescription": {"value": "Turkey and vegetable breakfast hash served on a plate"}},
+        ))
+
     def test_featured_image_rejects_archived_document_alt_text(self):
         with self.assertRaisesRegex(RuntimeError, "document/PDF-style image"):
             recipe_worker.featured_image_for(
