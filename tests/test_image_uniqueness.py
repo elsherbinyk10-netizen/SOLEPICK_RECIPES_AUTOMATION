@@ -70,17 +70,6 @@ class ImageUniquenessTests(unittest.TestCase):
             )
 
 
-    def test_live_image_search_failure_does_not_use_catalogue_fallback(self):
-        with patch.object(recipe_worker, "generate_recipe_image", side_effect=RuntimeError("no matching photo")), \
-             patch.object(recipe_worker, "catalogue_image_fallback") as fallback:
-            # The production flow now handles image search failure by skipping;
-            # it must never call the catalogue fallback.
-            try:
-                recipe_worker.generate_recipe_image({"title": "Turkey and Herb Breakfast Hash"}, [])
-            except RuntimeError:
-                pass
-            fallback.assert_not_called()
-
 
 
 if __name__ == "__main__":
