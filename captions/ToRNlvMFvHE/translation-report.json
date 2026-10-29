@@ -12,67 +12,67 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ar.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "es": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/es.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "fr": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/fr.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "de": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/de.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "it": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/it.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "pt": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/pt.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ja": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ja.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ko": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ko.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "tr": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/tr.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ru": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ru.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "zh-cn": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/zh.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "zh-tw": {
       "status": "ok",
@@ -88,7 +88,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/sq.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "am": {
       "status": "unavailable",
@@ -102,13 +102,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/az.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "eu": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/eu.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "be": {
       "status": "unavailable",
@@ -118,7 +118,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/bn.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "bs": {
       "status": "unavailable",
@@ -128,7 +128,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/bg.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "my": {
       "status": "unavailable",
@@ -138,7 +138,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ca.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ceb": {
       "status": "unavailable",
@@ -160,43 +160,43 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/cs.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "da": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/da.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "nl": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/nl.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "eo": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/eo.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "et": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/et.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "tl": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/tl.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "fi": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/fi.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "fy": {
       "status": "unavailable",
@@ -206,7 +206,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/gl.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ka": {
       "status": "unavailable",
@@ -216,7 +216,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/el.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "gu": {
       "status": "unavailable",
@@ -238,13 +238,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/he.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "hi": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/hi.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "hmn": {
       "status": "unavailable",
@@ -254,7 +254,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/hu.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "is": {
       "status": "unavailable",
@@ -268,13 +268,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/id.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ga": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ga.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "jv": {
       "status": "unavailable",
@@ -300,7 +300,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ky.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "lo": {
       "status": "unavailable",
@@ -314,13 +314,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/lv.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "lt": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/lt.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "lb": {
       "status": "unavailable",
@@ -338,7 +338,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ms.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ml": {
       "status": "unavailable",
@@ -380,13 +380,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/fa.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "pl": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/pl.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "pa": {
       "status": "unavailable",
@@ -396,7 +396,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ro.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "sm": {
       "status": "unavailable",
@@ -430,13 +430,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/sk.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "sl": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/sl.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "so": {
       "status": "unavailable",
@@ -450,13 +450,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/sw.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "sv": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/sv.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "tg": {
       "status": "unavailable",
@@ -478,7 +478,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/th.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ti": {
       "status": "unavailable",
@@ -488,13 +488,13 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/uk.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "ur": {
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/ur.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "uz": {
       "status": "unavailable",
@@ -504,7 +504,7 @@
       "status": "ok",
       "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/ToRNlvMFvHE/vi.vtt",
       "cues": 6,
-      "method": "argos-local"
+      "method": "existing-youtube-track"
     },
     "cy": {
       "status": "unavailable",
