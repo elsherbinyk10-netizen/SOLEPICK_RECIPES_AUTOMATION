@@ -39,6 +39,72 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(recipe_worker.already_published_today({"one": same_day}, now), same_day)
         self.assertIsNone(recipe_worker.already_published_today({"one": other_day}, now))
 
+    def test_daily_guard_ignores_unrelated_same_day_blog_articles(self):
+        cairo = ZoneInfo("Africa/Cairo")
+        now = datetime(2026, 10, 31, 10, 0, tzinfo=cairo)
+        unrelated = {
+            "publishedAt": "2026-10-31T07:05:00Z",
+            "isPublished": True,
+            "handle": "fast-mediterranean-inspired-recipes",
+        }
+        self.assertIsNone(
+            recipe_worker.already_published_today(
+                {"unrelated": unrelated},
+                now,
+                recipe_slugs={"one-pan-lemon-herb-chicken", "crispy-black-bean-tacos"},
+            )
+        )
+
+    def test_daily_guard_still_blocks_a_published_recipe_from_today(self):
+        cairo = ZoneInfo("Africa/Cairo")
+        now = datetime(2026, 10, 31, 10, 0, tzinfo=cairo)
+        recipe_article = {
+            "publishedAt": "2026-10-31T07:05:00Z",
+            "isPublished": True,
+            "handle": "crispy-black-bean-tacos",
+        }
+        self.assertEqual(
+            recipe_worker.already_published_today(
+                {"recipe": recipe_article},
+                now,
+                recipe_slugs={"crispy-black-bean-tacos"},
+            ),
+            recipe_article,
+        )
+
+    def test_daily_guard_ignores_unrelated_same_day_blog_articles(self):
+        cairo = ZoneInfo("Africa/Cairo")
+        now = datetime(2026, 10, 31, 10, 0, tzinfo=cairo)
+        unrelated = {
+            "publishedAt": "2026-10-31T07:05:00Z",
+            "isPublished": True,
+            "handle": "fast-mediterranean-inspired-recipes",
+        }
+        self.assertIsNone(
+            recipe_worker.already_published_today(
+                {"unrelated": unrelated},
+                now,
+                recipe_slugs={"one-pan-lemon-herb-chicken", "crispy-black-bean-tacos"},
+            )
+        )
+
+    def test_daily_guard_still_blocks_a_published_recipe_from_today(self):
+        cairo = ZoneInfo("Africa/Cairo")
+        now = datetime(2026, 10, 31, 10, 0, tzinfo=cairo)
+        recipe_article = {
+            "publishedAt": "2026-10-31T07:05:00Z",
+            "isPublished": True,
+            "handle": "crispy-black-bean-tacos",
+        }
+        self.assertEqual(
+            recipe_worker.already_published_today(
+                {"recipe": recipe_article},
+                now,
+                recipe_slugs={"crispy-black-bean-tacos"},
+            ),
+            recipe_article,
+        )
+
     def test_video_match_rejects_unrelated_titles(self):
         self.assertLess(recipe_worker._video_title_score("Creamy Tomato Spinach Pasta", "How to make chocolate cake"), 0.45)
         self.assertGreaterEqual(recipe_worker._video_title_score("Honey Garlic Salmon Bowls", "Honey Garlic Salmon Bowl Recipe"), 0.45)
