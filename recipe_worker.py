@@ -582,9 +582,15 @@ def expected_schedule_cron(now=None):
     return "0 7 * * *" if now.utcoffset() == datetime.timedelta(hours=3) else "0 8 * * *"
 
 
-def already_published_today(articles, now=None):
+def already_published_today(articles, now=None, recipe_slugs=None):
+    """Return today's published recipe, ignoring unrelated blog posts."""
     now = now or datetime.datetime.now(CAIRO)
+    allowed_slugs = set(recipe_slugs) if recipe_slugs is not None else None
     for article in articles.values():
+        # The Shopify blog may also contain editorial or legacy articles.
+        # Only handles from recipes.json can consume the daily recipe slot.
+        if allowed_slugs is not None and article.get("handle") not in allowed_slugs:
+            continue
         published_at = article.get("publishedAt")
         if article.get("isPublished") and published_at:
             try:
@@ -823,7 +829,7 @@ def main():
         return
 
     articles = existing_articles(blog_id)
-    published_today = already_published_today(articles, now)
+    published_today = already_published_today(articles, now, recipe_slugs={recipe['slug'] for recipe in recipes})
     if published_today and not args.one_time_test:
         body = str(published_today.get("body") or "")
         video_is_saved = (
