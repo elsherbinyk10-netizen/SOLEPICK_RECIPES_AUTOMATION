@@ -582,6 +582,17 @@ def expected_schedule_cron(now=None):
     return "0 7 * * *" if now.utcoffset() == datetime.timedelta(hours=3) else "0 8 * * *"
 
 
+def should_run_scheduled_event(event_schedule, now=None):
+    """Accept the seasonal 10:00 Cairo trigger and a later same-day recovery run."""
+    now = now or datetime.datetime.now(CAIRO)
+    if event_schedule == expected_schedule_cron(now):
+        return True
+    # The non-primary seasonal trigger or the 09:00 UTC recovery trigger may
+    # be the only run GitHub delivers. Never publish before 10:00 Cairo;
+    # after 10:00, the daily Shopify idempotency guard makes retries safe.
+    return now.hour >= 10
+
+
 def already_published_today(articles, now=None, recipe_slugs=None):
     """Return today's published recipe, ignoring unrelated blog posts."""
     now = now or datetime.datetime.now(CAIRO)
@@ -795,15 +806,15 @@ def main():
     if args.one_time_test and args.repair_handle:
         parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
-    # Two UTC cron entries cover Cairo's seasonal UTC+2/UTC+3 offsets.
-    # Only the entry matching today's Cairo offset may publish; this avoids
-    # duplicate runs and keeps the effective schedule at 10:00 Cairo year-round.
+    # Seasonal primary cron plus a recovery path: if GitHub skips the exact
+    # 10:00 Cairo run, a later scheduled event may still publish that Cairo day.
+    # The Shopify daily idempotency guard below prevents duplicate articles.
     event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
     event_schedule = os.environ.get("GITHUB_EVENT_SCHEDULE", "").strip()
-    if event_name == "schedule" and event_schedule and event_schedule != expected_schedule_cron(now):
+    if event_name == "schedule" and event_schedule and not should_run_scheduled_event(event_schedule, now):
         print(
-            f"Seasonal schedule guard: ignoring cron {event_schedule}; "
-            f"today's Cairo offset requires {expected_schedule_cron(now)}."
+            f"Schedule guard: ignoring cron {event_schedule} before 10:00 Cairo; "
+            f"primary trigger today is {expected_schedule_cron(now)}."
         )
         return
     # GitHub may delay scheduled workflows well beyond their cron time.
