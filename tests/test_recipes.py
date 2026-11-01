@@ -31,6 +31,19 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(recipe_worker.expected_schedule_cron(summer), "0 7 * * *")
         self.assertEqual(recipe_worker.expected_schedule_cron(winter), "0 8 * * *")
 
+    def test_schedule_accepts_seasonal_primary_and_same_day_recovery(self):
+        cairo = ZoneInfo("Africa/Cairo")
+        summer_primary = datetime(2026, 7, 1, 10, 0, tzinfo=cairo)
+        summer_recovery = datetime(2026, 7, 1, 11, 0, tzinfo=cairo)
+        winter_primary = datetime(2026, 1, 15, 10, 0, tzinfo=cairo)
+        winter_recovery = datetime(2026, 1, 15, 11, 0, tzinfo=cairo)
+        before_publish_window = datetime(2026, 1, 15, 9, 0, tzinfo=cairo)
+        self.assertTrue(recipe_worker.should_run_scheduled_event("0 7 * * *", summer_primary))
+        self.assertTrue(recipe_worker.should_run_scheduled_event("0 8 * * *", winter_primary))
+        self.assertTrue(recipe_worker.should_run_scheduled_event("0 8 * * *", summer_recovery))
+        self.assertTrue(recipe_worker.should_run_scheduled_event("0 9 * * *", winter_recovery))
+        self.assertFalse(recipe_worker.should_run_scheduled_event("0 7 * * *", before_publish_window))
+
     def test_daily_guard_blocks_second_publication(self):
         cairo = ZoneInfo("Africa/Cairo")
         now = datetime(2026, 10, 14, 10, 0, tzinfo=cairo)
