@@ -18,10 +18,11 @@ on:
         type: boolean
         default: false
   schedule:
-    # Both triggers are filtered by the worker against Cairo's current UTC offset:
-    # 07:00 UTC = 10:00 Cairo in UTC+3; 08:00 UTC = 10:00 Cairo in UTC+2.
+    # Primary triggers: 07:00 UTC in Cairo UTC+3, 08:00 UTC in UTC+2.
+    # 09:00 UTC is a recovery trigger if GitHub drops/delays the primary run.
     - cron: "0 7 * * *"
     - cron: "0 8 * * *"
+    - cron: "0 9 * * *"
 
 permissions:
   contents: write
@@ -94,8 +95,9 @@ jobs:
           if [[ -z "$REPAIR_HANDLE" && "$COMMIT_MESSAGE" =~ \[repair-video:([a-z0-9-]+)\] ]]; then
             REPAIR_HANDLE="${BASH_REMATCH[1]}"
           fi
-          # Two UTC triggers cover Cairo's seasonal offset. The worker skips
-          # whichever trigger does not match today's Cairo offset.
+          # Seasonal primary triggers plus a daily recovery trigger protect
+          # against GitHub dropping a scheduled run. Cairo-day idempotency
+          # prevents duplicate recipe publication.
           if [[ -n "$REPAIR_HANDLE" && "$ONE_TIME_TEST" == "true" ]]; then
             echo "Choose either repair_handle or one_time_test, not both."
             exit 2
