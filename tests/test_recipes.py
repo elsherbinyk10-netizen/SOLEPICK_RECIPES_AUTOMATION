@@ -206,7 +206,7 @@ class RecipeLibraryTests(unittest.TestCase):
                 "Fill with the cooked mixture and top with avocado and yogurt."
             ]
         }
-        with self.assertRaisesRegex(ValueError, "generic template instructions"):
+        with self.assertRaisesRegex(ValueError, "requires a real recipe edit"):
             recipe_worker.make_recipe_specific(recipe)
 
     def test_featured_image_uses_verified_generated_recipe_photo(self):
