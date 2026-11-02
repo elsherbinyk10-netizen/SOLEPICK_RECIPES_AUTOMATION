@@ -877,9 +877,13 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
         userErrors { field message }
       }
     }"""
+    # Ensure Recipe JSON-LD references the exact verified image that Shopify
+    # receives as the article's featured image, including generated Commons assets.
+    recipe_for_markup = dict(recipe)
+    recipe_for_markup["published_image_url"] = generated_image.get("url") if generated_image else ""
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
-        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video, published_handles),
+        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe_for_markup, video, published_handles),
         "summary": seo_metadata(recipe)["description"],
         "metafields": [
             {"namespace": "global", "key": "title_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["title"]},
