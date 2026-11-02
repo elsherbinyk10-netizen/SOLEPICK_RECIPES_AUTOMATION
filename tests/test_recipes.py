@@ -118,6 +118,17 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe_article,
         )
 
+    def test_white_bean_loaded_salad_has_specific_no_cook_steps(self):
+        recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
+        recipe = next(item for item in recipes if item["slug"] == "mediterranean-white-bean-loaded-salad")
+        self.assertEqual(recipe["cook_minutes"], 0)
+        self.assertEqual(len(recipe["instructions"]), 5)
+        text = " ".join(recipe["instructions"]).lower()
+        for placeholder in ("main ingredient", "if it requires cooking", "flavorings", "cook until ready"):
+            self.assertNotIn(placeholder, text)
+        self.assertIn("cannellini beans", text)
+        self.assertIn("lemon", text)
+
     def test_video_match_rejects_unrelated_titles(self):
         self.assertLess(recipe_worker._video_title_score("Creamy Tomato Spinach Pasta", "How to make chocolate cake"), 0.45)
         self.assertGreaterEqual(recipe_worker._video_title_score("Honey Garlic Salmon Bowls", "Honey Garlic Salmon Bowl Recipe"), 0.45)
