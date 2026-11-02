@@ -6,6 +6,7 @@ that already exist in recipes.json. If RSS is unavailable, callers retain their
 normal deterministic rotation.
 """
 import html
+import json
 import re
 import urllib.parse
 import urllib.request
@@ -105,3 +106,76 @@ def rank_trending_recipes(recipes, signals):
         return list(recipes)
     scored.sort(key=lambda row: (-row[0], row[1]))
     return [recipe for _, _, recipe in scored]
+
+
+
+def _fetch_text(url, timeout=10):
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "Mozilla/5.0 (compatible; SolePickTrendDiscovery/1.0)"}
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read().decode("utf-8", errors="replace")
+
+
+def fetch_google_search_trends(timeout=10, now=None):
+    """Read Google's public Trending Searches RSS for current search-demand topics."""
+    now = now or datetime.now(timezone.utc)
+    url = "https://trends.google.com/trending/rss?geo=US"
+    signals = []
+    try:
+        root = ET.fromstring(_fetch_text(url, timeout))
+    except Exception as error:
+        print(f"GOOGLE SEARCH TRENDS unavailable ({type(error).__name__}).")
+        return signals
+    for item in root.findall(".//item"):
+        title = html.unescape(item.findtext("title") or "").strip()
+        traffic = item.findtext("{https://trends.google.com/trending/rss}approx_traffic") or ""
+        if title:
+            signals.append({"text": title, "source": "google_trends", "traffic": traffic})
+    print(f"GOOGLE SEARCH TRENDS: {len(signals)} current trending-search terms collected.")
+    return signals
+
+
+def fetch_tiktok_food_trends(timeout=10):
+    """Best-effort public TikTok Creative Center signal; never required for publishing."""
+    url = "https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en"
+    signals = []
+    try:
+        page = _fetch_text(url, timeout)
+        # Public Creative Center pages expose trend names in rendered/embedded page data.
+        for match in re.findall(r'"hashtagName"\s*:\s*"([^"]+)"', page):
+            name = html.unescape(match).strip().lstrip("#")
+            if name:
+                signals.append({"text": name.replace("_", " "), "source": "tiktok_creative_center"})
+        for match in re.findall(r'"name"\s*:\s*"#?([A-Za-z][A-Za-z0-9_ ]{2,40})"', page):
+            name = html.unescape(match).strip().lstrip("#")
+            if name and any(word in name.lower() for word in ("food", "recipe", "cook", "meal", "bake", "pasta", "chicken", "protein")):
+                signals.append({"text": name.replace("_", " "), "source": "tiktok_creative_center"})
+    except Exception as error:
+        print(f"TIKTOK CREATIVE CENTER unavailable ({type(error).__name__}); continuing with search/RSS signals.")
+    unique = {}
+    for item in signals:
+        unique[item["text"].lower()] = item
+    result = list(unique.values())
+    print(f"TIKTOK CREATIVE CENTER: {len(result)} public trend signals collected.")
+    return result
+
+
+def collect_all_food_trend_signals():
+    """Combine Google News coverage, Google trending searches and public TikTok trend names."""
+    combined = []
+    combined.extend({"text": value, "source": "google_news"} for value in fetch_food_trend_signals())
+    combined.extend(fetch_google_search_trends())
+    combined.extend(fetch_tiktok_food_trends())
+    deduped = {}
+    for signal in combined:
+        key = " ".join(_tokens(signal.get("text", "")))
+        if key:
+            deduped.setdefault(key, signal)
+    print("MULTI-SOURCE FOOD TRENDS: " + json.dumps({
+        "google_news": sum(x["source"] == "google_news" for x in deduped.values()),
+        "google_trends": sum(x["source"] == "google_trends" for x in deduped.values()),
+        "tiktok_creative_center": sum(x["source"] == "tiktok_creative_center" for x in deduped.values()),
+        "total": len(deduped),
+    }))
+    return list(deduped.values())
