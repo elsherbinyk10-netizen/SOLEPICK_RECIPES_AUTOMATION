@@ -303,6 +303,9 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertLessEqual(len(meta["description"]), 155)
         self.assertIn("pasta", meta["title"].lower())
         self.assertGreaterEqual(len(meta["description"]), 90)
+        spaced = recipe_worker.seo_metadata({"title": "  Creamy   Tomato Pasta  ", "description": "  A useful   pasta recipe description for a weeknight meal.  "})
+        self.assertEqual(spaced["title"], "Creamy Tomato Pasta")
+        self.assertNotIn("  ", spaced["description"])
 
     def test_recipe_json_ld_has_required_recipe_fields_and_verified_image(self):
         recipe = {
