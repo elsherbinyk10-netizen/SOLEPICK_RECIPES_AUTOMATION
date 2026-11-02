@@ -118,6 +118,15 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe_article,
         )
 
+    def test_generic_recipe_templates_are_rejected_before_publishing(self):
+        recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
+        bad = next(item for item in recipes if any(
+            "main ingredient" in str(step).lower() or "flavorings" in str(step).lower()
+            for step in item.get("instructions", [])
+        ))
+        with self.assertRaisesRegex(ValueError, "generic template instructions"):
+            recipe_worker.make_recipe_specific(bad)
+
     def test_white_bean_loaded_salad_has_specific_no_cook_steps(self):
         recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
         recipe = next(item for item in recipes if item["slug"] == "mediterranean-white-bean-loaded-salad")
@@ -183,7 +192,7 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe, "Honey Mustard Salmon Stuffed Sweet Potatoes Recipe"
         ))
 
-    def test_recipe_specificity_replaces_generic_instruction_placeholders(self):
+    def test_recipe_specificity_rejects_generic_instruction_placeholders(self):
         recipe = {
             "title": "Honey Mustard Salmon Stuffed Sweet Potatoes",
             "ingredients": [
@@ -197,12 +206,8 @@ class RecipeLibraryTests(unittest.TestCase):
                 "Fill with the cooked mixture and top with avocado and yogurt."
             ]
         }
-        improved = recipe_worker.make_recipe_specific(recipe)
-        joined = " ".join(improved["instructions"]).lower()
-        self.assertIn("salmon", joined)
-        self.assertIn("mustard", joined)
-        self.assertNotIn("main ingredient", joined)
-        self.assertNotIn("flavorings", joined)
+        with self.assertRaisesRegex(ValueError, "generic template instructions"):
+            recipe_worker.make_recipe_specific(recipe)
 
     def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
