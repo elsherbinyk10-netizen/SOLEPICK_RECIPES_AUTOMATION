@@ -371,6 +371,44 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertNotIn("More Recipes to Try", no_links)
 
 
+    def test_published_generated_image_is_in_recipe_json_ld(self):
+        recipe = {
+            "slug": "sample-salmon-pasta",
+            "title": "Sample Salmon Pasta",
+            "description": "A bright salmon pasta with lemon and herbs.",
+            "prep_minutes": 10,
+            "cook_minutes": 15,
+            "servings": 2,
+            "ingredients": ["200 g salmon", "200 g pasta", "1 lemon"],
+            "instructions": [
+                "Boil the pasta until al dente.",
+                "Season and cook the salmon until safely cooked.",
+                "Flake the salmon into bite-sized pieces.",
+                "Toss pasta with lemon and salmon, then serve."
+            ],
+            "tags": ["Seafood", "Pasta"],
+        }
+        generated = {
+            "url": "https://commons.wikimedia.org/generated/sample-salmon-pasta.jpg",
+            "altText": "Salmon pasta with lemon and herbs",
+        }
+        video = {
+            "title": "Sample Salmon Pasta Recipe",
+            "url": "https://www.youtube.com/watch?v=abcdefghijk",
+            "embed_url": "https://www.youtube-nocookie.com/embed/abcdefghijk",
+        }
+        from unittest.mock import patch
+        captured = {}
+        def fake_graphql(_query, variables):
+            captured.update(variables["article"])
+            return {"articleCreate": {"article": {"isPublished": True}, "userErrors": []}}
+        with patch.object(recipe_worker, "graphql", side_effect=fake_graphql):
+            recipe_worker.create_published("gid://shopify/Blog/1", recipe, video, generated)
+        body = captured["body"]
+        self.assertIn(generated["url"], body)
+        self.assertIn(generated["url"], captured["image"]["url"])
+        self.assertIn('"image": ["' + generated["url"] + '"]', body)
+
 
 if __name__ == "__main__":
     unittest.main()
