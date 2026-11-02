@@ -304,6 +304,9 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertLessEqual(len(meta["description"]), 155)
         self.assertIn("pasta", meta["title"].lower())
         self.assertGreaterEqual(len(meta["description"]), 90)
+        spaced = recipe_worker.seo_metadata({"title": "  Creamy   Tomato Pasta  ", "description": "  A useful   pasta recipe description for a weeknight meal.  "})
+        self.assertEqual(spaced["title"], "Creamy Tomato Pasta")
+        self.assertNotIn("  ", spaced["description"])
 
     def test_recipe_json_ld_has_required_recipe_fields_and_verified_image(self):
         recipe = {
@@ -331,10 +334,17 @@ class RecipeLibraryTests(unittest.TestCase):
             "tags": ["pasta", "dinner"], "ingredients": ["pasta"],
             "instructions": ["Cook pasta."],
         }
-        markup = recipe_worker.article_html(recipe)
-        self.assertIn('https://solepick.site/blogs/recipes/', markup)
+        catalogue = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
+        related = next(
+            item for item in catalogue
+            if item["slug"] != recipe["slug"] and set(item.get("tags", [])) & {"pasta", "dinner"}
+        )
+        markup = recipe_worker.article_html(recipe, published_handles={related["slug"]})
+        self.assertIn("https://solepick.site/blogs/recipes/" + related["slug"], markup)
         self.assertIn('type="application/ld+json"', markup)
         self.assertIn("More Recipes to Try", markup)
+        no_links = recipe_worker.article_html(recipe, published_handles=set())
+        self.assertNotIn("More Recipes to Try", no_links)
 
 
 

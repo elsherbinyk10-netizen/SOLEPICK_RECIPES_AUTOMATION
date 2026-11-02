@@ -561,9 +561,9 @@ def featured_image_for(recipe, generated_image):
 
 def seo_metadata(recipe):
     """Create concise, intent-led search metadata without keyword stuffing."""
-    title = re.sub(r"\\s+", " ", str(recipe.get("title", "")).strip())
+    title = re.sub(r"\s+", " ", str(recipe.get("title", "")).strip())
     seo_title = title if len(title) <= 58 else title[:55].rsplit(" ", 1)[0].rstrip(" -|:") + " | SolePick"
-    description = re.sub(r"\\s+", " ", str(recipe.get("description", "")).strip())
+    description = re.sub(r"\s+", " ", str(recipe.get("description", "")).strip())
     if not description:
         description = f"Make {title} with clear step-by-step instructions and everyday ingredients."
     if len(description) > 155:
@@ -574,16 +574,17 @@ def seo_metadata(recipe):
     return {"title": seo_title, "description": description}
 
 
-def related_recipe_links(recipe):
+def related_recipe_links(recipe, published_handles=None):
     """Add up to three contextual links to published/approved related SolePick recipes."""
     try:
         catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return ""
     current_tags = set(recipe.get("tags") or [])
+    allowed_handles = set(published_handles or [])
     ranked = []
     for item in catalogue:
-        if item.get("slug") == recipe.get("slug"):
+        if item.get("slug") == recipe.get("slug") or item.get("slug") not in allowed_handles:
             continue
         overlap = len(current_tags & set(item.get("tags") or []))
         if overlap:
@@ -625,12 +626,12 @@ def recipe_json_ld(recipe):
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
 
-def article_html(recipe, video=None):
+def article_html(recipe, video=None, published_handles=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
     video_html = recipe_video_section_html(recipe, video) if video else ""
     metadata = seo_metadata(recipe)
-    related = related_recipe_links(recipe)
+    related = related_recipe_links(recipe, published_handles)
     return (
         f"<p>{esc(metadata['description'])}</p>"
         f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
@@ -848,7 +849,7 @@ def verify_published_article(article, recipe, video):
     return article
 
 
-def create_published(blog_id, recipe, video, generated_image):
+def create_published(blog_id, recipe, video, generated_image, published_handles=None):
     mutation = """mutation CreatePublishedArticle($article: ArticleCreateInput!) {
       articleCreate(article: $article) {
         article { id title handle isPublished body }
@@ -857,8 +858,13 @@ def create_published(blog_id, recipe, video, generated_image):
     }"""
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
-        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video),
-        "summary": seo_metadata(recipe)["description"], "tags": recipe.get("tags", []), "isPublished": True,
+        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video, published_handles),
+        "summary": seo_metadata(recipe)["description"],
+        "metafields": [
+            {"namespace": "global", "key": "title_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["title"]},
+            {"namespace": "global", "key": "description_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["description"]},
+        ],
+        "tags": recipe.get("tags", []), "isPublished": True,
         "image": featured_image_for(recipe, generated_image),
     }
     result = graphql(mutation, {"article": article}).get("articleCreate") or {}
@@ -1018,7 +1024,11 @@ def main():
                 raise RuntimeError("Shopify did not confirm recipe article publication.")
             verify_published_article(article, recipe, video)
         else:
-            article = create_published(blog_id, recipe, video, generated_image)
+            published_handles = {
+                handle for handle, existing_article in articles.items()
+                if existing_article.get("isPublished")
+            }
+            article = create_published(blog_id, recipe, video, generated_image, published_handles)
             verify_published_article(article, recipe, video)
         print(f"Published recipe with verified embedded video: {article['title']} | handle={article['handle']} | published={article['isPublished']} | iframe=verified | video={video['url']}")
         return

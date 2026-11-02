@@ -76,25 +76,42 @@ def fetch_food_trend_signals(timeout=10, now=None):
 
 
 def score_recipe_trends(recipe, signals):
-    """Score catalogue recipes by meaningful ingredient/dish overlap with fresh signals."""
+    """Rank recipes using search demand, food coverage and public social trend signals."""
     title_tokens = _tokens(recipe.get("title", ""))
-    recipe_tokens = _tokens(
+    tag_tokens = _tokens(
         " ".join(recipe.get("tags", []) if isinstance(recipe.get("tags"), list) else [])
     )
-    recipe_tokens |= title_tokens
+    recipe_tokens = title_tokens | tag_tokens
     if not recipe_tokens:
-        return 0
-    score = 0
+        return 0.0
+    weights = {
+        "google_news": 1.0,
+        "google_trends": 2.4,
+        "tiktok_creative_center": 2.0,
+        "youtube": 1.4,
+        "pinterest": 1.2,
+    }
+    score = 0.0
     for signal in signals:
         signal_text = signal.get("text", "") if isinstance(signal, dict) else signal
         signal_tokens = _tokens(signal_text)
         overlap = recipe_tokens & signal_tokens
         title_overlap = title_tokens & signal_tokens
-        if len(overlap) >= 2:
-            score += min(12, len(overlap) * 2 + len(title_overlap) * 2)
-        elif len(overlap) == 1 and title_overlap:
-            score += 2
-    return score
+        if not overlap:
+            continue
+        source = signal.get("source", "google_news") if isinstance(signal, dict) else "google_news"
+        weight = weights.get(source, 1.0)
+        traffic = signal.get("traffic", "") if isinstance(signal, dict) else ""
+        traffic_match = re.search(r"([0-9]+(?:\\.[0-9]+)?)\\s*([KMB]?)", str(traffic).upper())
+        demand_boost = 1.0
+        if traffic_match:
+            amount = float(traffic_match.group(1))
+            suffix = traffic_match.group(2)
+            amount *= {"K": 1_000, "M": 1_000_000, "B": 1_000_000_000}.get(suffix, 1)
+            demand_boost += min(1.5, amount / 1_000_000)
+        overlap_score = min(12, len(overlap) * 2 + len(title_overlap) * 2)
+        score += overlap_score * weight * demand_boost
+    return round(score, 2)
 
 
 def rank_trending_recipes(recipes, signals):
