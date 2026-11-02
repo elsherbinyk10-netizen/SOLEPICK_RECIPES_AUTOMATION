@@ -148,6 +148,27 @@ def make_recipe_specific(recipe):
                 seasoning_terms.append(clean)
     seasoning_text = ", ".join(dict.fromkeys(seasoning_terms[:5])) or "the listed seasonings"
 
+    # The old library contains generic templates which can be made to look specific
+    # by substituting ingredient names, but that does not create a tested recipe.
+    # Block those entries until their actual method is written and reviewed.
+    generic_instruction_patterns = (
+        r"\\bmain ingredient\\b",
+        r"\\blisted flavorings?\\b",
+        r"\\bflavorings\\b",
+        r"\\bvegetables of choice\\b",
+        r"\\bcook until ready\\b",
+        r"\\bif it requires cooking\\b",
+        r"\\bsafely cooked through(?:,? where applicable)?\\b",
+        r"\\bwhere applicable\\b",
+    )
+    original_steps = [str(step) for step in result.get("instructions", [])]
+    for step in original_steps:
+        if any(re.search(pattern, step, re.I) for pattern in generic_instruction_patterns):
+            raise ValueError(
+                f"Recipe '{title}' still contains generic template instructions; "
+                "manual recipe-specific review is required before publishing."
+            )
+
     instructions = []
     for step in result.get("instructions", []):
         step = re.sub(r"the main ingredient|main ingredient", main_food, str(step), flags=re.I)
