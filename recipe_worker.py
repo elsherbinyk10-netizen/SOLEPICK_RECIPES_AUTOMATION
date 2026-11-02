@@ -854,7 +854,7 @@ def create_published(blog_id, recipe, video, generated_image):
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
         "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video),
-        "summary": seo_metadata(recipe)["description"], "seo": seo_metadata(recipe), "tags": recipe.get("tags", []), "isPublished": True,
+        "summary": seo_metadata(recipe)["description"], "tags": recipe.get("tags", []), "isPublished": True,
         "image": featured_image_for(recipe, generated_image),
     }
     result = graphql(mutation, {"article": article}).get("articleCreate") or {}
@@ -1003,7 +1003,7 @@ def main():
             }"""
             result = graphql(mutation, {"id": existing["id"], "article": {
                 "body": article_html(recipe, video),
-                "summary": seo_metadata(recipe)["description"], "seo": seo_metadata(recipe),
+                "summary": seo_metadata(recipe)["description"],
                 "image": featured_image_for(recipe, generated_image),
                 "isPublished": True,
             }}).get("articleUpdate") or {}
