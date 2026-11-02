@@ -559,21 +559,90 @@ def featured_image_for(recipe, generated_image):
         raise RuntimeError("Verified image is missing descriptive alt text for " + recipe["title"])
     return {"url": url, "altText": alt}
 
+def seo_metadata(recipe):
+    """Create concise, intent-led search metadata without keyword stuffing."""
+    title = re.sub(r"\\s+", " ", str(recipe.get("title", "")).strip())
+    seo_title = title if len(title) <= 58 else title[:55].rsplit(" ", 1)[0].rstrip(" -|:") + " | SolePick"
+    description = re.sub(r"\\s+", " ", str(recipe.get("description", "")).strip())
+    if not description:
+        description = f"Make {title} with clear step-by-step instructions and everyday ingredients."
+    if len(description) > 155:
+        description = description[:152].rsplit(" ", 1)[0].rstrip(" ,;:") + "..."
+    elif len(description) < 110:
+        description = (description.rstrip(".") + ". Get the ingredients, prep time and easy step-by-step method.").strip()
+        description = description[:155].rsplit(" ", 1)[0].rstrip(" ,;:")
+    return {"title": seo_title, "description": description}
+
+
+def related_recipe_links(recipe):
+    """Add up to three contextual links to published/approved related SolePick recipes."""
+    try:
+        catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return ""
+    current_tags = set(recipe.get("tags") or [])
+    ranked = []
+    for item in catalogue:
+        if item.get("slug") == recipe.get("slug"):
+            continue
+        overlap = len(current_tags & set(item.get("tags") or []))
+        if overlap:
+            ranked.append((overlap, item.get("title", ""), item.get("slug", "")))
+    ranked.sort(key=lambda row: (-row[0], row[1]))
+    links = [
+        f'<li><a href="https://solepick.site/blogs/recipes/{esc(slug)}">{esc(title)}</a></li>'
+        for _, title, slug in ranked[:3] if title and slug
+    ]
+    if not links:
+        return ""
+    return "<h2>More Recipes to Try</h2><ul>" + "".join(links) + "</ul>"
+
+
+def recipe_json_ld(recipe):
+    """Schema.org Recipe JSON-LD for search engines and recipe rich results."""
+    metadata = seo_metadata(recipe)
+    image = recipe.get("published_image_url") or recipe.get("image_url")
+    data = {
+        "@context": "https://schema.org",
+        "@type": "Recipe",
+        "name": recipe["title"],
+        "description": metadata["description"],
+        "author": {"@type": "Organization", "name": "SolePick Recipes"},
+        "datePublished": datetime.datetime.now(datetime.timezone.utc).date().isoformat(),
+        "prepTime": f"PT{int(recipe['prep_minutes'])}M",
+        "cookTime": f"PT{int(recipe['cook_minutes'])}M",
+        "totalTime": f"PT{int(recipe['prep_minutes']) + int(recipe['cook_minutes'])}M",
+        "recipeYield": str(recipe["servings"]),
+        "recipeCategory": ", ".join(recipe.get("tags", [])[:3]),
+        "recipeIngredient": recipe["ingredients"],
+        "recipeInstructions": [
+            {"@type": "HowToStep", "position": index, "text": step}
+            for index, step in enumerate(recipe["instructions"], 1)
+        ],
+    }
+    if image:
+        data["image"] = [image]
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+
 def article_html(recipe, video=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
     video_html = recipe_video_section_html(recipe, video) if video else ""
-    # Do not add the deprecated visible Video language selector or fallback warning.
+    metadata = seo_metadata(recipe)
+    related = related_recipe_links(recipe)
     return (
-        f"<p>{esc(recipe['description'])}</p>"
+        f"<p>{esc(metadata['description'])}</p>"
         f"<p><strong>Prep:</strong> {recipe['prep_minutes']} minutes · "
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
         f"{video_html}"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
+        f"{related}"
         "<p><em>Check labels for allergens and follow safe food-handling practices. "
         "Cooking times vary; verify food is safely cooked before serving.</em></p>"
+        f"{recipe_json_ld(recipe)}"
     )
 
 
@@ -785,7 +854,7 @@ def create_published(blog_id, recipe, video, generated_image):
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
         "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video),
-        "summary": recipe["description"], "tags": recipe.get("tags", []), "isPublished": True,
+        "summary": seo_metadata(recipe)["description"], "seo": seo_metadata(recipe), "tags": recipe.get("tags", []), "isPublished": True,
         "image": featured_image_for(recipe, generated_image),
     }
     result = graphql(mutation, {"article": article}).get("articleCreate") or {}
@@ -933,6 +1002,7 @@ def main():
             }"""
             result = graphql(mutation, {"id": existing["id"], "article": {
                 "body": article_html(recipe, video),
+                "summary": seo_metadata(recipe)["description"], "seo": seo_metadata(recipe),
                 "image": featured_image_for(recipe, generated_image),
                 "isPublished": True,
             }}).get("articleUpdate") or {}
