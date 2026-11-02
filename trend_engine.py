@@ -86,7 +86,8 @@ def score_recipe_trends(recipe, signals):
         return 0
     score = 0
     for signal in signals:
-        signal_tokens = _tokens(signal)
+        signal_text = signal.get("text", "") if isinstance(signal, dict) else signal
+        signal_tokens = _tokens(signal_text)
         overlap = recipe_tokens & signal_tokens
         title_overlap = title_tokens & signal_tokens
         if len(overlap) >= 2:
