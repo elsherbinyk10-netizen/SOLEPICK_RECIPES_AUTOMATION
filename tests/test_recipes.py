@@ -118,6 +118,15 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe_article,
         )
 
+    def test_generic_recipe_templates_are_rejected_before_publishing(self):
+        recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
+        bad = next(item for item in recipes if any(
+            "main ingredient" in str(step).lower() or "flavorings" in str(step).lower()
+            for step in item.get("instructions", [])
+        ))
+        with self.assertRaisesRegex(ValueError, "generic template instructions"):
+            recipe_worker.make_recipe_specific(bad)
+
     def test_white_bean_loaded_salad_has_specific_no_cook_steps(self):
         recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
         recipe = next(item for item in recipes if item["slug"] == "mediterranean-white-bean-loaded-salad")
