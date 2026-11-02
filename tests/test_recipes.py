@@ -198,7 +198,7 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe, "Honey Mustard Salmon Stuffed Sweet Potatoes Recipe"
         ))
 
-    def test_recipe_specificity_replaces_generic_instruction_placeholders(self):
+    def test_recipe_specificity_rejects_generic_instructions_instead_of_inventing_steps(self):
         recipe = {
             "title": "Honey Mustard Salmon Stuffed Sweet Potatoes",
             "ingredients": [
@@ -212,12 +212,8 @@ class RecipeLibraryTests(unittest.TestCase):
                 "Fill with the cooked mixture and top with avocado and yogurt."
             ]
         }
-        improved = recipe_worker.make_recipe_specific(recipe)
-        joined = " ".join(improved["instructions"]).lower()
-        self.assertIn("salmon", joined)
-        self.assertIn("mustard", joined)
-        self.assertNotIn("main ingredient", joined)
-        self.assertNotIn("flavorings", joined)
+        with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
+            recipe_worker.make_recipe_specific(recipe)
 
     def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
