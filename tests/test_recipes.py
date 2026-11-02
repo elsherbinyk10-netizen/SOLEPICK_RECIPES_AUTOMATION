@@ -350,6 +350,7 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(payload["cookTime"], "PT20M")
         self.assertEqual(payload["totalTime"], "PT30M")
         self.assertEqual(len(payload["recipeInstructions"]), 2)
+        self.assertIn("pasta", payload["keywords"].lower())
 
     def test_recipe_article_has_contextual_internal_links_and_json_ld(self):
         recipe = {
@@ -408,6 +409,8 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn(generated["url"], body)
         self.assertIn(generated["url"], captured["image"]["url"])
         self.assertIn('"image": ["' + generated["url"] + '"]', body)
+        self.assertIn('"url": "https://solepick.site/blogs/recipes/sample-salmon-pasta"', body)
+        self.assertIn('"mainEntityOfPage"', body)
 
 
 if __name__ == "__main__":
