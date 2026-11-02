@@ -244,6 +244,7 @@ class RecipeLibraryTests(unittest.TestCase):
                 "<div><iframe src=\"https://www.youtube-nocookie.com/embed/abcdefghijk?playsinline=1\"></iframe></div>"
                 "<h2>Ingredients</h2><ul><li>pasta</li></ul>"
                 "<h2>Instructions</h2><ol><li>Cook pasta.</li></ol>"
+                '<script type="application/ld+json">{"@type": "Recipe"}</script>'
             ),
         }
         self.assertIs(recipe_worker.verify_published_article(article, recipe, video), article)
