@@ -887,6 +887,19 @@ def main():
     candidates = [target_recipe] if target_slug else [
         recipes[(start + offset) % len(recipes)] for offset in range(len(recipes))
     ]
+    if not target_slug:
+        # Free Google News RSS signals help prioritize existing, fully tested recipes
+        # whose ingredients or dish formats are currently attracting coverage.
+        from trend_engine import fetch_food_trend_signals, rank_trending_recipes, score_recipe_trends
+        trend_signals = fetch_food_trend_signals()
+        if trend_signals:
+            candidates = rank_trending_recipes(candidates, trend_signals)
+            best_score = score_recipe_trends(candidates[0], trend_signals) if candidates else 0
+            print(f"FOOD TREND DISCOVERY: signals={len(trend_signals)} | top_recipe={candidates[0]['title'] if candidates else 'none'} | score={best_score}")
+            if best_score <= 0:
+                print("No catalogue recipe matched current food-trend signals; retaining the safe daily rotation.")
+        else:
+            print("FOOD TREND DISCOVERY: no fresh RSS signals; retaining the safe daily rotation.")
     for recipe in candidates:
         existing = articles.get(recipe["slug"])
 
