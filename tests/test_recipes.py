@@ -118,6 +118,21 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe_article,
         )
 
+    def test_generic_recipe_templates_are_blocked_before_substitution(self):
+        recipe = {
+            "title": "Lemon Garlic Chicken Rice Bowls",
+            "ingredients": ["600 g chicken breast", "1 teaspoon garlic", "2 cups cooked rice"],
+            "instructions": [
+                "Season the main ingredient with the listed flavorings and a pinch of salt.",
+                "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+                "Divide the cooked rice between bowls.",
+                "Serve with rice."
+            ],
+            "prep_minutes": 15, "cook_minutes": 15, "servings": 4,
+        }
+        with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
+            recipe_worker.make_recipe_specific(recipe)
+
     def test_white_bean_loaded_salad_has_specific_no_cook_steps(self):
         recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
         recipe = next(item for item in recipes if item["slug"] == "mediterranean-white-bean-loaded-salad")
@@ -183,7 +198,7 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe, "Honey Mustard Salmon Stuffed Sweet Potatoes Recipe"
         ))
 
-    def test_recipe_specificity_replaces_generic_instruction_placeholders(self):
+    def test_recipe_specificity_rejects_generic_instructions_instead_of_inventing_steps(self):
         recipe = {
             "title": "Honey Mustard Salmon Stuffed Sweet Potatoes",
             "ingredients": [
@@ -197,12 +212,8 @@ class RecipeLibraryTests(unittest.TestCase):
                 "Fill with the cooked mixture and top with avocado and yogurt."
             ]
         }
-        improved = recipe_worker.make_recipe_specific(recipe)
-        joined = " ".join(improved["instructions"]).lower()
-        self.assertIn("salmon", joined)
-        self.assertIn("mustard", joined)
-        self.assertNotIn("main ingredient", joined)
-        self.assertNotIn("flavorings", joined)
+        with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
+            recipe_worker.make_recipe_specific(recipe)
 
     def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
