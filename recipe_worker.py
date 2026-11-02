@@ -122,14 +122,14 @@ def make_recipe_specific(recipe):
     # mechanically substituting ingredient names. These entries need human recipe
     # development and must be skipped until their steps are genuinely specific.
     generic_patterns = (
-        r"\\bmain ingredient\\b",
-        r"\\bflavorings?\\b",
-        r"\\blisted seasonings\\b",
-        r"\\bvegetables of choice\\b",
-        r"\\bcook until ready\\b",
-        r"\\bif it requires cooking\\b",
-        r"\\bcook until tender and safely cooked through\\b",
-        r"\\bsimmer until ingredients are tender\\b",
+        r"\bmain ingredient\b",
+        r"\bflavorings?\b",
+        r"\blisted seasonings\b",
+        r"\bvegetables of choice\b",
+        r"\bcook until ready\b",
+        r"\bif it requires cooking\b",
+        r"\bcook until tender and safely cooked through\b",
+        r"\bsimmer until ingredients are tender\b",
     )
     for step in result.get("instructions", []):
         if any(re.search(pattern, str(step), re.I) for pattern in generic_patterns):
