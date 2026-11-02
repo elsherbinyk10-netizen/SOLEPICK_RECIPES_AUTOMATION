@@ -29,6 +29,22 @@ class RecipeTrendTests(unittest.TestCase):
         recipe = {"title": "Simple Weeknight Bowl", "tags": ["cottage cheese", "high protein"]}
         self.assertGreater(score_recipe_trends(recipe, ["High protein cottage cheese bowls are trending"]), 0)
 
+    def test_search_and_social_signals_receive_stronger_weights(self):
+        recipe = {"title": "Cottage Cheese Protein Bowl", "tags": ["high protein", "breakfast"]}
+        news = [{"text": "Cottage cheese protein bowl", "source": "google_news"}]
+        search = [{"text": "Cottage cheese protein bowl", "source": "google_trends", "traffic": "500K+"}]
+        social = [{"text": "Cottage cheese protein bowl", "source": "tiktok_creative_center"}]
+        news_score = score_recipe_trends(recipe, news)
+        search_score = score_recipe_trends(recipe, search)
+        social_score = score_recipe_trends(recipe, social)
+        self.assertGreater(search_score, news_score)
+        self.assertGreater(social_score, news_score)
+
+    def test_signal_objects_and_legacy_strings_are_both_supported(self):
+        recipe = {"title": "Lemon Herb Chicken", "tags": ["chicken"]}
+        self.assertGreater(score_recipe_trends(recipe, ["lemon herb chicken"]), 0)
+        self.assertGreater(score_recipe_trends(recipe, [{"text": "lemon herb chicken", "source": "google_trends"}]), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
