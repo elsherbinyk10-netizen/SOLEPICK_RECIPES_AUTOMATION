@@ -856,7 +856,10 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
         "author": {"name": "SolePick Recipes"}, "body": article_html(recipe, video, published_handles),
         "summary": seo_metadata(recipe)["description"],
-        "seo": {"title": seo_metadata(recipe)["title"], "description": seo_metadata(recipe)["description"]},
+        "metafields": [
+            {"namespace": "global", "key": "title_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["title"]},
+            {"namespace": "global", "key": "description_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["description"]},
+        ],
         "tags": recipe.get("tags", []), "isPublished": True,
         "image": featured_image_for(recipe, generated_image),
     }
