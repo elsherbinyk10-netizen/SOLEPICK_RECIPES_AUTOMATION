@@ -128,6 +128,8 @@ class RecipeLibraryTests(unittest.TestCase):
             self.assertNotIn(placeholder, text)
         self.assertIn("cannellini beans", text)
         self.assertIn("lemon", text)
+        self.assertIn("sweet corn", " ".join(recipe["ingredients"]).lower())
+        self.assertIn("bell pepper", " ".join(recipe["ingredients"]).lower())
 
     def test_video_match_rejects_unrelated_titles(self):
         self.assertLess(recipe_worker._video_title_score("Creamy Tomato Spinach Pasta", "How to make chocolate cake"), 0.45)
