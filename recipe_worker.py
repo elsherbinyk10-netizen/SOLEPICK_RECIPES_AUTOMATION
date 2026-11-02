@@ -841,6 +841,10 @@ def verify_published_article(article, recipe, video):
         )
     if "<h2>Ingredients</h2>" not in body or "<h2>Instructions</h2>" not in body:
         raise RuntimeError(f"Shopify's saved body is missing recipe sections for '{recipe['title']}'.")
+    if 'application/ld+json' not in body or '"@type": "Recipe"' not in body:
+        raise RuntimeError(
+            f"Shopify did not preserve Recipe JSON-LD structured data for '{recipe['title']}'."
+        )
     return article
 
 
