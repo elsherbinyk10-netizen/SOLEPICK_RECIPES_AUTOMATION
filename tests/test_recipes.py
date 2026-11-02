@@ -330,10 +330,11 @@ class RecipeLibraryTests(unittest.TestCase):
             "tags": ["pasta", "dinner"], "ingredients": ["pasta"],
             "instructions": ["Cook pasta."],
         }
-        markup = recipe_worker.article_html(recipe)
-        self.assertIn('https://solepick.site/blogs/recipes/', markup)
+        markup = recipe_worker.article_html(recipe, published_handles={"related-pasta"})
+        self.assertIn('https://solepick.site/blogs/recipes/related-pasta', markup)
         self.assertIn('type="application/ld+json"', markup)
         self.assertIn("More Recipes to Try", markup)
+        self.assertNotIn("unpublished-pasta", markup)
 
 
 
