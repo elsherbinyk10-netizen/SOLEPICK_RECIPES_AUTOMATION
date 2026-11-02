@@ -959,8 +959,8 @@ def main():
     if not target_slug:
         # Free Google News RSS signals help prioritize existing, fully tested recipes
         # whose ingredients or dish formats are currently attracting coverage.
-        from trend_engine import fetch_food_trend_signals, rank_trending_recipes, score_recipe_trends
-        trend_signals = fetch_food_trend_signals()
+        from trend_engine import collect_all_food_trend_signals, rank_trending_recipes, score_recipe_trends
+        trend_signals = collect_all_food_trend_signals()
         if trend_signals:
             candidates = rank_trending_recipes(candidates, trend_signals)
             best_score = score_recipe_trends(candidates[0], trend_signals) if candidates else 0
@@ -993,6 +993,7 @@ def main():
             # Fail closed: never substitute a pre-saved image when live search
             # cannot verify a suitable photo for this exact recipe.
             generated_image = featured_image_for(recipe, generated_image)
+            recipe["published_image_url"] = generated_image["url"]
         except RuntimeError as error:
             print(f"SKIPPING recipe without a verified dish-relevant photo: {recipe['title']}. {error}")
             continue
