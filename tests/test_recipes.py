@@ -118,6 +118,20 @@ class RecipeLibraryTests(unittest.TestCase):
             recipe_article,
         )
 
+    def test_generic_recipe_templates_are_blocked_before_substitution(self):
+        recipe = {
+            "title": "Lemon Garlic Chicken Rice Bowls",
+            "ingredients": ["600 g chicken breast", "1 teaspoon garlic", "2 cups cooked rice"],
+            "instructions": [
+                "Season the main ingredient with the listed flavorings and a pinch of salt.",
+                "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+                "Serve with rice."
+            ],
+            "prep_minutes": 15, "cook_minutes": 15, "servings": 4,
+        }
+        with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
+            recipe_worker.make_recipe_specific(recipe)
+
     def test_white_bean_loaded_salad_has_specific_no_cook_steps(self):
         recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
         recipe = next(item for item in recipes if item["slug"] == "mediterranean-white-bean-loaded-salad")
