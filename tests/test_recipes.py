@@ -125,6 +125,7 @@ class RecipeLibraryTests(unittest.TestCase):
             "instructions": [
                 "Season the main ingredient with the listed flavorings and a pinch of salt.",
                 "Cook the main ingredient in a lightly oiled skillet until tender and safely cooked through.",
+                "Divide the cooked rice between bowls.",
                 "Serve with rice."
             ],
             "prep_minutes": 15, "cook_minutes": 15, "servings": 4,
