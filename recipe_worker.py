@@ -629,8 +629,13 @@ def recipe_json_ld(recipe):
         "@type": "Recipe",
         "name": recipe["title"],
         "description": metadata["description"],
-        "author": {"@type": "Organization", "name": "SolePick Recipes"},
+        "author": {"@type": "Organization", "name": "SolePick Recipes", "url": "https://solepick.site/"},
         "datePublished": datetime.datetime.now(datetime.timezone.utc).date().isoformat(),
+        "keywords": ", ".join(dict.fromkeys(
+            [str(recipe.get("title") or "").strip()]
+            + [str(value).strip() for value in recipe.get("tags", [])]
+            + [str(value).strip() for value in recipe.get("ingredients", [])]
+        ))[:500],
         "prepTime": f"PT{int(recipe['prep_minutes'])}M",
         "cookTime": f"PT{int(recipe['cook_minutes'])}M",
         "totalTime": f"PT{int(recipe['prep_minutes']) + int(recipe['cook_minutes'])}M",
@@ -644,6 +649,11 @@ def recipe_json_ld(recipe):
     }
     if image:
         data["image"] = [image]
+    slug = str(recipe.get("slug") or "").strip()
+    if slug and re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+        canonical = "https://solepick.site/blogs/recipes/" + slug
+        data["url"] = canonical
+        data["mainEntityOfPage"] = {"@type": "WebPage", "@id": canonical}
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
 
