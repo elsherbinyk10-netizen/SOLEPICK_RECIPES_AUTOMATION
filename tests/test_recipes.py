@@ -296,5 +296,46 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIsNone(recipe_worker.catalogue_image_fallback(unrelated))
 
 
+    def test_recipe_seo_metadata_is_concise_and_uses_recipe_intent(self):
+        recipe = {"title": "Creamy Tomato Spinach Pasta", "description": "A quick creamy tomato spinach pasta for a satisfying weeknight dinner."}
+        meta = recipe_worker.seo_metadata(recipe)
+        self.assertLessEqual(len(meta["title"]), 60)
+        self.assertLessEqual(len(meta["description"]), 155)
+        self.assertIn("pasta", meta["title"].lower())
+        self.assertGreaterEqual(len(meta["description"]), 90)
+
+    def test_recipe_json_ld_has_required_recipe_fields_and_verified_image(self):
+        recipe = {
+            "title": "Creamy Tomato Spinach Pasta",
+            "description": "A creamy pasta dinner.",
+            "prep_minutes": 10, "cook_minutes": 20, "servings": 4,
+            "tags": ["pasta", "dinner"],
+            "ingredients": ["300 g pasta", "tomatoes"],
+            "instructions": ["Boil pasta.", "Make sauce."],
+            "published_image_url": "https://cdn.example.com/verified-pasta.jpg",
+        }
+        markup = recipe_worker.recipe_json_ld(recipe)
+        payload = json.loads(markup.split(">", 1)[1].rsplit("</script>", 1)[0])
+        self.assertEqual(payload["@type"], "Recipe")
+        self.assertEqual(payload["image"], ["https://cdn.example.com/verified-pasta.jpg"])
+        self.assertEqual(payload["prepTime"], "PT10M")
+        self.assertEqual(payload["cookTime"], "PT20M")
+        self.assertEqual(payload["totalTime"], "PT30M")
+        self.assertEqual(len(payload["recipeInstructions"]), 2)
+
+    def test_recipe_article_has_contextual_internal_links_and_json_ld(self):
+        recipe = {
+            "slug": "sample-pasta", "title": "Sample Pasta", "description": "A simple pasta dinner.",
+            "prep_minutes": 5, "cook_minutes": 10, "servings": 2,
+            "tags": ["pasta", "dinner"], "ingredients": ["pasta"],
+            "instructions": ["Cook pasta."],
+        }
+        markup = recipe_worker.article_html(recipe)
+        self.assertIn('https://solepick.site/blogs/recipes/', markup)
+        self.assertIn('type="application/ld+json"', markup)
+        self.assertIn("More Recipes to Try", markup)
+
+
+
 if __name__ == "__main__":
     unittest.main()
