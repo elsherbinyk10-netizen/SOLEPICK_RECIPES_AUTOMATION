@@ -152,14 +152,14 @@ def make_recipe_specific(recipe):
     # by substituting ingredient names, but that does not create a tested recipe.
     # Block those entries until their actual method is written and reviewed.
     generic_instruction_patterns = (
-        r"\bmain ingredient\\b",
-        r"\blisted flavorings?\\b",
-        r"\bflavorings\\b",
-        r"\bvegetables of choice\\b",
-        r"\bcook until ready\\b",
-        r"\bif it requires cooking\\b",
-        r"\bsafely cooked through(?:,? where applicable)?\\b",
-        r"\bwhere applicable\\b",
+        r"\bmain ingredient\b",
+        r"\blisted flavorings?\b",
+        r"\bflavorings\b",
+        r"\bvegetables of choice\b",
+        r"\bcook until ready\b",
+        r"\bif it requires cooking\b",
+        r"\bsafely cooked through(?:,? where applicable)?\b",
+        r"\bwhere applicable\b",
     )
     original_steps = [str(step) for step in result.get("instructions", [])]
     for step in original_steps:
