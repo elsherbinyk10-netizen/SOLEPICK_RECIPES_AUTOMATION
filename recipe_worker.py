@@ -1017,7 +1017,11 @@ def main():
                 raise RuntimeError("Shopify did not confirm recipe article publication.")
             verify_published_article(article, recipe, video)
         else:
-            article = create_published(blog_id, recipe, video, generated_image)
+            published_handles = {
+                handle for handle, existing_article in articles.items()
+                if existing_article.get("isPublished")
+            }
+            article = create_published(blog_id, recipe, video, generated_image, published_handles)
             verify_published_article(article, recipe, video)
         print(f"Published recipe with verified embedded video: {article['title']} | handle={article['handle']} | published={article['isPublished']} | iframe=verified | video={video['url']}")
         return
