@@ -81,7 +81,12 @@ def score_recipe_trends(recipe, signals):
     tag_tokens = _tokens(
         " ".join(recipe.get("tags", []) if isinstance(recipe.get("tags"), list) else [])
     )
-    recipe_tokens = title_tokens | tag_tokens
+    ingredient_tokens = _tokens(
+        " ".join(recipe.get("ingredients", []) if isinstance(recipe.get("ingredients"), list) else [])
+    )
+    # Ingredient terms are valuable long-tail search intent (e.g. salmon + lemon),
+    # even when a current trend headline does not repeat the full recipe title.
+    recipe_tokens = title_tokens | tag_tokens | ingredient_tokens
     if not recipe_tokens:
         return 0.0
     weights = {
@@ -97,6 +102,7 @@ def score_recipe_trends(recipe, signals):
         signal_tokens = _tokens(signal_text)
         overlap = recipe_tokens & signal_tokens
         title_overlap = title_tokens & signal_tokens
+        ingredient_overlap = ingredient_tokens & signal_tokens
         if not overlap:
             continue
         source = signal.get("source", "google_news") if isinstance(signal, dict) else "google_news"
@@ -109,7 +115,10 @@ def score_recipe_trends(recipe, signals):
             suffix = traffic_match.group(2)
             amount *= {"K": 1_000, "M": 1_000_000, "B": 1_000_000_000}.get(suffix, 1)
             demand_boost += min(1.5, amount / 1_000_000)
-        overlap_score = min(12, len(overlap) * 2 + len(title_overlap) * 2)
+        overlap_score = min(
+            14,
+            len(overlap) * 2 + len(title_overlap) * 2 + len(ingredient_overlap),
+        )
         score += overlap_score * weight * demand_boost
     return round(score, 2)
 
@@ -138,19 +147,20 @@ def _fetch_text(url, timeout=10):
 def fetch_google_search_trends(timeout=10, now=None):
     """Read Google's public Trending Searches RSS for current search-demand topics."""
     now = now or datetime.now(timezone.utc)
-    url = "https://trends.google.com/trending/rss?geo=US"
     signals = []
-    try:
-        root = ET.fromstring(_fetch_text(url, timeout))
-    except Exception as error:
-        print(f"GOOGLE SEARCH TRENDS unavailable ({type(error).__name__}).")
-        return signals
-    for item in root.findall(".//item"):
-        title = html.unescape(item.findtext("title") or "").strip()
-        traffic = item.findtext("{https://trends.google.com/trending/rss}approx_traffic") or ""
-        if title:
-            signals.append({"text": title, "source": "google_trends", "traffic": traffic})
-    print(f"GOOGLE SEARCH TRENDS: {len(signals)} current trending-search terms collected.")
+    for geo in ("US", "GB", "CA", "AU", "EG"):
+        url = "https://trends.google.com/trending/rss?geo=" + geo
+        try:
+            root = ET.fromstring(_fetch_text(url, timeout))
+        except Exception as error:
+            print(f"GOOGLE SEARCH TRENDS unavailable for {geo} ({type(error).__name__}); continuing.")
+            continue
+        for item in root.findall(".//item"):
+            title = html.unescape(item.findtext("title") or "").strip()
+            traffic = item.findtext("{https://trends.google.com/trending/rss}approx_traffic") or ""
+            if title:
+                signals.append({"text": title, "source": "google_trends", "traffic": traffic, "geo": geo})
+    print(f"GOOGLE SEARCH TRENDS: {len(signals)} current trending-search terms collected across 5 markets.")
     return signals
 
 
