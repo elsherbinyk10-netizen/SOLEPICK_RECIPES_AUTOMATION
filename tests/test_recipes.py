@@ -330,11 +330,17 @@ class RecipeLibraryTests(unittest.TestCase):
             "tags": ["pasta", "dinner"], "ingredients": ["pasta"],
             "instructions": ["Cook pasta."],
         }
-        markup = recipe_worker.article_html(recipe, published_handles={"related-pasta"})
-        self.assertIn('https://solepick.site/blogs/recipes/related-pasta', markup)
+        catalogue = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
+        related = next(
+            item for item in catalogue
+            if item["slug"] != recipe["slug"] and set(item.get("tags", [])) & {"pasta", "dinner"}
+        )
+        markup = recipe_worker.article_html(recipe, published_handles={related["slug"]})
+        self.assertIn("https://solepick.site/blogs/recipes/" + related["slug"], markup)
         self.assertIn('type="application/ld+json"', markup)
         self.assertIn("More Recipes to Try", markup)
-        self.assertNotIn("unpublished-pasta", markup)
+        no_links = recipe_worker.article_html(recipe, published_handles=set())
+        self.assertNotIn("More Recipes to Try", no_links)
 
 
 
