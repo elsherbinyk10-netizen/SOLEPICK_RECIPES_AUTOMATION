@@ -1,0 +1,40 @@
+name: SolePick Existing Recipe Image Quality Repair
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 01:15 UTC = 03:15 Cairo (UTC+2); separate from recipe publishing.
+    - cron: "15 1 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: solepick-image-quality-repair
+  cancel-in-progress: false
+
+jobs:
+  repair-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install image decoder
+        run: python -m pip install --disable-pip-version-check "Pillow>=11,<13"
+      - name: Validate repair code and tests
+        run: |
+          python -m py_compile image_quality.py repair_recipe_images.py recipe_worker.py
+          python -m unittest discover -s tests -v
+      - name: Repair existing recipe article images
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+          SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
+          MAX_IMAGE_REPAIRS: "10"
+        run: python repair_recipe_images.py
