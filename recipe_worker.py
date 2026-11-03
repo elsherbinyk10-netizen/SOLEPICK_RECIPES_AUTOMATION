@@ -972,6 +972,7 @@ def main():
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
     args = parser.parse_args()
+    max_publish = 1 if (args.repair_handle or args.one_time_test) else max(1, min(3, int(os.environ.get("MAX_RECIPES_PER_RUN", "3"))))
     if args.one_time_test and args.repair_handle:
         parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
@@ -1015,17 +1016,26 @@ def main():
         video_is_saved = (
             "<iframe" in body.lower()
             and "youtube-nocookie.com/embed/" in body
-            and bool(re.search(r"<h2\b[^>]*>\s*Watch the Recipe Video Here\s*</h2>", body, flags=re.IGNORECASE))
+            and bool(re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE))
         )
-        if video_is_saved:
-            print(f"Daily idempotency guard: already published '{published_today.get('handle')}' with embedded video on {now.date()} Cairo time; no second recipe will be published.")
+        if not video_is_saved:
+            print(
+                f"Daily guard found today's article '{published_today.get('handle')}' but its saved body is missing the verified embed. "
+                "Repairing that existing article before considering additional recipes."
+            )
+            repair_existing_article_video(blog_id, published_today["handle"], recipes)
             return
-        print(
-            f"Daily guard found today's article '{published_today.get('handle')}' but its saved body is missing the verified embed. "
-            "Repairing that existing article instead of creating a duplicate."
+        published_today_count = sum(
+            1 for article in articles.values()
+            if article.get("isPublished")
+            and article.get("handle") in {recipe["slug"] for recipe in recipes}
+            and article.get("publishedAt")
+            and datetime.datetime.fromisoformat(article["publishedAt"].replace("Z", "+00:00")).astimezone(CAIRO).date() == now.date()
         )
-        repair_existing_article_video(blog_id, published_today["handle"], recipes)
-        return
+        if published_today_count >= max_publish:
+            print(f"Daily idempotency guard: {published_today_count}/{max_publish} verified recipes already published today; no duplicates will be created.")
+            return
+        print(f"Daily multi-publish continuation: {published_today_count}/{max_publish} verified recipes already published today; continuing with remaining eligible recipes.")
     if published_today and args.one_time_test:
         print(f"ONE-TIME TEST MODE: allowing one additional eligible recipe despite today's existing article '{published_today.get('handle')}'. Normal daily guard remains enabled for all other runs.")
     start = day_number % len(recipes)
@@ -1054,8 +1064,13 @@ def main():
 
     # Normal scheduled runs may publish up to three distinct, fully verified recipes.
     # Explicit targeted repairs/tests remain single-item operations.
-    max_publish = 1 if (target_slug or args.one_time_test) else max(1, min(3, int(os.environ.get("MAX_RECIPES_PER_RUN", "3"))))
-    published_count = 0
+    published_count = sum(
+        1 for article in articles.values()
+        if article.get("isPublished")
+        and article.get("handle") in {recipe["slug"] for recipe in recipes}
+        and article.get("publishedAt")
+        and datetime.datetime.fromisoformat(article["publishedAt"].replace("Z", "+00:00")).astimezone(CAIRO).date() == now.date()
+    ) if not args.one_time_test else 0
     # A one-time targeted run processes only the requested recipe; normal runs rotate.
     candidates = [target_recipe] if target_slug else [
         recipes[(start + offset) % len(recipes)] for offset in range(len(recipes))
@@ -1073,7 +1088,8 @@ def main():
                 print("No catalogue recipe matched fresh trend signals; using deterministic rotation as fallback.")
         else:
             print("FOOD TREND DISCOVERY: no fresh signals; using deterministic rotation as fallback.")
-    print(f"DAILY PUBLISH TARGET: up to {max_publish} distinct recipes; every recipe must pass instruction, video, image and Shopify verification.")
+    remaining_publish = max(0, max_publish - published_count)
+    print(f"DAILY PUBLISH TARGET: up to {max_publish} distinct recipes; already published={published_count}; remaining={remaining_publish}. Every recipe must pass instruction, video, image and Shopify verification.")
     for recipe in candidates:
         if published_count >= max_publish:
             break
