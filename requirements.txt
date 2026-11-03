@@ -1,2 +1,5 @@
 # SolePick publishing and exposure scripts use the Python standard library.
 # Google reporting dependencies are installed explicitly by daily-exposure.yml.
+
+# Decode and validate original recipe photo dimensions and sharpness.
+Pillow>=11.0.0,<13
