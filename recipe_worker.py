@@ -1052,24 +1052,31 @@ def main():
             "Recipe library exhausted. Add new original recipes to recipes.json."
         )
 
+    # Normal scheduled runs may publish up to three distinct, fully verified recipes.
+    # Explicit targeted repairs/tests remain single-item operations.
+    max_publish = 1 if (target_slug or args.one_time_test) else max(1, min(3, int(os.environ.get("MAX_RECIPES_PER_RUN", "3"))))
+    published_count = 0
     # A one-time targeted run processes only the requested recipe; normal runs rotate.
     candidates = [target_recipe] if target_slug else [
         recipes[(start + offset) % len(recipes)] for offset in range(len(recipes))
     ]
     if not target_slug:
-        # Free Google News RSS signals help prioritize existing, fully tested recipes
-        # whose ingredients or dish formats are currently attracting coverage.
+        # Combine current Google search-trend terms, food-news coverage and public
+        # TikTok Creative Center signals; rank only recipes already in the reviewed catalogue.
         from trend_engine import collect_all_food_trend_signals, rank_trending_recipes, score_recipe_trends
         trend_signals = collect_all_food_trend_signals()
         if trend_signals:
             candidates = rank_trending_recipes(candidates, trend_signals)
-            best_score = score_recipe_trends(candidates[0], trend_signals) if candidates else 0
-            print(f"FOOD TREND DISCOVERY: signals={len(trend_signals)} | top_recipe={candidates[0]['title'] if candidates else 'none'} | score={best_score}")
-            if best_score <= 0:
-                print("No catalogue recipe matched current food-trend signals; retaining the safe daily rotation.")
+            scored = [(score_recipe_trends(item, trend_signals), item["title"]) for item in candidates]
+            print(f"FOOD TREND DISCOVERY: signals={len(trend_signals)} | ranked_candidates={json.dumps(scored[:10])}")
+            if not any(score > 0 for score, _ in scored):
+                print("No catalogue recipe matched fresh trend signals; using deterministic rotation as fallback.")
         else:
-            print("FOOD TREND DISCOVERY: no fresh RSS signals; retaining the safe daily rotation.")
+            print("FOOD TREND DISCOVERY: no fresh signals; using deterministic rotation as fallback.")
+    print(f"DAILY PUBLISH TARGET: up to {max_publish} distinct recipes; every recipe must pass instruction, video, image and Shopify verification.")
     for recipe in candidates:
+        if published_count >= max_publish:
+            break
         existing = articles.get(recipe["slug"])
 
         if existing and existing.get("isPublished"):
@@ -1124,9 +1131,23 @@ def main():
             article = create_published(blog_id, recipe, video, generated_image, published_handles)
             verify_published_article(article, recipe, video)
         print(f"Published recipe with verified embedded video: {article['title']} | handle={article['handle']} | published={article['isPublished']} | iframe=verified | video={video['url']}")
-        return
+        published_count += 1
+        # Add the just-published article to the in-memory Shopify set so the next
+        # recipe cannot reuse its image or related-link handle during this same run.
+        articles[article["handle"]] = {
+            **(article if isinstance(article, dict) else {}),
+            "id": article.get("id"),
+            "handle": article.get("handle"),
+            "title": article.get("title"),
+            "isPublished": True,
+            "publishedAt": article.get("publishedAt") or now.isoformat(),
+            "image": {"url": generated_image["url"]},
+        }
 
-    raise RuntimeError("No eligible recipe found. Review recipes.json and Shopify article handles.")
+    if published_count:
+        print(f"DAILY PUBLISH COMPLETE: {published_count}/{max_publish} verified recipe(s) published. Unqualified candidates were skipped; no quality gate was bypassed.")
+        return
+    raise RuntimeError("No eligible recipe passed all quality gates. No unverified recipe was published.")
 
 
 if __name__ == "__main__":
