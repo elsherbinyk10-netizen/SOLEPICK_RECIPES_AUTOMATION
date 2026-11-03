@@ -157,5 +157,21 @@ class ImageUniquenessTests(unittest.TestCase):
         ))
 
 
+    def test_actual_safeway_pasta_shelf_image_from_published_article_is_rejected(self):
+        self.assertTrue(recipe_worker._is_retail_product_image(
+            "1920px-Shelves_of_pasta_at_Safeway.jpg",
+            "https://cdn.shopify.com/s/files/1/1004/5014/0449/articles/1920px-Shelves_of_pasta_at_Safeway.jpg",
+            {"ImageDescription": {"value": "Shelves of pasta at Safeway"}},
+        ))
+        with self.assertRaisesRegex(RuntimeError, "grocery-store, retail-shelf"):
+            recipe_worker.featured_image_for(
+                {"title": "Easy Roasted Vegetable Pasta"},
+                {
+                    "url": "https://cdn.shopify.com/s/files/1/1004/5014/0449/articles/1920px-Shelves_of_pasta_at_Safeway.jpg",
+                    "altText": "shelves of pasta at safeway",
+                },
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
