@@ -23,6 +23,8 @@ on:
     - cron: "0 7 * * *"
     - cron: "0 8 * * *"
     - cron: "0 9 * * *"
+    # Additional same-day catch-up if GitHub drops or delays all earlier triggers.
+    - cron: "0 10 * * *"
 
 permissions:
   contents: write
