@@ -39,10 +39,14 @@ def main():
         if repaired >= MAX_REPAIRS:
             print("Batch repair limit reached; remaining low-quality images will be handled by the next scheduled batch.")
             break
-        candidate = worker.generate_recipe_image({"title": article["title"], "slug": article["handle"]}, published)
-        candidate_quality = inspect_image_url(candidate.get("url"))
-        if not is_high_quality_image(candidate_quality):
-            raise RuntimeError(f"Replacement photo did not pass image quality validation for {article['handle']}: {candidate_quality}")
+        try:
+            candidate = worker.generate_recipe_image({"title": article["title"], "slug": article["handle"]}, published)
+            candidate_quality = inspect_image_url(candidate.get("url"))
+            if not is_high_quality_image(candidate_quality):
+                raise RuntimeError(f"Replacement photo did not pass image quality validation: {candidate_quality}")
+        except RuntimeError as error:
+            print(f"DEFERRED {article['handle']} | no verified replacement yet | {error}")
+            continue
         mutation = """mutation UpdateRecipeImage($id: ID!, $article: ArticleUpdateInput!) {
           articleUpdate(id: $id, article: $article) {
             article { id title handle isPublished image { url altText } }
