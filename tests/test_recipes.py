@@ -413,5 +413,40 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn('"mainEntityOfPage"', body)
 
 
+
+    def test_new_recipe_library_entries_include_practical_original_notes(self):
+        recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
+        slugs = {item["slug"] for item in recipes}
+        expected = {
+            "crispy-harissa-chickpea-pitas",
+            "lemony-orzo-with-peas-and-feta",
+            "smoky-sweet-potato-black-bean-skillet",
+            "ginger-sesame-tofu-noodle-bowls",
+            "roasted-carrot-red-lentil-soup",
+        }
+        self.assertTrue(expected.issubset(slugs))
+        for recipe in recipes:
+            if recipe["slug"] in expected:
+                self.assertGreaterEqual(len(recipe["instructions"]), 5)
+                self.assertGreaterEqual(len(recipe.get("cook_notes", [])), 2)
+                self.assertGreaterEqual(len(recipe.get("substitutions", [])), 2)
+                self.assertTrue(recipe.get("storage"))
+                self.assertGreaterEqual(len(recipe["description"]), 110)
+                self.assertGreaterEqual(len(set(recipe.get("tags", []))), 4)
+
+    def test_recipe_editorial_sections_render_only_supplied_practical_notes(self):
+        recipe = {
+            "title": "Test Bowl",
+            "cook_notes": ["Dry the chickpeas before roasting."],
+            "substitutions": ["Use parsley instead of dill."],
+            "storage": "Refrigerate in a sealed container for 3 days.",
+        }
+        markup = recipe_worker.recipe_editorial_sections(recipe)
+        self.assertIn("Recipe Tips", markup)
+        self.assertIn("Ingredient Swaps", markup)
+        self.assertIn("Make-Ahead and Storage", markup)
+        self.assertIn("Dry the chickpeas", markup)
+        self.assertNotIn("FAQ", markup)
+
 if __name__ == "__main__":
     unittest.main()
