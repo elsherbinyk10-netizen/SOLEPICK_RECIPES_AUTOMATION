@@ -1079,15 +1079,36 @@ def main():
         # Combine current Google search-trend terms, food-news coverage and public
         # TikTok Creative Center signals; rank only recipes already in the reviewed catalogue.
         from trend_engine import collect_all_food_trend_signals, rank_trending_recipes, score_recipe_trends
+        from trend_recipe_builder import generate_trend_recipe_candidates
         trend_signals = collect_all_food_trend_signals()
-        if trend_signals:
-            candidates = rank_trending_recipes(candidates, trend_signals)
-            scored = [(score_recipe_trends(item, trend_signals), item["title"]) for item in candidates]
-            print(f"FOOD TREND DISCOVERY: signals={len(trend_signals)} | ranked_candidates={json.dumps(scored[:10])}")
-            if not any(score > 0 for score, _ in scored):
-                print("No catalogue recipe matched fresh trend signals; using deterministic rotation as fallback.")
+        generated_candidates = generate_trend_recipe_candidates(
+            trend_signals,
+            existing_slugs=set(articles) | {item["slug"] for item in recipes},
+            limit=3,
+        )
+        if generated_candidates:
+            print("TREND RECIPE GENERATION: " + json.dumps([
+                {"title": item["title"], "slug": item["slug"],
+                 "sources": item["trend_sources"], "evidence_count": item["trend_evidence_count"]}
+                for item in generated_candidates
+            ]))
+            candidates = generated_candidates + candidates
         else:
-            print("FOOD TREND DISCOVERY: no fresh signals; using deterministic rotation as fallback.")
+            print("TREND RECIPE GENERATION: no supported trend matched a reviewed complete-recipe pattern; no speculative recipe was created.")
+        if trend_signals:
+            ranked_catalogue = rank_trending_recipes(candidates, trend_signals)
+            # Generated candidates are already evidence-matched and stay ahead of
+            # generic catalogue rotation; rank all matching candidates by their score.
+            candidates = sorted(
+                ranked_catalogue,
+                key=lambda item: -score_recipe_trends(item, trend_signals),
+            )
+            scored = [(score_recipe_trends(item, trend_signals), item["title"]) for item in candidates]
+            print(f"FOOD TREND DISCOVERY: signals={len(trend_signals)} | new_candidates={len(generated_candidates)} | ranked_candidates={json.dumps(scored[:10])}")
+            if not any(score > 0 for score, _ in scored):
+                print("No recipe matched fresh trend signals; catalogue rotation remains a last-resort fallback.")
+        else:
+            print("FOOD TREND DISCOVERY: no fresh signals; only existing reviewed catalogue recipes are eligible.")
     remaining_publish = max(0, max_publish - published_count)
     print(f"DAILY PUBLISH TARGET: up to {max_publish} distinct recipes; already published={published_count}; remaining={remaining_publish}. Every recipe must pass instruction, video, image and Shopify verification.")
     for recipe in candidates:
