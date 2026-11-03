@@ -57,6 +57,9 @@ jobs:
           done
           exit 1
 
+      - name: Install Pillow for image quality validation
+        run: python -m pip install --disable-pip-version-check "Pillow>=11.0.0,<13"
+
       # HARD QUALITY GATE: every recipe, image-relevance, retail-shelf,
       # duplicate-image, document/PDF and video regression test must pass
       # before any scheduled or manual Shopify publishing step can run.
