@@ -13,6 +13,7 @@ import re
 import time
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from image_quality import inspect_image_url, is_high_quality_image
 
 API_VERSION = "2026-07"
 CAIRO = ZoneInfo("Africa/Cairo")
@@ -503,8 +504,9 @@ def generate_recipe_image(recipe, published_articles=None):
             if mime and not mime.startswith("image/"):
                 print("REJECTED NON-IMAGE MEDIA: " + title_text + " | mime=" + mime)
                 continue
-            if width and height and (width < 500 or height < 350):
-                print("REJECTED LOW-RESOLUTION IMAGE: " + title_text + f" | {width}x{height}")
+            quality = inspect_image_url(image_url)
+            if not is_high_quality_image(quality):
+                print("REJECTED LOW-QUALITY IMAGE: " + title_text + " | " + str(quality))
                 continue
             if (
                 not image_url.startswith("https://")
@@ -818,7 +820,7 @@ def graphql(query, variables):
 def existing_articles(blog_id):
     query = """query ArticleHandles($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
-        nodes { id title handle body isPublished publishedAt image { url altText } }
+        nodes { id title handle body tags isPublished publishedAt image { url altText width height } }
         pageInfo { hasNextPage endCursor }
       } }
     }"""
