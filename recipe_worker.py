@@ -616,6 +616,9 @@ def featured_image_for(recipe, generated_image):
             "No verified, dish-relevant featured image found for " + recipe["title"]
             + ". Refusing to publish a mismatched fallback photo."
         )
+    quality = inspect_image_url(url)
+    if not is_high_quality_image(quality):
+        raise RuntimeError("Rejected low-resolution or soft recipe image for " + recipe["title"] + ": " + str(quality))
     alt = str(image.get("altText") or "").strip()
     if not alt:
         raise RuntimeError("Verified image is missing descriptive alt text for " + recipe["title"])
