@@ -18,8 +18,9 @@ on:
         type: boolean
         default: false
   schedule:
-    # Primary triggers: 07:00 UTC in Cairo UTC+3, 08:00 UTC in UTC+2.
-    # 09:00 UTC is a recovery trigger if GitHub drops/delays the primary run.
+    # Cairo is UTC+2 after the 2026 daylight-saving transition:
+    # 07:00 UTC = 09:00 Cairo (early guard/recovery), 08:00 UTC = 10:00 Cairo (primary).
+    # 09:00 and 10:00 UTC are same-day recovery checks if GitHub delays/drops earlier runs.
     - cron: "0 7 * * *"
     - cron: "0 8 * * *"
     - cron: "0 9 * * *"
@@ -56,7 +57,10 @@ jobs:
           done
           exit 1
 
-      - name: Validate recipe library
+      # HARD QUALITY GATE: every recipe, image-relevance, retail-shelf,
+      # duplicate-image, document/PDF and video regression test must pass
+      # before any scheduled or manual Shopify publishing step can run.
+      - name: Validate recipe library and media safety (required before publishing)
         run: python -m unittest discover -s tests -v
 
       - name: Install open-source caption tools
@@ -76,7 +80,7 @@ jobs:
           exit 1
 
       - name: Publish daily Shopify recipe
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[publish-daily-recipe]')))
+        if: success() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[publish-daily-recipe]'))))
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
