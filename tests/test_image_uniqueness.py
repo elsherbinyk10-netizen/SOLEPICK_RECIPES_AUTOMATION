@@ -75,6 +75,51 @@ class ImageUniquenessTests(unittest.TestCase):
             {"ImageDescription": {"value": "Scanned page from a historical archive"}},
         ))
 
+    def test_retail_shelf_and_supermarket_photos_are_rejected(self):
+        self.assertTrue(recipe_worker._is_retail_product_image(
+            "File: pasta products on supermarket shelves.jpg",
+            "https://images.example.com/pasta-shelf.jpg",
+            {"ImageDescription": {"value": "Rows of boxed pasta displayed in a grocery store aisle"}}
+        ))
+        self.assertTrue(recipe_worker._is_retail_product_image(
+            "File: grocery store aisle.jpg",
+            "https://images.example.com/aisle.jpg",
+            {}
+        ))
+
+    def test_prepared_food_photographs_are_not_rejected_as_retail(self):
+        self.assertFalse(recipe_worker._is_retail_product_image(
+            "File: roasted vegetable pasta served in a bowl.jpg",
+            "https://images.example.com/roasted-vegetable-pasta.jpg",
+            {"ImageDescription": {"value": "Prepared roasted vegetable pasta on a ceramic plate"}}
+        ))
+
+    def test_featured_image_rejects_supermarket_shelf_photo(self):
+        with self.assertRaisesRegex(RuntimeError, "grocery-store, retail-shelf"):
+            recipe_worker.featured_image_for(
+                {"title": "Easy Roasted Vegetable Pasta"},
+                {
+                    "url": "https://images.example.com/pasta-supermarket-shelf.jpg",
+                    "altText": "Pasta products displayed on grocery store shelves"
+                }
+            )
+
+    def test_catalogue_fallback_rejects_retail_shelf_photo(self):
+        with tempfile.TemporaryDirectory() as directory:
+            catalogue_path = Path(directory) / "recipes.json"
+            catalogue_path.write_text(json.dumps([
+                {"slug": "today", "image_url": "https://images.example.com/pasta-shelf.jpg",
+                 "image_alt": "Pasta products on supermarket shelves"}
+            ]), encoding="utf-8")
+            with patch.object(recipe_worker, "RECIPES_PATH", catalogue_path):
+                result = recipe_worker.catalogue_image_fallback(
+                    {"slug": "today", "title": "Easy Roasted Vegetable Pasta",
+                     "image_url": "https://images.example.com/pasta-shelf.jpg",
+                     "image_alt": "Pasta products on supermarket shelves"},
+                    [],
+                )
+        self.assertIsNone(result)
+
     def test_document_like_image_allows_food_photo_with_clean_metadata(self):
         self.assertFalse(recipe_worker._is_document_like_image(
             "File: turkey breakfast hash.jpg",
