@@ -89,10 +89,10 @@ def main():
                 if value not in tags:
                     tags.append(value)
         social = {
-            "facebook": f"{title}\\n\\n{summary}\\n\\nSave this recipe: {url}",
-            "instagram": f"{title}\\n\\n{summary}\\n\\nSave for later — link in bio.\\n{' '.join(tags[:10])}",
+            "facebook": f"{title}\n\n{summary}\n\nSave this recipe: {url}",
+            "instagram": f"{title}\n\n{summary}\n\nSave for later — link in bio.\n{' '.join(tags[:10])}",
             "x": f"{title[:160]} — {url}",
-            "pinterest": f"{title} — {summary}\\n{url}",
+            "pinterest": f"{title} — {summary}\n{url}",
         }
         packs.append({
             "title": title, "url": url, "seo_title": seo_title,
