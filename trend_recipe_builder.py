@@ -9,7 +9,7 @@ import unicodedata
 
 
 def _slug(value):
-    value = unicodedata.normalize("ascii", value).lower()
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii").lower()
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", value)).strip("-")
 
 
