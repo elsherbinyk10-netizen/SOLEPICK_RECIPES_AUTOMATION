@@ -352,6 +352,37 @@ def _image_identity(url):
     return filename
 
 
+def _is_retail_product_image(title_text, image_url="", metadata=None):
+    """Reject grocery-store shelves, retail aisles, packaged-goods displays and product shots."""
+    metadata = metadata or {}
+    parts = [str(title_text or ""), str(image_url or "")]
+    for key in ("ObjectName", "ImageDescription", "Description", "Categories"):
+        item = metadata.get(key) or {}
+        value = item.get("value", "") if isinstance(item, dict) else item
+        if isinstance(value, list):
+            value = " ".join(map(str, value))
+        parts.append(re.sub(r"<[^>]+>", " ", str(value or "")))
+    tokens = set(re.findall(r"[a-z0-9]+", " ".join(parts).lower()))
+    retail_terms = {
+        "supermarket", "grocery", "groceries", "market", "store", "shelf", "shelves",
+        "aisle", "aisles", "retail", "checkout", "cashier", "shopping", "shop",
+        "packaging", "package", "packaged", "product", "products", "brand", "brands",
+        "display", "displayed", "merchandise", "stock", "stocked", "price", "prices",
+        "barcode", "carton", "cartons", "box", "boxes", "cans", "bottles", "wrapper",
+        "wrappers", "label", "labels"
+    }
+    # "market" is too broad on its own (e.g. farmers-market food photography);
+    # require a more specific retail cue for that word.
+    strong_terms = retail_terms - {"market", "store", "shop", "product", "brand", "display", "stock"}
+    if tokens & strong_terms:
+        return True
+    if "market" in tokens and tokens & {"aisle", "shelf", "supermarket", "grocery", "retail", "checkout"}:
+        return True
+    if tokens & {"store", "shop", "product", "brand", "display", "stock"} and tokens & {"shelf", "shelves", "aisle", "packaging", "package", "packaged", "barcode", "price", "prices", "carton", "boxes"}:
+        return True
+    return False
+
+
 def _is_document_like_image(title_text, image_url, metadata):
     """Reject document scans and PDF-preview thumbnails using filename and descriptive metadata."""
     path = urllib.parse.unquote(urllib.parse.urlparse(str(image_url or "")).path).lower()
@@ -463,6 +494,9 @@ def generate_recipe_image(recipe, published_articles=None):
             if _is_document_like_image(title_text, image_url, metadata):
                 print("REJECTED DOCUMENT/ARCHIVE/SCAN IMAGE: " + title_text)
                 continue
+            if _is_retail_product_image(title_text, image_url, metadata):
+                print("REJECTED GROCERY/RETAIL/PACKAGED-PRODUCT IMAGE: " + title_text)
+                continue
             mime = str(info.get("mime") or "").lower()
             width = int(info.get("thumbwidth") or info.get("width") or 0)
             height = int(info.get("thumbheight") or info.get("height") or 0)
@@ -522,6 +556,9 @@ def catalogue_image_fallback(recipe, published_articles=None):
     if ".pdf." in urllib.parse.unquote(urllib.parse.urlparse(url).path).lower():
         print("REJECTED PDF THUMBNAIL FROM CATALOGUE: " + recipe.get("title", "(untitled)"))
         return None
+    if _is_retail_product_image(alt, url):
+        print("REJECTED GROCERY/RETAIL CATALOGUE IMAGE: " + recipe.get("title", "(untitled)"))
+        return None
 
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
     used_urls = {
@@ -570,6 +607,8 @@ def featured_image_for(recipe, generated_image):
     forbidden_alt = {"document", "archived", "archive", "historic", "historical", "scientific", "policy", "practice", "pdf", "scan", "scanned", "manuscript"}
     if ".pdf." in image_path or image_path.endswith(".pdf") or (alt_tokens & forbidden_alt):
         raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"] + "; refusing to publish without a real food photo.")
+    if _is_retail_product_image(str(image.get("altText") or ""), url):
+        raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"] + "; refusing to publish without a prepared-food photograph.")
     if not url.startswith("https://"):
         raise RuntimeError(
             "No verified, dish-relevant featured image found for " + recipe["title"]
