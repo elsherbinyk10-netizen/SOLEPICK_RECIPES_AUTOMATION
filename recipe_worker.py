@@ -595,6 +595,21 @@ def seo_metadata(recipe):
     return {"title": seo_title, "description": description}
 
 
+def recipe_editorial_sections(recipe):
+    """Render only recipe-specific practical notes supplied and reviewed in recipes.json."""
+    sections = []
+    notes = [str(value).strip() for value in recipe.get("cook_notes", []) if str(value).strip()]
+    swaps = [str(value).strip() for value in recipe.get("substitutions", []) if str(value).strip()]
+    storage = str(recipe.get("storage") or "").strip()
+    if notes:
+        sections.append("<h2>Recipe Tips</h2><ul>" + "".join(f"<li>{esc(value)}</li>" for value in notes) + "</ul>")
+    if swaps:
+        sections.append("<h2>Ingredient Swaps</h2><ul>" + "".join(f"<li>{esc(value)}</li>" for value in swaps) + "</ul>")
+    if storage:
+        sections.append("<h2>Make-Ahead and Storage</h2><p>" + esc(storage) + "</p>")
+    return "".join(sections)
+
+
 def related_recipe_links(recipe, published_handles=None):
     """Add up to three contextual links to published/approved related SolePick recipes."""
     try:
@@ -671,6 +686,7 @@ def article_html(recipe, video=None, published_handles=None):
         f"{video_html}"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
+        f"{recipe_editorial_sections(recipe)}"
         f"{related}"
         "<p><em>Check labels for allergens and follow safe food-handling practices. "
         "Cooking times vary; verify food is safely cooked before serving.</em></p>"
@@ -1047,7 +1063,10 @@ def main():
               articleUpdate(id: $id, article: $article) { article { id title handle isPublished body } userErrors { field message } }
             }"""
             result = graphql(mutation, {"id": existing["id"], "article": {
-                "body": article_html(recipe, video),
+                "body": article_html(recipe, video, {
+                    handle for handle, existing_article in articles.items()
+                    if existing_article.get("isPublished")
+                }),
                 "summary": seo_metadata(recipe)["description"],
                 "image": featured_image_for(recipe, generated_image),
                 "isPublished": True,
