@@ -221,7 +221,9 @@ class RecipeLibraryTests(unittest.TestCase):
             "url": "https://cdn.example.com/generated-salmon-pasta.jpg",
             "altText": "Creamy salmon pasta with parsley, photographed on a plate",
         }
-        image = recipe_worker.featured_image_for(recipe, generated_image)
+        from unittest.mock import patch
+        with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
+            image = recipe_worker.featured_image_for(recipe, generated_image)
         self.assertEqual(image["url"], generated_image["url"])
         self.assertEqual(image["altText"], generated_image["altText"])
 
@@ -403,7 +405,7 @@ class RecipeLibraryTests(unittest.TestCase):
         def fake_graphql(_query, variables):
             captured.update(variables["article"])
             return {"articleCreate": {"article": {"isPublished": True}, "userErrors": []}}
-        with patch.object(recipe_worker, "graphql", side_effect=fake_graphql):
+        with patch.object(recipe_worker, "graphql", side_effect=fake_graphql), patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
             recipe_worker.create_published("gid://shopify/Blog/1", recipe, video, generated)
         body = captured["body"]
         self.assertIn(generated["url"], body)
