@@ -1,6 +1,12 @@
 name: SolePick Existing Recipe Image Quality Repair
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "repair_recipe_images.py"
+      - "image_quality.py"
+      - ".github/workflows/repair-recipe-images.yml"
   workflow_dispatch:
   schedule:
     # 01:15 UTC = 03:15 Cairo (UTC+2); separate from recipe publishing.
