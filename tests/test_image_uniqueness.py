@@ -138,5 +138,24 @@ class ImageUniquenessTests(unittest.TestCase):
 
 
 
+    def test_retail_display_is_rejected_from_structured_commons_metadata(self):
+        self.assertTrue(recipe_worker._is_retail_product_image(
+            "File: pasta display.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/pasta-display.jpg",
+            {
+                "ObjectName": {"value": "Pasta products"},
+                "Categories": {"value": "Supermarkets; Grocery store interiors; Retail displays"},
+                "ImageDescription": {"value": "Packaged pasta arranged for sale"},
+            },
+        ))
+
+    def test_prepared_pasta_photo_with_packaging_word_in_unrelated_metadata_is_not_used(self):
+        self.assertFalse(recipe_worker._is_retail_product_image(
+            "File: roasted vegetable pasta bowl.jpg",
+            "https://images.example.com/roasted-vegetable-pasta-bowl.jpg",
+            {"ImageDescription": {"value": "Cooked roasted vegetable pasta served in a bowl"}},
+        ))
+
+
 if __name__ == "__main__":
     unittest.main()
