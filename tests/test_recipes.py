@@ -420,6 +420,15 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn("fresh-and-green", fresh["tags"])
         self.assertIn("comfort-food", comfort["tags"])
         self.assertIn("sweet-things", sweet["tags"])
+        savory_baked = recipe_worker.add_recipe_category_tags({
+            "title": "Creamy Baked Feta Tomato Pasta",
+            "description": "A savoury pasta with roasted tomatoes, feta and basil.",
+            "tags": ["pasta", "vegetarian", "dinner"],
+            "prep_minutes": 10,
+            "cook_minutes": 30,
+        })
+        self.assertNotIn("sweet-things", savory_baked["tags"])
+        self.assertIn("comfort-food", savory_baked["tags"])
 
     def test_food_network_article_url_requires_official_recipe_path(self):
         self.assertEqual(
