@@ -23,6 +23,9 @@ Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube re
 
 Never put credentials in repository files.
 
+## Production publishing trigger
+A commit whose message includes `[publish-daily-recipe]` runs the same validated production publisher used by the scheduled workflow. It resolves the Shopify blog by the `recipes` handle, applies the Cairo-day cap of up to three verified recipes, and skips candidates that fail recipe, photo, video, or Shopify verification.
+
 ## Tests
 Run:
 ```bash
