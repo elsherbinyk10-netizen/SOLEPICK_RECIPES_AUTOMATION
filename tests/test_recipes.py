@@ -219,8 +219,9 @@ class RecipeLibraryTests(unittest.TestCase):
     def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
         generated_image = {
-            "url": "https://cdn.example.com/generated-salmon-pasta.jpg",
-            "altText": "Creamy salmon pasta with parsley, photographed on a plate",
+            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
+            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
+            "source_type": "official_youtube_thumbnail",
         }
         from unittest.mock import patch
         with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
@@ -393,8 +394,9 @@ class RecipeLibraryTests(unittest.TestCase):
             "tags": ["Seafood", "Pasta"],
         }
         generated = {
-            "url": "https://commons.wikimedia.org/generated/sample-salmon-pasta.jpg",
-            "altText": "Salmon pasta with lemon and herbs",
+            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
+            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
+            "source_type": "official_youtube_thumbnail",
         }
         video = {
             "title": "Sample Salmon Pasta Recipe",
@@ -414,6 +416,8 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn('"image": ["' + generated["url"] + '"]', body)
         self.assertIn('"url": "https://solepick.site/blogs/recipes/sample-salmon-pasta"', body)
         self.assertIn('"mainEntityOfPage"', body)
+        self.assertIn('"VideoObject"', body)
+        self.assertIn('"embedUrl": "https://www.youtube.com/watch?v=abcdefghijk"', body)
 
 
 
