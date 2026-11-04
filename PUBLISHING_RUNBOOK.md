@@ -7,3 +7,5 @@
 - Image relevance, image uniqueness, video verification, captions, duplicate protection and Shopify authentication remain mandatory gates.
 - One-time duplicate-guard bypass remains limited to explicit manual workflow dispatch.
 - Workflow concurrency keys separate explicit recovery runs from scheduled runs so stale skipped pushes cannot block a new recovery attempt.
+
+- 2026-11-04: Updated the stale auth unit test to mock the current Shopify client-credentials exchange; this commit intentionally triggers today's three-recipe media-gated recovery batch.
