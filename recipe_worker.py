@@ -839,10 +839,16 @@ def already_published_today(articles, now=None, recipe_slugs=None):
 
 
 def get_access_token(domain):
+    # Prefer a merchant-provided Admin API token when the repository uses a
+    # manually generated temporary token. This avoids exchanging unrelated or
+    # stale app client credentials on every run.
+    direct_token = os.environ.get("SHOPIFY_ACCESS_TOKEN", "").strip()
+    if direct_token:
+        return direct_token
     client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
     client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
     if not client_id or not client_secret:
-        raise RuntimeError("Set SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET in GitHub Actions Secrets.")
+        raise RuntimeError("Set SHOPIFY_ACCESS_TOKEN, or both SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET, in GitHub Actions Secrets.")
     payload = {"grant_type": "client_credentials", "client_id": client_id, "client_secret": client_secret}
     req = urllib.request.Request(
         f"https://{domain}/admin/oauth/access_token",
