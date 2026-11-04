@@ -3,6 +3,8 @@ name: SolePick Daily Recipe Publishing
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/workflows/shopify-auth-check.yml'
   pull_request:
     branches: [main]
   workflow_dispatch:
