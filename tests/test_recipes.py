@@ -335,6 +335,22 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(image["url"], generated_image["url"])
         self.assertEqual(image["altText"], generated_image["altText"])
 
+    def test_featured_image_validation_preserves_provenance_for_repeat_validation(self):
+        recipe = {"title": "Sample Salmon Pasta"}
+        generated_image = {
+            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
+            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
+            "source_type": "official_youtube_thumbnail",
+            "publisher": "Food Network",
+        }
+        from unittest.mock import patch
+        with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
+            first = recipe_worker.featured_image_for(recipe, generated_image)
+            second = recipe_worker.featured_image_for(recipe, first)
+        self.assertEqual(first["source_type"], "official_youtube_thumbnail")
+        self.assertEqual(first["publisher"], "Food Network")
+        self.assertEqual(second["url"], generated_image["url"])
+
     def test_featured_image_rejects_unverified_recipe_fallback(self):
         recipe = {
             "title": "Sample Dish",
