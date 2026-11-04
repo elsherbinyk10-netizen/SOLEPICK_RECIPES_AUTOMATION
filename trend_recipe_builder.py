@@ -14,7 +14,7 @@ def _slug(value):
 
 
 # Each pattern is a complete editorially-authored recipe, not scraped/copied content.
-# These patterns are intentionally narrow; expand only with reviewed, testable recipes. New matches are persisted to the daily library.
+# These patterns are intentionally narrow; expand only with reviewed, testable recipes. New matches are persisted to the daily library and checked before publication.
 PATTERNS = (
     {
         "key": "cottage-cheese",
