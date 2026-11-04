@@ -89,7 +89,7 @@ jobs:
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
           SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
-          MAX_RECIPES_PER_RUN: '3'
+          MAX_RECIPES_PER_RUN: '1'
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           REPAIR_HANDLE: ${{ inputs.repair_handle }}
