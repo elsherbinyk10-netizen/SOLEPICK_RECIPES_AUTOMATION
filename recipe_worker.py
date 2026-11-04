@@ -433,7 +433,7 @@ def find_verified_recipe_video(recipe):
             seen.add(video_id)
             if not _video_title_is_compatible(recipe, title_found):
                 continue
-            if _video_title_score(title, title_found) < 0.45:
+            if _video_title_score(title, title_found) < 0.72:
                 continue
             description = str(entry.get("description") or "")
             source_article_url = food_network_recipe_article_url(description)
@@ -459,7 +459,7 @@ def find_verified_recipe_video(recipe):
             seen.add(video_id)
             if not _video_title_is_compatible(recipe, entry["title"]):
                 continue
-            if _video_title_score(title, entry["title"]) < 0.45:
+            if _video_title_score(title, entry["title"]) < 0.72:
                 continue
             source_article_url = food_network_recipe_article_url(entry.get("description", ""))
             candidate = _check_video_candidate(
