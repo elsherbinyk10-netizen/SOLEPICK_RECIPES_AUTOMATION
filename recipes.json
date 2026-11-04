@@ -4631,5 +4631,137 @@
       "For a richer finish, swirl in coconut milk; add it after blending."
     ],
     "storage": "Refrigerate cooled soup for up to 4 days or freeze in individual portions for up to 3 months. Thaw overnight in the refrigerator and reheat until steaming hot."
+  },
+  {
+    "slug": "hot-honey-chicken-rice-bowls",
+    "title": "Hot Honey Chicken Rice Bowls",
+    "description": "Juicy skillet chicken glazed with sweet heat, served over fluffy rice with crisp cucumber, lime and fresh coriander. These quick hot honey chicken rice bowls make a balanced weeknight dinner with a short ingredient list and a bright finish.",
+    "tags": [
+      "dinner",
+      "chicken",
+      "rice bowl",
+      "quick-and-easy",
+      "high protein"
+    ],
+    "ingredients": [
+      "500 g boneless, skinless chicken breast, cut into 2 cm pieces",
+      "1 tablespoon olive oil",
+      "1 teaspoon smoked paprika",
+      "1/2 teaspoon garlic powder",
+      "1/2 teaspoon fine salt",
+      "3 tablespoons honey",
+      "1 tablespoon hot sauce",
+      "1 tablespoon fresh lime juice",
+      "2 cups cooked rice",
+      "1 cucumber, diced",
+      "2 tablespoons chopped fresh coriander"
+    ],
+    "instructions": [
+      "Pat the chicken pieces dry. Toss with olive oil, smoked paprika, garlic powder and salt until evenly coated.",
+      "Heat a large skillet over medium-high heat. Add the chicken in a single layer and cook for 5–7 minutes, turning occasionally, until browned and the thickest pieces reach 74°C (165°F) on a food thermometer.",
+      "Stir the honey, hot sauce and lime juice together in a small bowl.",
+      "Lower the skillet heat. Pour in the honey mixture and toss the chicken for 30–60 seconds until glossy and coated; remove from the heat.",
+      "Divide the hot rice between bowls. Add the cucumber, spoon over the chicken and pan glaze, then finish with coriander and extra lime if desired."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 12,
+    "servings": 2,
+    "cook_notes": [
+      "Cut the chicken into evenly sized pieces so they finish cooking at the same time.",
+      "Keep the heat moderate after adding honey; the glaze can darken quickly."
+    ],
+    "substitutions": [
+      "Use boneless chicken thighs instead of breast and cook until they reach 74°C (165°F).",
+      "Swap coriander for sliced spring onions, and use maple syrup instead of honey if preferred."
+    ],
+    "storage": "Store chicken and rice in separate airtight containers in the refrigerator for up to 3 days. Reheat until steaming hot; add cucumber fresh just before serving."
+  },
+  {
+    "slug": "creamy-baked-feta-tomato-pasta",
+    "title": "Creamy Baked Feta Tomato Pasta",
+    "description": "Cherry tomatoes roast around a block of feta with garlic and oregano, then turn into a silky sauce for pasta. This easy baked feta tomato pasta is a hands-off comfort-food favourite finished with fresh basil.",
+    "tags": [
+      "dinner",
+      "pasta",
+      "vegetarian",
+      "comfort-food",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "300 g short pasta",
+      "200 g block feta cheese",
+      "400 g cherry tomatoes",
+      "3 tablespoons olive oil",
+      "3 garlic cloves, thinly sliced",
+      "1/2 teaspoon dried oregano",
+      "1/4 teaspoon black pepper",
+      "1/4 cup reserved pasta water",
+      "1/4 cup fresh basil leaves"
+    ],
+    "instructions": [
+      "Heat the oven to 200°C (400°F). Place the cherry tomatoes and sliced garlic in a baking dish. Drizzle with olive oil and season with oregano and black pepper.",
+      "Set the feta block in the centre and turn it once to coat lightly with oil. Bake for 25–30 minutes, until the tomatoes have burst and the feta is soft.",
+      "Meanwhile, cook the pasta in salted boiling water according to the packet directions. Reserve 1/4 cup of pasta water, then drain.",
+      "Mash the baked feta and tomatoes together in the dish until creamy. Stir in a little reserved pasta water to loosen the sauce.",
+      "Add the drained pasta and toss until coated. Tear over the fresh basil and serve warm."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 30,
+    "servings": 4,
+    "cook_notes": [
+      "Use a snug baking dish so the tomatoes release their juices around the feta.",
+      "Taste before adding extra salt because feta is naturally salty."
+    ],
+    "substitutions": [
+      "Use a block of firm plant-based feta for a dairy-free version, checking that it softens when baked.",
+      "Replace basil with flat-leaf parsley or baby spinach stirred through at the end."
+    ],
+    "storage": "Refrigerate leftovers in a sealed container for up to 3 days. Reheat gently with a splash of water to loosen the sauce; the pasta will soften as it sits."
+  },
+  {
+    "slug": "crispy-salmon-rice-bowls",
+    "title": "Crispy Salmon Rice Bowls",
+    "description": "Golden-edged salmon sits over warm rice with cucumber, avocado and a quick sesame-soy dressing. These crispy salmon rice bowls bring together fresh crunch and savoury flavour for a satisfying dinner in about half an hour.",
+    "tags": [
+      "dinner",
+      "salmon",
+      "rice bowl",
+      "seafood",
+      "fresh-and-green",
+      "high protein"
+    ],
+    "ingredients": [
+      "450 g skinless salmon fillet, cut into 2 cm cubes",
+      "1 tablespoon neutral oil",
+      "1 tablespoon soy sauce",
+      "1 teaspoon sesame oil",
+      "1/2 teaspoon garlic powder",
+      "2 cups cooked rice",
+      "1 cucumber, diced",
+      "1 ripe avocado, sliced",
+      "1 tablespoon rice vinegar",
+      "1 teaspoon honey",
+      "1 teaspoon toasted sesame seeds",
+      "2 spring onions, thinly sliced"
+    ],
+    "instructions": [
+      "Pat the salmon cubes dry. Toss with neutral oil, soy sauce and garlic powder until lightly coated.",
+      "Heat a non-stick skillet over medium-high heat. Arrange salmon in one layer and cook for 2–3 minutes per side, turning gently, until browned and the centre reaches 63°C (145°F) on a food thermometer.",
+      "Whisk the sesame oil, rice vinegar and honey in a small bowl to make the dressing.",
+      "Divide the warm rice between bowls. Arrange cucumber and avocado alongside the salmon.",
+      "Spoon the dressing over the bowls and finish with sesame seeds and sliced spring onions."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 12,
+    "servings": 2,
+    "cook_notes": [
+      "Dry the salmon well before cooking to encourage browning rather than steaming.",
+      "Cook in batches if the pan is crowded; overcrowding releases moisture and prevents crisp edges."
+    ],
+    "substitutions": [
+      "Use tamari instead of soy sauce for a gluten-free option.",
+      "Swap avocado for steamed edamame or shredded carrot if preferred."
+    ],
+    "storage": "For best texture, store cooked salmon, rice and fresh toppings separately in the refrigerator for up to 2 days. Reheat salmon and rice thoroughly; add avocado and cucumber fresh."
   }
 ]
