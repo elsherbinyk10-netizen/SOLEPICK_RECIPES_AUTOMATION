@@ -567,6 +567,7 @@ class RecipeLibraryTests(unittest.TestCase):
             "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
             "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
             "source_type": "official_youtube_thumbnail",
+            "publisher": "Food Network",
         }
         video = {
             "title": "Sample Salmon Pasta Recipe",
