@@ -2,7 +2,7 @@
 """Publish the scheduled SolePick recipe to the configured Shopify blog.
 
 Every publication is gated by recipe-specific instructions, approved publisher video,
-strict title matching, verified thumbnail provenance, and a read-after-write Shopify article check. The daily worker uses one serialized publishing slot.
+strict title matching, verified thumbnail provenance, and a read-after-write Shopify article check. The daily worker uses one serialized publishing slot and validates creator identity live.
 """
 import argparse
 import base64
