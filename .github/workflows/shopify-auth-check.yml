@@ -32,6 +32,11 @@ jobs:
           domain = os.environ["SHOPIFY_STORE_DOMAIN"]
           client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
           client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
+          expected_client_id = "dd33a917997e41f6dc54f4ea7533a05b"
+          if client_id != expected_client_id:
+              print("FAIL: GitHub SHOPIFY_CLIENT_ID does not match the known SolePick Automation Studio app.")
+              print("Update the GitHub secret from Dev Dashboard → SolePick Automation Studio → Settings → Credentials.")
+              sys.exit(1)
           if not client_id or not client_secret:
               print("FAIL: SHOPIFY_CLIENT_ID or SHOPIFY_CLIENT_SECRET is missing.")
               sys.exit(1)
