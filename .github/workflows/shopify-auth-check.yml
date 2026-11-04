@@ -83,12 +83,13 @@ jobs:
               print("FAIL: Shopify returned no access token.")
               sys.exit(1)
 
-          granted_scopes = set(str(token_payload.get("scope") or "").split(","))
-          required_scopes = {"read_content", "write_content"}
+          granted_scopes = {scope.strip() for scope in str(token_payload.get("scope") or "").split(",") if scope.strip()}
+          # Shopify write_content includes read access to the same content resources.
+          required_scopes = {"write_content"}
           missing_scopes = sorted(required_scopes - granted_scopes)
           if missing_scopes:
               print("FAIL: The installed app token is missing required scope(s): " + ", ".join(missing_scopes))
-              print("Release and approve an app version containing these scopes, then rerun this check.")
+              print("Release and approve an app version containing write_content, then rerun this check.")
               sys.exit(1)
 
           query = """
@@ -131,6 +132,6 @@ jobs:
           print("SUCCESS: Shopify client-credentials authentication verified.")
           print(f"Store: {shop.get('name', 'SolePick store')}")
           print(f"Domain: {actual_domain}")
-          print("Granted scopes include read_content and write_content.")
+          print("Granted scope includes write_content (which also grants content read access).")
           print("Check type: read-only; no articles, products, files, or settings were changed.")
           PY
