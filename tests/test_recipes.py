@@ -13,7 +13,7 @@ import recipe_worker
 
 class RecipeLibraryTests(unittest.TestCase):
     def test_direct_shopify_access_token_is_used_without_client_credentials(self):
-        with patch.dict("os.environ", {"SHOPIFY_ACCESS_TOKEN": "shpat_test_token", "SHOPIFY_CLIENT_ID": "", "SHOPIFY_CLIENT_SECRET": ""}, clear=False):
+        with patch.dict("os.environ", {"SHOPIFY_ADMIN_ACCESS_TOKEN": "shpat_test_token", "SHOPIFY_ACCESS_TOKEN": "", "SHOPIFY_CLIENT_ID": "", "SHOPIFY_CLIENT_SECRET": ""}, clear=False):
             self.assertEqual(recipe_worker.get_access_token("example.myshopify.com"), "shpat_test_token")
 
     def test_recipes_have_unique_slugs_and_required_fields(self):
