@@ -1129,13 +1129,42 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
     return published
 
 
+def configured_max_recipes_per_run():
+    """Read the daily batch size, capped at three to keep each publishing run controlled."""
+    raw = os.environ.get("MAX_RECIPES_PER_RUN", "3").strip()
+    try:
+        requested = int(raw)
+    except ValueError:
+        raise ValueError("MAX_RECIPES_PER_RUN must be a whole number from 1 to 3.")
+    if requested < 1:
+        raise ValueError("MAX_RECIPES_PER_RUN must be a whole number from 1 to 3.")
+    return min(requested, 3)
+
+
+def requested_target_recipes(recipes):
+    """Resolve an optional comma-separated list of recipes for a targeted publishing run."""
+    raw = os.environ.get("TARGET_RECIPE_SLUGS", "").strip()
+    if not raw:
+        return None
+    slugs = [value.strip() for value in raw.split(",") if value.strip()]
+    if not slugs:
+        return None
+    if len(slugs) != len(set(slugs)):
+        raise ValueError("TARGET_RECIPE_SLUGS contains duplicate recipe slugs.")
+    by_slug = {recipe["slug"]: recipe for recipe in recipes}
+    missing = [slug for slug in slugs if slug not in by_slug]
+    if missing:
+        raise ValueError("Requested recipe slug(s) not found in recipes.json: " + ", ".join(missing))
+    return [by_slug[slug] for slug in slugs]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
     args = parser.parse_args()
-    max_publish = 1
+    max_publish = configured_max_recipes_per_run()
     if args.one_time_test and args.repair_handle:
         parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
@@ -1179,7 +1208,7 @@ def main():
         video_is_saved = (
             "<iframe" in body.lower()
             and "youtube-nocookie.com/embed/" in body
-            and bool(re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE))
+            and bool(re.search(r"<h2\b[^>]*>\s*Watch the Recipe Video Here\s*</h2>", body, flags=re.IGNORECASE))
         )
         if not video_is_saved:
             print(
@@ -1204,16 +1233,21 @@ def main():
     start = day_number % len(recipes)
 
     target_slug = os.environ.get("TARGET_RECIPE_SLUG", "").strip()
-    target_recipe = None
+    target_list = requested_target_recipes(recipes)
+    if target_slug and target_list is not None:
+        parser.error("Use TARGET_RECIPE_SLUG or TARGET_RECIPE_SLUGS, not both.")
     if target_slug:
         target_recipe = next((recipe for recipe in recipes if recipe["slug"] == target_slug), None)
         if target_recipe is None:
             raise RuntimeError(f"Requested target recipe '{target_slug}' is not in recipes.json.")
+        target_recipes = [target_recipe]
+    else:
+        target_recipes = target_list
 
+    eligible_source = target_recipes if target_recipes is not None else recipes
     eligible = [
-        recipe for recipe in recipes
-        if (not target_slug or recipe["slug"] == target_slug)
-        and not (articles.get(recipe["slug"]) and articles[recipe["slug"]].get("isPublished"))
+        recipe for recipe in eligible_source
+        if not (articles.get(recipe["slug"]) and articles[recipe["slug"]].get("isPublished"))
     ]
     print(f"Recipe library status: {len(eligible)} of {len(recipes)} recipes remain eligible.")
 
@@ -1235,10 +1269,10 @@ def main():
         and datetime.datetime.fromisoformat(article["publishedAt"].replace("Z", "+00:00")).astimezone(CAIRO).date() == now.date()
     ) if not args.one_time_test else 0
     # A one-time targeted run processes only the requested recipe; normal runs rotate.
-    candidates = [target_recipe] if target_slug else [
+    candidates = target_recipes if target_recipes is not None else [
         recipes[(start + offset) % len(recipes)] for offset in range(len(recipes))
     ]
-    if not target_slug:
+    if target_recipes is None:
         # Combine current Google search-trend terms, food-news coverage and public
         # TikTok Creative Center signals; rank only recipes already in the reviewed catalogue.
         from trend_engine import collect_all_food_trend_signals, rank_trending_recipes, score_recipe_trends
