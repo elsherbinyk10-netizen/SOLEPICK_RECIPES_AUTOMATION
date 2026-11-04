@@ -914,6 +914,11 @@ def article_html(recipe, video=None, published_handles=None):
     ingredients = "".join(f"<li>{esc(item)}</li>" for item in recipe["ingredients"])
     steps = "".join(f"<li>{esc(item)}</li>" for item in recipe["instructions"])
     video_html = recipe_video_section_html(recipe, video) if video else ""
+    video_credit = (
+        f"<p><small>Video credit: {esc(video.get('publisher', 'YouTube creator'))}. "
+        "The video is embedded from its creator; recipe text and method are independently authored by SolePick Recipes.</small></p>"
+        if video else ""
+    )
     metadata = seo_metadata(recipe)
     related = related_recipe_links(recipe, published_handles)
     return (
@@ -922,11 +927,7 @@ def article_html(recipe, video=None, published_handles=None):
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
         f"{video_html}"
-        + (
-            f"<p><small>Video credit: {esc(video.get('publisher', 'YouTube creator'))}. "
-            "The video is embedded from its creator; recipe text and method are independently authored by SolePick Recipes.</small></p>"
-            if video else ""
-        )
+        f"{video_credit}"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         f"{recipe_editorial_sections(recipe)}"
