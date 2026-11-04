@@ -17,6 +17,7 @@ from image_quality import inspect_image_url, is_high_quality_image
 
 API_VERSION = "2026-07"
 CAIRO = ZoneInfo("Africa/Cairo")
+FOOD_NETWORK_CHANNEL_ID = "UC8Y-jrV8oR3s2Ix4viDkZtA"
 RECIPES_PATH = Path(__file__).with_name("recipes.json")
 ACCESS_TOKEN = None
 
@@ -203,8 +204,14 @@ def make_recipe_specific(recipe):
         raise ValueError(f"Recipe '{title}' needs at least four clear, sequential instructions.")
     return result
 
-def _check_video_candidate(recipe, video_id, title):
-    """Validate a discovered YouTube candidate before it can be embedded."""
+def _is_authorized_video_channel(channel_id):
+    return str(channel_id or "").strip() == FOOD_NETWORK_CHANNEL_ID
+
+
+def _check_video_candidate(recipe, video_id, title, channel_id=""):
+    """Validate only a candidate from the official Food Network channel."""
+    if not _is_authorized_video_channel(channel_id):
+        return None
     video_id = str(video_id or "").strip()
     title = str(title or "").strip()
     if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id) or not title:
@@ -234,12 +241,16 @@ def _check_video_candidate(recipe, video_id, title):
     live_score = _video_title_score(recipe.get("title", ""), live_title)
     if live_score < 0.45:
         return None
+    if str(metadata.get("author_name") or "").strip().lower() not in {"food network", "foodnetwork"}:
+        return None
     return {
         "id": video_id,
         "title": live_title,
         "url": "https://www.youtube.com/watch?v=" + video_id,
         "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
         "match_score": round(live_score, 2),
+        "channel_id": channel_id,
+        "publisher": "Food Network",
     }
 
 
@@ -252,7 +263,7 @@ def find_verified_recipe_video(recipe):
         configured
     )
     if match:
-        candidate = _check_video_candidate(recipe, match.group(1), recipe.get("video_title", ""))
+        candidate = _check_video_candidate(recipe, match.group(1), recipe.get("video_title", ""), recipe.get("video_channel_id", ""))
         if candidate:
             return candidate
 
@@ -270,11 +281,8 @@ def find_verified_recipe_video(recipe):
     # weakening the strict protein/dish-format and live-embeddability checks.
     # A recipe is published only after a title-compatible video passes oEmbed.
     queries = [
-        f"ytsearch20:{title} recipe",
-        f"ytsearch15:how to make {title}",
-        f"ytsearch15:{title} step by step cooking",
-        f"ytsearch15:{title} easy recipe tutorial",
-        f"ytsearch10:{title} home cooking",
+        f"ytsearch30:{title} Food Network recipe",
+        f"ytsearch20:Food Network {title} cooking",
     ]
     seen = set()
     failures = 0
@@ -296,6 +304,9 @@ def find_verified_recipe_video(recipe):
                 continue
             video_id = str(entry.get("id") or "").strip()
             title_found = str(entry.get("title") or "").strip()
+            channel_id = str(entry.get("channel_id") or "").strip()
+            if not _is_authorized_video_channel(channel_id):
+                continue
             if video_id in seen:
                 continue
             seen.add(video_id)
@@ -303,7 +314,7 @@ def find_verified_recipe_video(recipe):
                 continue
             if _video_title_score(title, title_found) < 0.45:
                 continue
-            candidate = _check_video_candidate(recipe, video_id, title_found)
+            candidate = _check_video_candidate(recipe, video_id, title_found, channel_id)
             if candidate:
                 print(f"AUTO-SELECTED VIDEO: {candidate['title']} | match={candidate['match_score']} | live oEmbed check passed.")
                 return candidate
@@ -319,6 +330,7 @@ def recipe_video_section_html(recipe, video):
     frame_id = "solepick-video-" + video_id
     return (
         "<h2>Watch the Recipe Video Here</h2>"
+        f"<p><small>Official video publisher: {esc(video.get('publisher', 'Food Network'))}. <a href='{esc(video['url'])}' target='_blank' rel='noopener noreferrer'>View the original video</a>.</small></p>"
         f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;margin:0 0 1rem;overflow:hidden;\">"
         f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}?playsinline=1\" title=\"{esc(recipe['title'])} recipe video\" "
         "loading=\"eager\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
@@ -600,8 +612,24 @@ def catalogue_image_fallback(recipe, published_articles=None):
     return {"url": url, "altText": alt}
 
 
+def youtube_thumbnail_for(recipe, video):
+    """Use only the verified Food Network video's own high-resolution thumbnail."""
+    video_id = str(video.get("id") or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
+        raise RuntimeError("Cannot select a thumbnail without a verified publisher video ID.")
+    for url in (
+        f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg",
+        f"https://img.youtube.com/vi/{video_id}/sddefault.jpg",
+    ):
+        quality = inspect_image_url(url)
+        if is_high_quality_image(quality):
+            return {"url": url, "altText": f"Food Network cooking video thumbnail for {recipe['title']}", "source_type": "official_youtube_thumbnail"}
+        print(f"REJECTED PUBLISHER THUMBNAIL: {url} | {quality}")
+    raise RuntimeError("No high-resolution official Food Network thumbnail passed image checks; refusing to publish.")
+
+
 def featured_image_for(recipe, generated_image):
-    """Use only a dish-relevant image returned by the verified image search; never silently fall back to generic catalogue photos."""
+    """Require the verified official publisher thumbnail; no generated or stock fallback."""
     image = generated_image or {}
     url = str(image.get("url") or "").strip()
     image_path = urllib.parse.unquote(urllib.parse.urlparse(url).path).lower()
@@ -611,17 +639,14 @@ def featured_image_for(recipe, generated_image):
         raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"] + "; refusing to publish without a real food photo.")
     if _is_retail_product_image(str(image.get("altText") or ""), url):
         raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"] + "; refusing to publish without a prepared-food photograph.")
-    if not url.startswith("https://"):
-        raise RuntimeError(
-            "No verified, dish-relevant featured image found for " + recipe["title"]
-            + ". Refusing to publish a mismatched fallback photo."
-        )
+    if image.get("source_type") != "official_youtube_thumbnail" or not url.startswith("https://img.youtube.com/vi/"):
+        raise RuntimeError("Featured image must be the verified official publisher video thumbnail.")
     quality = inspect_image_url(url)
     if not is_high_quality_image(quality):
         raise RuntimeError("Rejected low-resolution or soft recipe image for " + recipe["title"] + ": " + str(quality))
     alt = str(image.get("altText") or "").strip()
-    if not alt:
-        raise RuntimeError("Verified image is missing descriptive alt text for " + recipe["title"])
+    if not alt or "food network" not in alt.lower():
+        raise RuntimeError("Verified publisher thumbnail is missing descriptive alt text for " + recipe["title"])
     return {"url": url, "altText": alt}
 
 def seo_metadata(recipe):
@@ -695,6 +720,7 @@ def recipe_json_ld(recipe):
             + [str(value).strip() for value in recipe.get("tags", [])]
             + [str(value).strip() for value in recipe.get("ingredients", [])]
         ))[:500],
+        "video": {"@type": "VideoObject", "name": video_title if False else recipe["title"]},
         "prepTime": f"PT{int(recipe['prep_minutes'])}M",
         "cookTime": f"PT{int(recipe['cook_minutes'])}M",
         "totalTime": f"PT{int(recipe['prep_minutes']) + int(recipe['cook_minutes'])}M",
@@ -728,6 +754,7 @@ def article_html(recipe, video=None, published_handles=None):
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
         f"{video_html}"
+        "<p><small>Video credit: Food Network. Recipe text and method are independently authored by SolePick Recipes.</small></p>"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         f"{recipe_editorial_sections(recipe)}"
@@ -983,6 +1010,7 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
     # receives as the article's featured image, including generated Commons assets.
     recipe_for_markup = dict(recipe)
     recipe_for_markup["published_image_url"] = generated_image.get("url") if generated_image else ""
+    recipe_for_markup["published_video_url"] = video.get("url") if video else ""
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
         "author": {"name": "SolePick Recipes"}, "body": article_html(recipe_for_markup, video, published_handles),
@@ -1009,7 +1037,7 @@ def main():
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
     args = parser.parse_args()
-    max_publish = 1 if (args.repair_handle or args.one_time_test) else max(1, min(3, int(os.environ.get("MAX_RECIPES_PER_RUN", "3"))))
+    max_publish = 1
     if args.one_time_test and args.repair_handle:
         parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
@@ -1170,9 +1198,7 @@ def main():
             continue
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         try:
-            generated_image = generate_recipe_image(recipe, articles.values())
-            # Fail closed: never substitute a pre-saved image when live search
-            # cannot verify a suitable photo for this exact recipe.
+            generated_image = youtube_thumbnail_for(recipe, video)
             generated_image = featured_image_for(recipe, generated_image)
             recipe["published_image_url"] = generated_image["url"]
         except RuntimeError as error:
