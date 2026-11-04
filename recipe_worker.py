@@ -306,6 +306,59 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     }
 
 
+def search_official_food_network_videos(query):
+    """Search public Invidious-compatible indexes for official Food Network uploads.
+
+    This is a fallback for hosted runners where YouTube's direct search endpoint
+    returns a bot-verification challenge. Results are still re-verified with
+    YouTube oEmbed, the official channel ID, live title and embeddability.
+    """
+    instances = [
+        "https://invidious.logicism.tv",
+        "https://inv.nadeko.net",
+        "https://yewtu.be",
+    ]
+    for instance in instances:
+        endpoint = instance + "/api/v1/search?" + urllib.parse.urlencode({
+            "q": query, "type": "video", "sort_by": "relevance"
+        })
+        request = urllib.request.Request(
+            endpoint,
+            headers={
+                "Accept": "application/json",
+                "User-Agent": "SolePickRecipesBot/1.0 (+https://solepick.site)",
+            },
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=10) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            if not isinstance(payload, list):
+                continue
+            matches = []
+            for item in payload:
+                if not isinstance(item, dict):
+                    continue
+                if str(item.get("authorId") or "").strip() != FOOD_NETWORK_CHANNEL_ID:
+                    continue
+                if str(item.get("author") or "").strip().lower() not in {"food network", "foodnetwork"}:
+                    continue
+                video_id = str(item.get("videoId") or "").strip()
+                title = str(item.get("title") or "").strip()
+                if re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id) and title:
+                    matches.append({
+                        "id": video_id,
+                        "title": title,
+                        "channel_id": FOOD_NETWORK_CHANNEL_ID,
+                        "description": str(item.get("description") or ""),
+                    })
+            if matches:
+                print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} official Food Network candidate(s).")
+                return matches
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
+            print(f"INVIDIOUS VIDEO SEARCH: {instance} unavailable ({type(error).__name__}); trying another public index.")
+    return []
+
+
 def find_verified_recipe_video(recipe):
     """Automatically discover and validate a matching, currently embeddable YouTube video."""
     # Re-check a configured video first, but do not make manual catalogue flags a blocker.
@@ -382,9 +435,31 @@ def find_verified_recipe_video(recipe):
                 print(f"AUTO-SELECTED VIDEO: {candidate['title']} | match={candidate['match_score']} | live oEmbed check passed.")
                 return candidate
             failures += 1
+    # Public-index fallback: YouTube direct search is frequently bot-challenged
+    # on GitHub-hosted runners. Only exact official Food Network channel results
+    # are considered; every result must still pass live YouTube oEmbed checks.
+    for query in (f"{title} Food Network", f"Food Network {title} recipe"):
+        for entry in search_official_food_network_videos(query):
+            video_id = entry["id"]
+            if video_id in seen:
+                continue
+            seen.add(video_id)
+            if not _video_title_is_compatible(recipe, entry["title"]):
+                continue
+            if _video_title_score(title, entry["title"]) < 0.45:
+                continue
+            source_article_url = food_network_recipe_article_url(entry.get("description", ""))
+            candidate = _check_video_candidate(
+                recipe, video_id, entry["title"], entry["channel_id"], source_article_url
+            )
+            if candidate:
+                print(f"AUTO-SELECTED VIDEO: {candidate['title']} | official channel | live oEmbed check passed.")
+                return candidate
+
     raise RuntimeError(
-        f"No currently embeddable, title-matched video found for '{title}' after checking "
-        f"{len(seen)} search results ({failures} candidate checks failed). The workflow will retry tomorrow."
+        f"No currently embeddable, title-matched official Food Network video found for '{title}' after checking "
+        f"{len(seen)} candidates ({failures} direct-search candidate checks failed). "
+        "All configured public video indexes were exhausted; the workflow will retry at the next scheduled run."
     )
 
 def recipe_video_section_html(recipe, video):
