@@ -207,10 +207,28 @@ def make_recipe_specific(recipe):
 def _is_authorized_video_channel(channel_id):
     return str(channel_id or "").strip() == FOOD_NETWORK_CHANNEL_ID
 
+def food_network_recipe_article_url(description):
+    """Extract a direct Food Network recipe-page URL from the official video's description."""
+    text = str(description or "")
+    candidates = re.findall(r"https?://[^\s<>\\"']+", text)
+    for candidate in candidates:
+        candidate = candidate.rstrip(").,;]")
+        parsed = urllib.parse.urlparse(candidate)
+        host = (parsed.hostname or "").lower()
+        if host not in {"foodnetwork.com", "www.foodnetwork.com"}:
+            continue
+        if not parsed.path.startswith("/recipes/"):
+            continue
+        return urllib.parse.urlunparse(("https", "www.foodnetwork.com", parsed.path, "", parsed.query, ""))
+    return ""
 
-def _check_video_candidate(recipe, video_id, title, channel_id=""):
-    """Validate only a candidate from the official Food Network channel."""
+
+def _check_video_candidate(recipe, video_id, title, channel_id="", source_article_url=""):
+    """Validate an official Food Network video and its directly linked recipe article."""
     if not _is_authorized_video_channel(channel_id):
+        return None
+    parsed_source = urllib.parse.urlparse(str(source_article_url or ""))
+    if (parsed_source.hostname or "").lower() not in {"foodnetwork.com", "www.foodnetwork.com"} or not parsed_source.path.startswith("/recipes/"):
         return None
     video_id = str(video_id or "").strip()
     title = str(title or "").strip()
@@ -251,6 +269,7 @@ def _check_video_candidate(recipe, video_id, title, channel_id=""):
         "match_score": round(live_score, 2),
         "channel_id": channel_id,
         "publisher": "Food Network",
+        "source_article_url": "https://www.foodnetwork.com" + parsed_source.path + (("?" + parsed_source.query) if parsed_source.query else ""),
     }
 
 
@@ -263,7 +282,7 @@ def find_verified_recipe_video(recipe):
         configured
     )
     if match:
-        candidate = _check_video_candidate(recipe, match.group(1), recipe.get("video_title", ""), recipe.get("video_channel_id", ""))
+        candidate = _check_video_candidate(recipe, match.group(1), recipe.get("video_title", ""), recipe.get("video_channel_id", ""), recipe.get("source_article_url", ""))
         if candidate:
             return candidate
 
@@ -314,7 +333,19 @@ def find_verified_recipe_video(recipe):
                 continue
             if _video_title_score(title, title_found) < 0.45:
                 continue
-            candidate = _check_video_candidate(recipe, video_id, title_found, channel_id)
+            description = str(entry.get("description") or "")
+            source_article_url = food_network_recipe_article_url(description)
+            if not source_article_url:
+                # Flat search results may omit descriptions; fetch public video metadata only.
+                try:
+                    with yt_dlp.YoutubeDL({"quiet": True, "no_warnings": True, "skip_download": True, "noplaylist": True, "socket_timeout": 12}) as detail_ydl:
+                        detail = detail_ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False)
+                    source_article_url = food_network_recipe_article_url((detail or {}).get("description", ""))
+                except Exception:
+                    source_article_url = ""
+            if not source_article_url:
+                continue
+            candidate = _check_video_candidate(recipe, video_id, title_found, channel_id, source_article_url)
             if candidate:
                 print(f"AUTO-SELECTED VIDEO: {candidate['title']} | match={candidate['match_score']} | live oEmbed check passed.")
                 return candidate
@@ -330,7 +361,8 @@ def recipe_video_section_html(recipe, video):
     frame_id = "solepick-video-" + video_id
     return (
         "<h2>Watch the Recipe Video Here</h2>"
-        f"<p><small>Official video publisher: {esc(video.get('publisher', 'Food Network'))}. <a href='{esc(video['url'])}' target='_blank' rel='noopener noreferrer'>View the original video</a>.</small></p>"
+        f"<p><small>Video: {esc(video.get('publisher', 'Food Network'))}. <a href='{esc(video['url'])}' target='_blank' rel='noopener noreferrer'>Watch the original video</a>. "
+        f"<a href='{esc(video['source_article_url'])}' target='_blank' rel='noopener noreferrer'>View the publisher's original recipe article</a>.</small></p>"
         f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;margin:0 0 1rem;overflow:hidden;\">"
         f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}?playsinline=1\" title=\"{esc(recipe['title'])} recipe video\" "
         "loading=\"eager\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
@@ -754,7 +786,7 @@ def article_html(recipe, video=None, published_handles=None):
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
         f"{video_html}"
-        "<p><small>Video credit: Food Network. Recipe text and method are independently authored by SolePick Recipes.</small></p>"
+        "<p><small>Video credit: Food Network. Recipe text and method are independently authored by SolePick Recipes; see the publisher's original recipe article above.</small></p>"
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         f"{recipe_editorial_sections(recipe)}"
