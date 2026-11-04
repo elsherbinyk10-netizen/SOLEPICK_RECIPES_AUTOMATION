@@ -63,10 +63,10 @@ jobs:
               try:
                   error_payload = json.loads(error.read().decode("utf-8"))
                   error_code = str(error_payload.get("error") or "")
-        error_description = str(error_payload.get("error_description") or error_payload.get("error_uri") or "")
-        if error_description:
-            safe_description = error_description.replace(client_secret, "[REDACTED]")[:240]
-            print(f"Shopify detail: {safe_description}")
+                  error_description = str(error_payload.get("error_description") or error_payload.get("error_uri") or "")
+                  if error_description:
+                      safe_description = error_description.replace(client_secret, "[REDACTED]")[:240]
+                      print(f"Shopify detail: {safe_description}")
               except Exception:
                   pass
               suffix = f" ({error_code})" if error_code else ""
