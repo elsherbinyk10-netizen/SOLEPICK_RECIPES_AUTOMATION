@@ -44,8 +44,10 @@ on:
 permissions:
   contents: write
 
+# Keep scheduled ticks serialized, but give each explicit push/manual recovery
+# run its own queue key so a stale skipped push cannot block a real publish run.
 concurrency:
-  group: solepick-daily-recipe-publishing
+  group: ${{ github.event_name == 'schedule' && format('solepick-schedule-{0}', github.event.schedule) || format('solepick-run-{0}', github.run_id) }}
   cancel-in-progress: false
 
 jobs:
