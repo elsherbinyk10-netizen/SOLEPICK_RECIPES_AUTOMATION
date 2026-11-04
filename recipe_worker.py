@@ -18,6 +18,12 @@ from image_quality import inspect_image_url, is_high_quality_image
 API_VERSION = "2026-07"
 CAIRO = ZoneInfo("Africa/Cairo")
 FOOD_NETWORK_CHANNEL_ID = "UC8Y-jrV8oR3s2Ix4viDkZtA"
+AUTHORIZED_VIDEO_CHANNELS = {
+    FOOD_NETWORK_CHANNEL_ID: "Food Network",
+    "UCJFp8uSYCjXOMnkUyb3CQ3Q": "Tasty",
+    "UCpSgg_ECBj25s9moCDfSTsA": "Jamie Oliver",
+    "UC4tAgeVdaNB5vD_mBoxg50w": "Allrecipes",
+}
 RECIPES_PATH = Path(__file__).with_name("recipes.json")
 ACCESS_TOKEN = None
 
@@ -235,7 +241,7 @@ def make_recipe_specific(recipe):
     return result
 
 def _is_authorized_video_channel(channel_id):
-    return str(channel_id or "").strip() == FOOD_NETWORK_CHANNEL_ID
+    return str(channel_id or "").strip() in AUTHORIZED_VIDEO_CHANNELS
 
 def food_network_recipe_article_url(description):
     """Extract a direct Food Network recipe-page URL from the official video's description."""
@@ -292,7 +298,8 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     live_score = _video_title_score(recipe.get("title", ""), live_title)
     if live_score < 0.45:
         return None
-    if str(metadata.get("author_name") or "").strip().lower() not in {"food network", "foodnetwork"}:
+    publisher = AUTHORIZED_VIDEO_CHANNELS.get(channel_id, "")
+    if not publisher or str(metadata.get("author_name") or "").strip().casefold() != publisher.casefold():
         return None
     return {
         "id": video_id,
@@ -301,13 +308,13 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
         "embed_url": "https://www.youtube-nocookie.com/embed/" + video_id,
         "match_score": round(live_score, 2),
         "channel_id": channel_id,
-        "publisher": "Food Network",
+        "publisher": publisher,
         "source_article_url": ("https://www.foodnetwork.com" + parsed_source.path + (("?" + parsed_source.query) if parsed_source.query else "")) if source_article_url else "",
     }
 
 
-def search_official_food_network_videos(query):
-    """Search public Invidious-compatible indexes for official Food Network uploads.
+def search_authorized_recipe_videos(query):
+    """Search public indexes for uploads from the verified recipe-publisher allowlist.
 
     This is a fallback for hosted runners where YouTube's direct search endpoint
     returns a bot-verification challenge. Results are still re-verified with
@@ -338,9 +345,11 @@ def search_official_food_network_videos(query):
             for item in payload:
                 if not isinstance(item, dict):
                     continue
-                if str(item.get("authorId") or "").strip() != FOOD_NETWORK_CHANNEL_ID:
+                channel_id = str(item.get("authorId") or "").strip()
+                publisher = AUTHORIZED_VIDEO_CHANNELS.get(channel_id)
+                if not publisher:
                     continue
-                if str(item.get("author") or "").strip().lower() not in {"food network", "foodnetwork"}:
+                if str(item.get("author") or "").strip().casefold() != publisher.casefold():
                     continue
                 video_id = str(item.get("videoId") or "").strip()
                 title = str(item.get("title") or "").strip()
@@ -348,11 +357,11 @@ def search_official_food_network_videos(query):
                     matches.append({
                         "id": video_id,
                         "title": title,
-                        "channel_id": FOOD_NETWORK_CHANNEL_ID,
+                        "channel_id": channel_id,
                         "description": str(item.get("description") or ""),
                     })
             if matches:
-                print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} official Food Network candidate(s).")
+                print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} verified publisher candidate(s).")
                 return matches
         except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
             print(f"INVIDIOUS VIDEO SEARCH: {instance} unavailable ({type(error).__name__}); trying another public index.")
@@ -386,8 +395,8 @@ def find_verified_recipe_video(recipe):
     # weakening the strict protein/dish-format and live-embeddability checks.
     # A recipe is published only after a title-compatible video passes oEmbed.
     queries = [
-        f"ytsearch30:{title} Food Network recipe",
-        f"ytsearch20:Food Network {title} cooking",
+        f"ytsearch30:{title} recipe",
+        f"ytsearch20:{title} cooking",
     ]
     seen = set()
     failures = 0
@@ -438,8 +447,8 @@ def find_verified_recipe_video(recipe):
     # Public-index fallback: YouTube direct search is frequently bot-challenged
     # on GitHub-hosted runners. Only exact official Food Network channel results
     # are considered; every result must still pass live YouTube oEmbed checks.
-    for query in (f"{title} Food Network", f"Food Network {title} recipe"):
-        for entry in search_official_food_network_videos(query):
+    for query in (f"{title} recipe", f"{title} cooking"):
+        for entry in search_authorized_recipe_videos(query):
             video_id = entry["id"]
             if video_id in seen:
                 continue
@@ -453,11 +462,11 @@ def find_verified_recipe_video(recipe):
                 recipe, video_id, entry["title"], entry["channel_id"], source_article_url
             )
             if candidate:
-                print(f"AUTO-SELECTED VIDEO: {candidate['title']} | official channel | live oEmbed check passed.")
+                print(f"AUTO-SELECTED VIDEO: {candidate['title']} | publisher={candidate['publisher']} | live oEmbed check passed.")
                 return candidate
 
     raise RuntimeError(
-        f"No currently embeddable, title-matched official Food Network video found for '{title}' after checking "
+        f"No currently embeddable, title-matched verified-publisher video found for '{title}' after checking "
         f"{len(seen)} candidates ({failures} direct-search candidate checks failed). "
         "All configured public video indexes were exhausted; the workflow will retry at the next scheduled run."
     )
@@ -757,7 +766,7 @@ def catalogue_image_fallback(recipe, published_articles=None):
 
 
 def youtube_thumbnail_for(recipe, video):
-    """Use only the verified Food Network video's own high-resolution thumbnail."""
+    """Use only the verified publisher video's own high-resolution thumbnail."""
     video_id = str(video.get("id") or "").strip()
     if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
         raise RuntimeError("Cannot select a thumbnail without a verified publisher video ID.")
@@ -767,7 +776,8 @@ def youtube_thumbnail_for(recipe, video):
     ):
         quality = inspect_image_url(url)
         if is_high_quality_image(quality):
-            return {"url": url, "altText": f"Food Network cooking video thumbnail for {recipe['title']}", "source_type": "official_youtube_thumbnail"}
+            publisher = str(video.get("publisher") or "Verified publisher")
+            return {"url": url, "altText": f"{publisher} cooking video thumbnail for {recipe['title']}", "source_type": "official_youtube_thumbnail", "publisher": publisher}
         print(f"REJECTED PUBLISHER THUMBNAIL: {url} | {quality}")
     raise RuntimeError("No high-resolution official Food Network thumbnail passed image checks; refusing to publish.")
 
@@ -789,8 +799,9 @@ def featured_image_for(recipe, generated_image):
     if not is_high_quality_image(quality):
         raise RuntimeError("Rejected low-resolution or soft recipe image for " + recipe["title"] + ": " + str(quality))
     alt = str(image.get("altText") or "").strip()
-    if not alt or "food network" not in alt.lower():
-        raise RuntimeError("Verified publisher thumbnail is missing descriptive alt text for " + recipe["title"])
+    publisher = str(image.get("publisher") or "").strip()
+    if not publisher or publisher not in AUTHORIZED_VIDEO_CHANNELS.values() or publisher.casefold() not in alt.casefold():
+        raise RuntimeError("Verified publisher thumbnail is missing approved publisher-specific alt text for " + recipe["title"])
     return {"url": url, "altText": alt}
 
 def seo_metadata(recipe):
