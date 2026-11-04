@@ -237,10 +237,24 @@ class RecipeLibraryTests(unittest.TestCase):
         }
         # An image URL in recipe data is not proof that the photo matches the dish.
         # Keep the publisher's no-mismatched-image safeguard in place.
-        with self.assertRaisesRegex(RuntimeError, "Refusing to publish a mismatched fallback photo"):
+        with self.assertRaisesRegex(RuntimeError, "Featured image must be the verified official publisher video thumbnail"):
             recipe_worker.featured_image_for(recipe, None)
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
+
+    def test_food_network_article_url_requires_official_recipe_path(self):
+        self.assertEqual(
+            recipe_worker.food_network_recipe_article_url(
+                "Get the recipe: https://www.foodnetwork.com/recipes/ina-garten/pasta-recipe-123"
+            ),
+            "https://www.foodnetwork.com/recipes/ina-garten/pasta-recipe-123",
+        )
+        self.assertEqual(
+            recipe_worker.food_network_recipe_article_url(
+                "See https://example.com/recipes/pasta and https://www.foodnetwork.com/videos"
+            ),
+            "",
+        )
 
     def test_recipe_video_is_embedded_in_article_html(self):
         recipe = {
