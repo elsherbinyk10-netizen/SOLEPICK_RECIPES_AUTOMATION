@@ -1,0 +1,78 @@
+name: SolePick Shopify Authentication Check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: solepick-shopify-auth-check
+  cancel-in-progress: false
+
+jobs:
+  verify-shopify-auth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify Shopify Admin token with a read-only request
+        env:
+          SHOPIFY_STORE_DOMAIN: 0mxbjk-cz.myshopify.com
+          SHOPIFY_ADMIN_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ADMIN_ACCESS_TOKEN }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.request
+
+          domain = os.environ["SHOPIFY_STORE_DOMAIN"]
+          token = os.environ.get("SHOPIFY_ADMIN_ACCESS_TOKEN", "").strip()
+          if not token:
+              print("FAIL: SHOPIFY_ADMIN_ACCESS_TOKEN is not configured or is empty.")
+              sys.exit(1)
+
+          query = """
+          query SolePickReadOnlyAuthCheck {
+            shop {
+              name
+              myshopifyDomain
+            }
+          }
+          """
+          request = urllib.request.Request(
+              f"https://{domain}/admin/api/2026-07/graphql.json",
+              data=json.dumps({"query": query}).encode("utf-8"),
+              headers={
+                  "Content-Type": "application/json",
+                  "X-Shopify-Access-Token": token,
+              },
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  payload = json.loads(response.read().decode("utf-8"))
+          except urllib.error.HTTPError as error:
+              # Do not print response bodies or request headers; they may contain sensitive details.
+              print(f"FAIL: Shopify Admin API returned HTTP {error.code}.")
+              sys.exit(1)
+          except Exception as error:
+              print(f"FAIL: Shopify request could not complete ({type(error).__name__}).")
+              sys.exit(1)
+
+          if payload.get("errors"):
+              print("FAIL: Shopify rejected the read-only GraphQL query; check token scopes.")
+              sys.exit(1)
+
+          shop = (payload.get("data") or {}).get("shop") or {}
+          actual_domain = shop.get("myshopifyDomain", "")
+          if actual_domain.lower() != domain.lower():
+              print("FAIL: Authenticated Shopify store does not match the configured SolePick store.")
+              sys.exit(1)
+
+          print("SUCCESS: Shopify Admin authentication verified.")
+          print(f"Store: {shop.get('name', 'SolePick store')}")
+          print(f"Domain: {actual_domain}")
+          print("Check type: read-only; no articles, products, or settings were changed.")
+          PY
