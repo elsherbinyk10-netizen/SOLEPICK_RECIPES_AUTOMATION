@@ -3,7 +3,7 @@
 Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube recipe-video check before an article is published.
 
 ## Daily schedule and duplicate protection
-- The workflow has two UTC triggers: `0 7 * * *` and `0 8 * * *`. The worker compares the trigger with Cairo's current UTC offset and ignores the off-season trigger, targeting 10:00 AM Cairo time year-round.
+- The workflow has seasonal primary triggers plus same-day recovery triggers at `0 7 * * *`, `0 8 * * *`, `0 9 * * *`, and `0 10 * * *` UTC. The worker accepts the 10:00 AM Cairo primary trigger and later recovery attempts; Shopify's Cairo-day guard prevents duplicate posts.
 - Before publishing, the worker checks Shopify article publication dates in `Africa/Cairo`. If today's article already has a saved embedded player, it skips the run to prevent a duplicate.
 - If today's article exists but its saved body is missing the embedded player, the worker repairs that existing article instead of creating another recipe.
 - The publishing command retries up to three times after failures. Shopify is re-checked on each attempt, and the Cairo-day guard prevents duplicate posts after an uncertain API response.
@@ -19,7 +19,7 @@ Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube re
 ## Required GitHub Actions secrets
 - `SHOPIFY_STORE_DOMAIN`: the store's `*.myshopify.com` domain.
 - `SHOPIFY_CLIENT_ID` and `SHOPIFY_CLIENT_SECRET`: Shopify app credentials with article/blog permissions.
-- `SHOPIFY_BLOG_ID`: the target blog's GraphQL ID.
+- `SHOPIFY_BLOG_ID`: retained for backward compatibility only. The worker now discovers the dedicated Shopify blog with handle `recipes` and creates it if missing, so a stale ID pointing to the old News blog cannot misroute recipes.
 
 Never put credentials in repository files.
 
@@ -33,7 +33,7 @@ python recipe_worker.py --dry-run
 The dry run selects a recipe offline and does not call Shopify. The workflow runs unit tests before attempting publication and retries publishing up to three times. A green workflow now confirms Shopify returned the embedded player markup in the saved article body, but it cannot guarantee that every public browser successfully plays the third-party video. Spot-check the published article URL on mobile after a real run.
 
 ## Recipe library
-The worker rotates through `recipes.json`, skips recipes already published by handle, and stops when no eligible recipe remains. It does not invent new recipes from the internet. Review recipe accuracy, food safety, allergens, and any generated or third-party media before scaling the library.
+The worker rotates through `recipes.json`, skips recipes already published by handle, and stops when no eligible recipe remains. Trend-matched candidates are generated only from narrow, pre-authored complete-recipe patterns and still pass all normal instruction, image, video and Shopify checks; unsupported trends never become invented recipes. Review recipe accuracy, food safety, allergens, and any generated or third-party media before scaling the library.
 
 ## ElevenLabs video dubbing (manual, safe-by-default)
 - The GitHub Actions workflow `.github/workflows/elevenlabs-dubbing.yml` can generate target-language video versions using the `ELEVENLABS_API_KEY` Actions secret and FFmpeg.
