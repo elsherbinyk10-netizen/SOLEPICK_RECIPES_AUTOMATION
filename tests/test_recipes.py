@@ -29,6 +29,24 @@ class RecipeLibraryTests(unittest.TestCase):
             slugs.append(recipe["slug"])
         self.assertEqual(len(slugs), len(set(slugs)))
 
+    def test_daily_batch_limit_is_configurable_but_capped_at_three(self):
+        with patch.dict("os.environ", {"MAX_RECIPES_PER_RUN": "3"}, clear=False):
+            self.assertEqual(recipe_worker.configured_max_recipes_per_run(), 3)
+        with patch.dict("os.environ", {"MAX_RECIPES_PER_RUN": "9"}, clear=False):
+            self.assertEqual(recipe_worker.configured_max_recipes_per_run(), 3)
+        with patch.dict("os.environ", {"MAX_RECIPES_PER_RUN": "0"}, clear=False):
+            with self.assertRaisesRegex(ValueError, "from 1 to 3"):
+                recipe_worker.configured_max_recipes_per_run()
+
+    def test_targeted_recipe_slug_list_preserves_requested_order(self):
+        recipes = [{"slug": "first"}, {"slug": "second"}]
+        with patch.dict("os.environ", {"TARGET_RECIPE_SLUGS": "second,first"}, clear=False):
+            selected = recipe_worker.requested_target_recipes(recipes)
+        self.assertEqual([item["slug"] for item in selected], ["second", "first"])
+        with patch.dict("os.environ", {"TARGET_RECIPE_SLUGS": "missing"}, clear=False):
+            with self.assertRaisesRegex(ValueError, "not found"):
+                recipe_worker.requested_target_recipes(recipes)
+
     def test_cairo_seasonal_schedule_uses_correct_utc_cron(self):
         cairo = ZoneInfo("Africa/Cairo")
         summer = datetime(2026, 7, 1, 10, 0, tzinfo=cairo)
@@ -482,6 +500,9 @@ class RecipeLibraryTests(unittest.TestCase):
             "smoky-sweet-potato-black-bean-skillet",
             "ginger-sesame-tofu-noodle-bowls",
             "roasted-carrot-red-lentil-soup",
+            "hot-honey-chicken-rice-bowls",
+            "creamy-baked-feta-tomato-pasta",
+            "crispy-salmon-rice-bowls",
         }
         self.assertTrue(expected.issubset(slugs))
         for recipe in recipes:
