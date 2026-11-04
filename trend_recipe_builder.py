@@ -168,3 +168,29 @@ def generate_trend_recipe_candidates(signals, existing_slugs=(), limit=3):
         if len(found) >= max(1, min(3, int(limit))):
             break
     return found
+
+
+
+def generate_curated_recipe_candidates(existing_slugs=(), limit=3):
+    """Replenish an exhausted library from fully authored, reviewed recipe patterns.
+
+    This is an evergreen fallback, not a trend claim. Every candidate still passes
+    the publisher's normal recipe, verified-video, verified-image and Shopify gates.
+    """
+    existing = set(existing_slugs)
+    found = []
+    for pattern in PATTERNS:
+        recipe = {key: value for key, value in pattern.items() if key not in {"key", "needles"}}
+        slug = _slug(recipe["title"])
+        if slug in existing:
+            continue
+        recipe["slug"] = slug
+        recipe["trend_sources"] = ["SolePick curated evergreen library"]
+        recipe["trend_evidence_count"] = 0
+        recipe["seo_title"] = recipe["title"] + " | SolePick Recipes"
+        recipe["seo_description"] = recipe["description"][:155]
+        found.append(recipe)
+        existing.add(slug)
+        if len(found) >= max(1, min(3, int(limit))):
+            break
+    return found
