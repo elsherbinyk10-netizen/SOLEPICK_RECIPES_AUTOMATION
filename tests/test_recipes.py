@@ -607,6 +607,10 @@ class RecipeLibraryTests(unittest.TestCase):
         body = captured["body"]
         self.assertIn(generated["url"], body)
         self.assertIn(generated["url"], captured["image"]["url"])
+        self.assertEqual(set(captured["image"]), {"url", "altText"})
+        self.assertNotIn("source_type", captured["image"])
+        self.assertNotIn("publisher", captured["image"])
+        self.assertIn("Video credit: YouTube creator", body)
         self.assertIn('"image": ["' + generated["url"] + '"]', body)
         self.assertIn('"url": "https://solepick.site/blogs/recipes/sample-salmon-pasta"', body)
         self.assertIn('"mainEntityOfPage"', body)
