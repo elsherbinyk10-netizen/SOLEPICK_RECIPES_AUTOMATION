@@ -9,3 +9,7 @@
 - Workflow concurrency keys separate explicit recovery runs from scheduled runs so stale skipped pushes cannot block a new recovery attempt.
 
 - 2026-11-04: Updated the stale auth unit test to mock the current Shopify client-credentials exchange; this commit intentionally triggers today's three-recipe media-gated recovery batch.
+
+- Daily trend updates now save new complete trend-matched recipes back into recipes.json; the workflow commits those library additions after the worker exits, including when media checks correctly defer publication.
+- Video discovery now retries official Food Network channel search through public Invidious-compatible indexes when GitHub-hosted YouTube search is bot-challenged. The official channel ID, live title, oEmbed availability and embed response checks remain required.
+- The recipe library includes additional reviewed trend patterns for smash-burger tacos, chili-crisp peanut noodles, marry-me chickpeas and pesto eggs.
