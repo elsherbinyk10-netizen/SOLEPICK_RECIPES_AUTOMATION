@@ -1216,6 +1216,20 @@ def verify_published_article(article, recipe, video):
     return article
 
 
+def recipe_article_update_input(recipe, video, published_handles, generated_image):
+    """Build a complete update payload, including canonical collection tags."""
+    recipe_for_markup = dict(recipe)
+    recipe_for_markup["published_image_url"] = generated_image.get("url") if generated_image else ""
+    recipe_for_markup["published_video_url"] = video.get("url") if video else ""
+    return {
+        "body": article_html(recipe_for_markup, video, published_handles),
+        "summary": seo_metadata(recipe)["description"],
+        "image": {"url": generated_image["url"], "altText": generated_image["altText"]},
+        "tags": list(recipe.get("tags") or []),
+        "isPublished": True,
+    }
+
+
 def create_published(blog_id, recipe, video, generated_image, published_handles=None):
     mutation = """mutation CreatePublishedArticle($article: ArticleCreateInput!) {
       articleCreate(article: $article) {
@@ -1489,15 +1503,15 @@ def main():
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
               articleUpdate(id: $id, article: $article) { article { id title handle isPublished body } userErrors { field message } }
             }"""
-            result = graphql(mutation, {"id": existing["id"], "article": {
-                "body": article_html(recipe, video, {
+            result = graphql(mutation, {"id": existing["id"], "article": recipe_article_update_input(
+                recipe,
+                video,
+                {
                     handle for handle, existing_article in articles.items()
                     if existing_article.get("isPublished")
-                }),
-                "summary": seo_metadata(recipe)["description"],
-                "image": {"url": generated_image["url"], "altText": generated_image["altText"]},
-                "isPublished": True,
-            }}).get("articleUpdate") or {}
+                },
+                generated_image,
+            )}).get("articleUpdate") or {}
             if result.get("userErrors"):
                 raise RuntimeError("Shopify rejected recipe/video update: " + json.dumps(result["userErrors"]))
             article = result.get("article")
