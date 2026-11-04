@@ -869,32 +869,52 @@ def already_published_today(articles, now=None, recipe_slugs=None):
 
 
 def get_access_token(domain):
-    # Prefer a merchant-provided Admin API token when the repository uses a
-    # manually generated temporary token. This avoids exchanging unrelated or
-    # stale app client credentials on every run.
-    direct_token = (
-        os.environ.get("SHOPIFY_ADMIN_ACCESS_TOKEN", "").strip()
-        or os.environ.get("SHOPIFY_ACCESS_TOKEN", "").strip()
-    )
-    if direct_token:
-        return direct_token
+    """Exchange the Dev Dashboard app credentials for a short-lived Admin API token."""
     client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
     client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
     if not client_id or not client_secret:
-        raise RuntimeError("Set the GitHub Actions secret SHOPIFY_ADMIN_ACCESS_TOKEN, or both SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET.")
-    payload = {"grant_type": "client_credentials", "client_id": client_id, "client_secret": client_secret}
+        raise RuntimeError("Set both SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET GitHub Actions secrets.")
+    payload = urllib.parse.urlencode({
+        "grant_type": "client_credentials",
+        "client_id": client_id,
+        "client_secret": client_secret,
+    }).encode("ascii")
     req = urllib.request.Request(
         f"https://{domain}/admin/oauth/access_token",
-        data=json.dumps(payload).encode(),
-        headers={"Content-Type": "application/json"}, method="POST")
+        data=payload,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+        },
+        method="POST",
+    )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode())
     except urllib.error.HTTPError as error:
-        raise RuntimeError(f"Shopify token exchange failed with HTTP {error.code}; check app installation, credentials, and permissions.") from None
+        error_code = ""
+        try:
+            error_payload = json.loads(error.read().decode())
+            error_code = str(error_payload.get("error") or "")
+        except Exception:
+            pass
+        detail = f" ({error_code})" if error_code else ""
+        raise RuntimeError(
+            f"Shopify client-credentials exchange failed with HTTP {error.code}{detail}; "
+            "verify that the app credentials are current and the store belongs to the app's Shopify organization."
+        ) from None
     token = data.get("access_token")
     if not token:
-        raise RuntimeError("Shopify returned no access token.")
+        raise RuntimeError("Shopify returned no access token from the client-credentials exchange.")
+    granted_scopes = set(str(data.get("scope") or "").split(","))
+    required_scopes = {"read_content", "write_content"}
+    missing_scopes = sorted(required_scopes - granted_scopes)
+    if missing_scopes:
+        raise RuntimeError(
+            "Shopify token is missing required granted scope(s): " + ", ".join(missing_scopes)
+            + ". Release/approve an app version with these scopes, then retry."
+        )
+    print("Shopify client-credentials authentication succeeded; required content scopes are present.")
     return token
 
 
