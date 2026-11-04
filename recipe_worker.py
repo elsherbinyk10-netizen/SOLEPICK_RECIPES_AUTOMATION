@@ -1164,7 +1164,7 @@ def main():
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
     args = parser.parse_args()
-    max_publish = configured_max_recipes_per_run()
+    max_publish = 1 if args.one_time_test else configured_max_recipes_per_run()
     if args.one_time_test and args.repair_handle:
         parser.error("--one-time-test cannot be combined with --repair-handle")
     now = datetime.datetime.now(CAIRO)
