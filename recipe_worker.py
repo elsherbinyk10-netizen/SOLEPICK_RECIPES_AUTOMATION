@@ -872,7 +872,10 @@ def get_access_token(domain):
     # Prefer a merchant-provided Admin API token when the repository uses a
     # manually generated temporary token. This avoids exchanging unrelated or
     # stale app client credentials on every run.
-    direct_token = os.environ.get("SHOPIFY_ACCESS_TOKEN", "").strip()
+    direct_token = (
+        os.environ.get("SHOPIFY_ADMIN_ACCESS_TOKEN", "").strip()
+        or os.environ.get("SHOPIFY_ACCESS_TOKEN", "").strip()
+    )
     if direct_token:
         return direct_token
     client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
