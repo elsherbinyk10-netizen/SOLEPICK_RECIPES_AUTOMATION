@@ -22,6 +22,7 @@ Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube re
 - `SHOPIFY_BLOG_ID`: retained for backward compatibility only. The worker now discovers the dedicated Shopify blog with handle `recipes` and creates it if missing, so a stale ID pointing to the old News blog cannot misroute recipes.
 
 Never put credentials in repository files.
+The daily publisher is pinned to the verified SolePick Shopify domain `0mxbjk-cz.myshopify.com`; it must never use the Valuted News store domain.
 
 ## Production publishing trigger
 A commit whose message includes `[publish-daily-recipe]` runs the same validated production publisher used by the scheduled workflow. It resolves the Shopify blog by the `recipes` handle, applies the Cairo-day cap of up to three verified recipes, and skips candidates that fail recipe, photo, video, or Shopify verification.
