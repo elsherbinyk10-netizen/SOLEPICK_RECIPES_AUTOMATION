@@ -219,8 +219,9 @@ class RecipeLibraryTests(unittest.TestCase):
     def test_featured_image_uses_verified_generated_recipe_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
         generated_image = {
-            "url": "https://cdn.example.com/generated-salmon-pasta.jpg",
-            "altText": "Creamy salmon pasta with parsley, photographed on a plate",
+            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
+            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
+            "source_type": "official_youtube_thumbnail",
         }
         from unittest.mock import patch
         with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
@@ -236,10 +237,24 @@ class RecipeLibraryTests(unittest.TestCase):
         }
         # An image URL in recipe data is not proof that the photo matches the dish.
         # Keep the publisher's no-mismatched-image safeguard in place.
-        with self.assertRaisesRegex(RuntimeError, "Refusing to publish a mismatched fallback photo"):
+        with self.assertRaisesRegex(RuntimeError, "Featured image must be the verified official publisher video thumbnail"):
             recipe_worker.featured_image_for(recipe, None)
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
+
+    def test_food_network_article_url_requires_official_recipe_path(self):
+        self.assertEqual(
+            recipe_worker.food_network_recipe_article_url(
+                "Get the recipe: https://www.foodnetwork.com/recipes/ina-garten/pasta-recipe-123"
+            ),
+            "https://www.foodnetwork.com/recipes/ina-garten/pasta-recipe-123",
+        )
+        self.assertEqual(
+            recipe_worker.food_network_recipe_article_url(
+                "See https://example.com/recipes/pasta and https://www.foodnetwork.com/videos"
+            ),
+            "",
+        )
 
     def test_recipe_video_is_embedded_in_article_html(self):
         recipe = {
@@ -393,8 +408,9 @@ class RecipeLibraryTests(unittest.TestCase):
             "tags": ["Seafood", "Pasta"],
         }
         generated = {
-            "url": "https://commons.wikimedia.org/generated/sample-salmon-pasta.jpg",
-            "altText": "Salmon pasta with lemon and herbs",
+            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
+            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
+            "source_type": "official_youtube_thumbnail",
         }
         video = {
             "title": "Sample Salmon Pasta Recipe",
@@ -414,6 +430,8 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn('"image": ["' + generated["url"] + '"]', body)
         self.assertIn('"url": "https://solepick.site/blogs/recipes/sample-salmon-pasta"', body)
         self.assertIn('"mainEntityOfPage"', body)
+        self.assertIn('"VideoObject"', body)
+        self.assertIn('"embedUrl": "https://www.youtube.com/watch?v=abcdefghijk"', body)
 
 
 
