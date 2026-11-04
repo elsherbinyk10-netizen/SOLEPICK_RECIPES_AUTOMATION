@@ -96,7 +96,6 @@ PATTERNS = (
         "instructions": ["Toast the sourdough until golden and crisp.", "Heat the pesto in a small non-stick skillet over medium-low heat until it loosens and becomes fragrant.", "Crack in the eggs, cover the skillet and cook for 3–5 minutes until the whites are fully set and the yolks are cooked to your preference.", "Toss the avocado with lemon juice and a little black pepper.", "Place one pesto egg on each toast slice, add avocado and finish with crumbled feta and black pepper."],
         "prep_minutes": 5, "cook_minutes": 6, "servings": 2,
     },
-,
 )
 
 
