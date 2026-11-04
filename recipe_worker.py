@@ -922,7 +922,11 @@ def article_html(recipe, video=None, published_handles=None):
         f"<strong>Cook:</strong> {recipe['cook_minutes']} minutes · "
         f"<strong>Serves:</strong> {recipe['servings']}</p>"
         f"{video_html}"
-        "<p><small>Video credit: Food Network. Recipe text and method are independently authored by SolePick Recipes; see the publisher's original recipe article above.</small></p>"
+        + (
+            f"<p><small>Video credit: {esc(video.get('publisher', 'YouTube creator'))}. "
+            "The video is embedded from its creator; recipe text and method are independently authored by SolePick Recipes.</small></p>"
+            if video else ""
+        )
         f"<h2>Ingredients</h2><ul>{ingredients}</ul>"
         f"<h2>Instructions</h2><ol>{steps}</ol>"
         f"{recipe_editorial_sections(recipe)}"
@@ -1219,7 +1223,7 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
             {"namespace": "global", "key": "description_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["description"]},
         ],
         "tags": recipe.get("tags", []), "isPublished": True,
-        "image": featured_image_for(recipe, generated_image),
+        "image": {"url": generated_image["url"], "altText": generated_image["altText"]},
     }
     result = graphql(mutation, {"article": article}).get("articleCreate") or {}
     if result.get("userErrors"):
@@ -1477,7 +1481,7 @@ def main():
                     if existing_article.get("isPublished")
                 }),
                 "summary": seo_metadata(recipe)["description"],
-                "image": featured_image_for(recipe, generated_image),
+                "image": {"url": generated_image["url"], "altText": generated_image["altText"]},
                 "isPublished": True,
             }}).get("articleUpdate") or {}
             if result.get("userErrors"):
