@@ -881,7 +881,7 @@ def get_access_token(domain):
     client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
     client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
     if not client_id or not client_secret:
-        raise RuntimeError("Set SHOPIFY_ACCESS_TOKEN, or both SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET, in GitHub Actions Secrets.")
+        raise RuntimeError("Set the GitHub Actions secret SHOPIFY_ADMIN_ACCESS_TOKEN, or both SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET.")
     payload = {"grant_type": "client_credentials", "client_id": client_id, "client_secret": client_secret}
     req = urllib.request.Request(
         f"https://{domain}/admin/oauth/access_token",
