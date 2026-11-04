@@ -400,6 +400,31 @@ class RecipeLibraryTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
 
+    def test_existing_article_update_payload_includes_canonical_category_tags(self):
+        recipe = recipe_worker.add_recipe_category_tags({
+            "title": "Creamy Tomato Pasta",
+            "description": "A cosy family dinner.",
+            "tags": ["pasta", "dinner"],
+            "ingredients": ["300 g pasta", "1 cup tomatoes"],
+            "instructions": ["Boil pasta.", "Cook sauce.", "Combine.", "Serve."],
+            "prep_minutes": 10,
+            "cook_minutes": 20,
+            "servings": 2,
+        })
+        video = {
+            "id": "abcdefghijk",
+            "url": "https://www.youtube.com/watch?v=abcdefghijk",
+            "embed_url": "https://www.youtube-nocookie.com/embed/abcdefghijk",
+            "publisher": "Food Network",
+        }
+        image = {"url": "https://images.example.com/pasta.jpg", "altText": "Creamy tomato pasta"}
+        with patch.object(recipe_worker, "article_html", return_value="<h2>Ingredients</h2><h2>Instructions</h2>"):
+            payload = recipe_worker.recipe_article_update_input(recipe, video, set(), image)
+        self.assertIn("comfort-food", payload["tags"])
+        self.assertIn("quick-and-easy", payload["tags"])
+        self.assertEqual(payload["image"]["url"], image["url"])
+        self.assertTrue(payload["isPublished"])
+
     def test_category_tagging_assigns_canonical_collection_tags(self):
         quick = recipe_worker.add_recipe_category_tags({
             "title": "Quick Lemon Chicken Tacos",
