@@ -455,8 +455,8 @@ def find_verified_recipe_video(recipe):
                 return candidate
             failures += 1
     # Public-index fallback: YouTube direct search is frequently bot-challenged
-    # on GitHub-hosted runners. Only exact official Food Network channel results
-    # are considered; every result must still pass live YouTube oEmbed checks.
+    # on GitHub-hosted runners. Creator names and channel IDs are checked against
+    # live YouTube oEmbed metadata before any video can be used.
     for query in (f"{title} recipe", f"{title} cooking"):
         for entry in search_verified_recipe_videos(query):
             video_id = entry["id"]
@@ -789,7 +789,7 @@ def youtube_thumbnail_for(recipe, video):
             publisher = str(video.get("publisher") or "Verified publisher")
             return {"url": url, "altText": f"{publisher} cooking video thumbnail for {recipe['title']}", "source_type": "official_youtube_thumbnail", "publisher": publisher}
         print(f"REJECTED PUBLISHER THUMBNAIL: {url} | {quality}")
-    raise RuntimeError("No high-resolution official Food Network thumbnail passed image checks; refusing to publish.")
+    raise RuntimeError("No high-resolution verified creator thumbnail passed image checks; refusing to publish.")
 
 
 def featured_image_for(recipe, generated_image):
