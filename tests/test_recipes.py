@@ -246,6 +246,40 @@ class RecipeLibraryTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
 
+    def test_category_tagging_assigns_canonical_collection_tags(self):
+        quick = recipe_worker.add_recipe_category_tags({
+            "title": "Quick Lemon Chicken Tacos",
+            "description": "A fast weeknight dinner.",
+            "tags": ["chicken", "quick"],
+            "prep_minutes": 10,
+            "cook_minutes": 15,
+        })
+        fresh = recipe_worker.add_recipe_category_tags({
+            "title": "Mediterranean Chickpea Salad",
+            "description": "Fresh vegetables and herbs.",
+            "tags": ["vegetarian", "salad"],
+            "prep_minutes": 15,
+            "cook_minutes": 0,
+        })
+        comfort = recipe_worker.add_recipe_category_tags({
+            "title": "Creamy Tomato Pasta",
+            "description": "A cosy family dinner.",
+            "tags": ["pasta", "dinner"],
+            "prep_minutes": 10,
+            "cook_minutes": 20,
+        })
+        sweet = recipe_worker.add_recipe_category_tags({
+            "title": "Blueberry Muffins",
+            "description": "Easy baked breakfast treats.",
+            "tags": ["baking"],
+            "prep_minutes": 10,
+            "cook_minutes": 20,
+        })
+        self.assertIn("quick-and-easy", quick["tags"])
+        self.assertIn("fresh-and-green", fresh["tags"])
+        self.assertIn("comfort-food", comfort["tags"])
+        self.assertIn("sweet-things", sweet["tags"])
+
     def test_food_network_article_url_requires_official_recipe_path(self):
         self.assertEqual(
             recipe_worker.food_network_recipe_article_url(
