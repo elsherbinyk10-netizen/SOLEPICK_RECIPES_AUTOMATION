@@ -96,9 +96,49 @@ PATTERNS = (
         "instructions": ["Toast the sourdough until golden and crisp.", "Heat the pesto in a small non-stick skillet over medium-low heat until it loosens and becomes fragrant.", "Crack in the eggs, cover the skillet and cook for 3–5 minutes until the whites are fully set and the yolks are cooked to your preference.", "Toss the avocado with lemon juice and a little black pepper.", "Place one pesto egg on each toast slice, add avocado and finish with crumbled feta and black pepper."],
         "prep_minutes": 5, "cook_minutes": 6, "servings": 2,
     },
+    {
+        "key": "korean-ground-beef-bowls",
+        "needles": ("korean ground beef bowls", "korean beef rice bowls", "gochujang ground beef"),
+        "title": "Korean-Style Ground Beef Rice Bowls",
+        "description": "Savoury ground beef is glazed with soy, garlic, ginger and a little gochujang, then served over rice with crunchy cucumber and sesame.",
+        "tags": ["dinner", "beef", "rice bowl", "high protein", "quick-and-easy"],
+        "ingredients": ["450 g lean ground beef", "2 cups cooked rice", "2 tablespoons low-sodium soy sauce", "1 tablespoon gochujang", "1 tablespoon honey", "2 garlic cloves, minced", "1 teaspoon grated fresh ginger", "1 teaspoon sesame oil", "1 cucumber, thinly sliced", "2 spring onions, sliced", "1 teaspoon toasted sesame seeds"],
+        "instructions": ["Whisk the soy sauce, gochujang and honey together in a small bowl.", "Heat a large skillet over medium-high heat. Add the ground beef and cook for 6–8 minutes, breaking it into small pieces, until no pink remains and it reaches 71°C (160°F). Drain excess fat if needed.", "Add the garlic and ginger and cook for 30 seconds until fragrant.", "Pour in the sauce and simmer for 1–2 minutes, stirring until the beef is glossy and fully coated.", "Divide the rice between bowls. Spoon over the beef and finish with cucumber, spring onions and sesame seeds."],
+        "prep_minutes": 10, "cook_minutes": 12, "servings": 4,
+    },
+    {
+        "key": "air-fryer-salmon-bites",
+        "needles": ("air fryer salmon bites", "crispy salmon bites", "salmon bites"),
+        "title": "Air Fryer Salmon Bites with Lemon Yogurt",
+        "description": "Bite-sized salmon pieces turn golden in the air fryer and are served with a cool lemon-yogurt dip, cucumber and warm grains.",
+        "tags": ["dinner", "salmon", "seafood", "air fryer", "fresh-and-green"],
+        "ingredients": ["450 g skinless salmon fillet, cut into 2.5 cm cubes", "1 tablespoon olive oil", "1 teaspoon smoked paprika", "1/2 teaspoon garlic powder", "1/2 teaspoon fine salt", "1/2 cup plain Greek yogurt", "1 tablespoon lemon juice", "1 teaspoon lemon zest", "2 cups cooked quinoa or rice", "1 cucumber, diced", "1 tablespoon chopped dill"],
+        "instructions": ["Preheat the air fryer to 200°C (400°F) for 3 minutes.", "Pat the salmon cubes dry. Toss with olive oil, smoked paprika, garlic powder and salt.", "Arrange salmon in a single layer in the air-fryer basket. Cook for 7–9 minutes, shaking once, until the centre reaches 63°C (145°F) and the edges are lightly crisp.", "Stir the Greek yogurt with lemon juice, lemon zest and dill to make the dip.", "Serve the salmon over warm quinoa or rice with cucumber and the lemon-yogurt dip."],
+        "prep_minutes": 12, "cook_minutes": 9, "servings": 2,
+    },
+    {
+        "key": "crispy-potato-black-bean-tacos",
+        "needles": ("crispy potato tacos", "potato black bean tacos", "crispy potato tacos black beans"),
+        "title": "Crispy Potato and Black Bean Tacos",
+        "description": "Spiced roast potatoes and warm black beans fill crisp-edged tortillas with cabbage, lime and a quick smoky yogurt sauce.",
+        "tags": ["dinner", "vegetarian", "tacos", "comfort-food"],
+        "ingredients": ["500 g potatoes, cut into 1.5 cm cubes", "1 tablespoon olive oil", "1 teaspoon ground cumin", "1 teaspoon smoked paprika", "1/2 teaspoon fine salt", "1 can (400 g) black beans, drained and rinsed", "8 small corn tortillas", "1 cup finely shredded red cabbage", "1/2 cup plain Greek yogurt", "1 tablespoon lime juice", "1/2 teaspoon chipotle powder"],
+        "instructions": ["Heat the oven to 220°C (425°F). Toss the potatoes with olive oil, cumin, smoked paprika and salt.", "Spread the potatoes on a lined baking tray and roast for 25–30 minutes, turning once, until golden and crisp.", "Warm the black beans in a small saucepan with a splash of water for 3–4 minutes.", "Mix the Greek yogurt with lime juice and chipotle powder to make a smoky sauce.", "Warm the tortillas in a dry skillet. Fill with roast potatoes, black beans and cabbage, then drizzle with the sauce."],
+        "prep_minutes": 12, "cook_minutes": 30, "servings": 4,
+    },
+    {
+        "key": "honey-garlic-halloumi-bowls",
+        "needles": ("honey garlic halloumi bowls", "halloumi veggie bowls", "crispy halloumi bowls"),
+        "title": "Honey Garlic Halloumi and Veggie Bowls",
+        "description": "Golden halloumi is tossed in a light honey-garlic glaze and paired with roasted vegetables, grains and a bright lemon dressing.",
+        "tags": ["dinner", "halloumi", "vegetarian", "fresh-and-green"],
+        "ingredients": ["250 g halloumi, cut into 1 cm slices", "1 tablespoon olive oil", "1 red bell pepper, sliced", "1 courgette, sliced", "1 red onion, cut into wedges", "2 cups cooked couscous or quinoa", "1 tablespoon honey", "1 garlic clove, minced", "1 tablespoon lemon juice", "1 teaspoon lemon zest", "2 tablespoons chopped parsley"],
+        "instructions": ["Heat the oven to 210°C (410°F). Toss the pepper, courgette and onion with half the olive oil and roast for 18–22 minutes until tender and lightly browned.", "Whisk the honey, garlic, lemon juice and lemon zest in a small bowl.", "Heat the remaining oil in a non-stick skillet over medium heat. Cook the halloumi for 1–2 minutes per side until golden.", "Pour the honey-garlic mixture into the skillet and turn the halloumi for 20–30 seconds until lightly glazed.", "Divide the grains and roasted vegetables between bowls. Add the halloumi and finish with parsley."],
+        "prep_minutes": 12, "cook_minutes": 22, "servings": 2,
+    },
 )
 
-
+ 
 def generate_trend_recipe_candidates(signals, existing_slugs=(), limit=3):
     """Return up to limit new, complete recipes only when current signals match a reviewed pattern."""
     existing = set(existing_slugs)
