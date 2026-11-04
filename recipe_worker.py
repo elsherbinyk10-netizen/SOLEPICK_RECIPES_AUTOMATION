@@ -1453,10 +1453,8 @@ def main():
     if len(eligible) <= 3:
         print("WARNING: Recipe library is nearly exhausted. Add original recipes to recipes.json.")
 
-    if not eligible:
-        raise RuntimeError(
-            "Recipe library exhausted. Add new original recipes to recipes.json."
-        )
+    # Do not stop here when the reviewed library is exhausted: the curated
+    # recipe-pattern fallback below can replenish it without inventing a recipe.
 
     # Normal scheduled runs may publish up to three distinct, fully verified recipes.
     # Explicit targeted repairs/tests remain single-item operations.
@@ -1475,7 +1473,7 @@ def main():
         # Combine current Google search-trend terms, food-news coverage and public
         # TikTok Creative Center signals; rank only recipes already in the reviewed catalogue.
         from trend_engine import collect_all_food_trend_signals, rank_trending_recipes, score_recipe_trends
-        from trend_recipe_builder import generate_trend_recipe_candidates
+        from trend_recipe_builder import generate_trend_recipe_candidates, generate_curated_recipe_candidates
         trend_signals = collect_all_food_trend_signals()
         generated_candidates = generate_trend_recipe_candidates(
             trend_signals,
@@ -1508,6 +1506,28 @@ def main():
                 print("No recipe matched fresh trend signals; catalogue rotation remains a last-resort fallback.")
         else:
             print("FOOD TREND DISCOVERY: no fresh signals; only existing reviewed catalogue recipes are eligible.")
+    if target_recipes is None and not any(
+        not (articles.get(item["slug"]) and articles[item["slug"]].get("isPublished"))
+        for item in recipes
+    ) and not any(item.get("slug") not in articles for item in candidates):
+        # Trend matches get first priority. If no fresh trend maps to a new
+        # approved pattern, use fully authored evergreen patterns to avoid a
+        # hard stop when the rotating recipe library has been exhausted.
+        evergreen = generate_curated_recipe_candidates(
+            existing_slugs=set(articles) | {item["slug"] for item in recipes},
+            limit=max_publish,
+        )
+        persisted_evergreen = persist_generated_recipe_candidates(recipes, evergreen)
+        if persisted_evergreen:
+            recipes.extend(persisted_evergreen)
+            candidates = persisted_evergreen
+            print("EVERGREEN RECIPE REPLENISHMENT: " + json.dumps([
+                {"title": item["title"], "slug": item["slug"]}
+                for item in persisted_evergreen
+            ]))
+    if not candidates:
+        raise RuntimeError("No unused trend-matched or curated recipe candidates are available.")
+
     remaining_publish = max(0, max_publish - published_count)
     print(f"DAILY PUBLISH TARGET: up to {max_publish} distinct recipes; already published={published_count}; remaining={remaining_publish}. Every recipe must pass instruction, video, image and Shopify verification.")
     for recipe in candidates:
