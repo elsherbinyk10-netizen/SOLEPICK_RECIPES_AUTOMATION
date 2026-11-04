@@ -1,5 +1,5 @@
 name: SolePick Daily Recipe Publishing
-# Scheduled daily trend refresh plus verified, serialized recipe publishing.
+# Scheduled daily trend refresh plus verified, serialized recipe publishing; no unverified media is published.
 
 on:
   push:
