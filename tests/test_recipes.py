@@ -358,6 +358,19 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(image["url"], generated_image["url"])
         self.assertEqual(image["altText"], generated_image["altText"])
 
+    def test_featured_image_rejects_thumbnail_for_a_different_recipe(self):
+        recipe = {"title": "Crispy Salmon Rice Bowls"}
+        generated_image = {
+            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
+            "altText": "Natashas Kitchen cooking video thumbnail for Crispy Chicken Rice Bowls",
+            "source_type": "official_youtube_thumbnail",
+            "publisher": "Natashas Kitchen",
+        }
+        from unittest.mock import patch
+        with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 900, "edge_variance": 42}):
+            with self.assertRaisesRegex(RuntimeError, "does not identify the recipe title"):
+                recipe_worker.featured_image_for(recipe, generated_image)
+
     def test_featured_image_validation_preserves_provenance_for_repeat_validation(self):
         recipe = {"title": "Sample Salmon Pasta"}
         generated_image = {
@@ -457,6 +470,9 @@ class RecipeLibraryTests(unittest.TestCase):
         html = recipe_worker.article_html(recipe, video)
         self.assertIn("Recipe Video", html)
         self.assertIn(video["embed_url"], html)
+        self.assertIn('<iframe', html)
+        self.assertIn('aspect-ratio:16/9', html)
+        self.assertIn('title="Sample Pasta recipe video"', html)
         self.assertIn(video["url"], html)
 
 
