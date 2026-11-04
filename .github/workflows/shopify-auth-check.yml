@@ -15,22 +15,71 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Verify Shopify Admin token with a read-only request
+      - name: Exchange app credentials and verify Shopify Admin access (read-only)
         env:
           SHOPIFY_STORE_DOMAIN: 0mxbjk-cz.myshopify.com
-          SHOPIFY_ADMIN_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ADMIN_ACCESS_TOKEN }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
         run: |
           python - <<'PY'
           import json
           import os
           import sys
           import urllib.error
+          import urllib.parse
           import urllib.request
 
           domain = os.environ["SHOPIFY_STORE_DOMAIN"]
-          token = os.environ.get("SHOPIFY_ADMIN_ACCESS_TOKEN", "").strip()
+          client_id = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
+          client_secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
+          if not client_id or not client_secret:
+              print("FAIL: SHOPIFY_CLIENT_ID or SHOPIFY_CLIENT_SECRET is missing.")
+              sys.exit(1)
+
+          form = urllib.parse.urlencode({
+              "grant_type": "client_credentials",
+              "client_id": client_id,
+              "client_secret": client_secret,
+          }).encode("ascii")
+          token_request = urllib.request.Request(
+              f"https://{domain}/admin/oauth/access_token",
+              data=form,
+              headers={
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Accept": "application/json",
+              },
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(token_request, timeout=30) as response:
+                  token_payload = json.loads(response.read().decode("utf-8"))
+          except urllib.error.HTTPError as error:
+              error_code = ""
+              try:
+                  error_payload = json.loads(error.read().decode("utf-8"))
+                  error_code = str(error_payload.get("error") or "")
+              except Exception:
+                  pass
+              suffix = f" ({error_code})" if error_code else ""
+              print(f"FAIL: Shopify client-credentials exchange returned HTTP {error.code}{suffix}.")
+              if error_code == "shop_not_permitted":
+                  print("The app and store must belong to the same Shopify organization for this grant.")
+              sys.exit(1)
+          except Exception as error:
+              print(f"FAIL: Shopify token request could not complete ({type(error).__name__}).")
+              sys.exit(1)
+
+          token = str(token_payload.get("access_token") or "").strip()
           if not token:
-              print("FAIL: SHOPIFY_ADMIN_ACCESS_TOKEN is not configured or is empty.")
+              print("FAIL: Shopify returned no access token.")
+              sys.exit(1)
+
+          granted_scopes = set(str(token_payload.get("scope") or "").split(","))
+          required_scopes = {"read_content", "write_content"}
+          missing_scopes = sorted(required_scopes - granted_scopes)
+          if missing_scopes:
+              print("FAIL: The installed app token is missing required scope(s): " + ", ".join(missing_scopes))
+              print("Release and approve an app version containing these scopes, then rerun this check.")
               sys.exit(1)
 
           query = """
@@ -54,15 +103,14 @@ jobs:
               with urllib.request.urlopen(request, timeout=30) as response:
                   payload = json.loads(response.read().decode("utf-8"))
           except urllib.error.HTTPError as error:
-              # Do not print response bodies or request headers; they may contain sensitive details.
-              print(f"FAIL: Shopify Admin API returned HTTP {error.code}.")
+              print(f"FAIL: Shopify Admin GraphQL returned HTTP {error.code}.")
               sys.exit(1)
           except Exception as error:
-              print(f"FAIL: Shopify request could not complete ({type(error).__name__}).")
+              print(f"FAIL: Shopify GraphQL request could not complete ({type(error).__name__}).")
               sys.exit(1)
 
           if payload.get("errors"):
-              print("FAIL: Shopify rejected the read-only GraphQL query; check token scopes.")
+              print("FAIL: Shopify rejected the read-only GraphQL query.")
               sys.exit(1)
 
           shop = (payload.get("data") or {}).get("shop") or {}
@@ -71,8 +119,9 @@ jobs:
               print("FAIL: Authenticated Shopify store does not match the configured SolePick store.")
               sys.exit(1)
 
-          print("SUCCESS: Shopify Admin authentication verified.")
+          print("SUCCESS: Shopify client-credentials authentication verified.")
           print(f"Store: {shop.get('name', 'SolePick store')}")
           print(f"Domain: {actual_domain}")
-          print("Check type: read-only; no articles, products, or settings were changed.")
+          print("Granted scopes include read_content and write_content.")
+          print("Check type: read-only; no articles, products, files, or settings were changed.")
           PY
