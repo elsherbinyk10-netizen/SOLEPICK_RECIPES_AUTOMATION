@@ -242,6 +242,13 @@ class RecipeLibraryTests(unittest.TestCase):
             )
         self.assertIsNone(result)
 
+    def test_video_title_match_rejects_different_flavour_variant(self):
+        score = recipe_worker._video_title_score(
+            "Hot Honey Chicken Rice Bowls",
+            "Molly Yeh's Citrus Chicken Rice Bowls | Girl Meets Farm | Food Network",
+        )
+        self.assertLess(score, 0.72)
+
     def test_unapproved_video_channel_is_always_rejected(self):
         recipe = {"title": "Hot Honey Chicken Rice Bowls"}
         with patch("recipe_worker.urllib.request.urlopen") as mocked:
