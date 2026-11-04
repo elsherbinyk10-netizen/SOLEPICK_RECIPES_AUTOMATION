@@ -36,6 +36,14 @@ python recipe_worker.py --dry-run
 
 The dry run selects a recipe offline and does not call Shopify. The workflow runs unit tests before attempting publication and retries publishing up to three times. A green workflow now confirms Shopify returned the embedded player markup in the saved article body, but it cannot guarantee that every public browser successfully plays the third-party video. Spot-check the published article URL on mobile after a real run.
 
+## Daily category maintenance
+- Every scheduled publishing run first synchronizes canonical category tags across already-published recipe articles whose handles exist in `recipes.json`.
+- The four canonical tags are `quick-and-easy`, `fresh-and-green`, `sweet-things`, and `comfort-food`. Existing non-category tags are preserved; unrelated editorial posts are not modified.
+- Category assignment is recalculated from the reviewed recipe title, description, tags, and prep/cook times. Vegetarian pasta is not automatically treated as Fresh & Green.
+- Newly published recipes receive the same category tags on creation. Existing-article updates also send category tags explicitly.
+- A recipe is published only after a title-compatible YouTube creator video passes live oEmbed verification and the saved Shopify article is read back with its responsive iframe. A failed video/photo/recipe-quality check skips that candidate; it never inserts an unrelated video.
+- The connected Shopify store was verified as `0mxbjk-cz.myshopify.com` with primary domain `solepick.site` and timezone `Africa/Cairo`.
+
 ## Recipe library
 The worker rotates through `recipes.json`, skips recipes already published by handle, and stops when no eligible recipe remains. Trend-matched candidates are generated only from narrow, pre-authored complete-recipe patterns and still pass all normal instruction, image, video and Shopify checks; unsupported trends never become invented recipes. Review recipe accuracy, food safety, allergens, and any generated or third-party media before scaling the library.
 
