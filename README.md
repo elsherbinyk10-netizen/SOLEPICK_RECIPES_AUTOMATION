@@ -41,6 +41,7 @@ The dry run selects a recipe offline and does not call Shopify. The workflow run
 - The four canonical tags are `quick-and-easy`, `fresh-and-green`, `sweet-things`, and `comfort-food`. Existing non-category tags are preserved; unrelated editorial posts are not modified.
 - Category assignment is recalculated from the reviewed recipe title, description, tags, and prep/cook times. Vegetarian pasta is not automatically treated as Fresh & Green.
 - Newly published recipes receive the same category tags on creation. Existing-article updates also send category tags explicitly.
+- When the reviewed catalogue is exhausted, the publisher first checks fresh trend-matched patterns, then replenishes from unused, fully authored evergreen recipes. This fallback does not invent ingredients or claim an evergreen recipe is trending; every candidate still passes the normal instruction, verified-video, verified-image and Shopify read-back gates.
 - A recipe is published only after a title-compatible YouTube creator video passes live oEmbed verification and the saved Shopify article is read back with its responsive iframe. A failed video/photo/recipe-quality check skips that candidate; it never inserts an unrelated video.
 - The connected Shopify store was verified as `0mxbjk-cz.myshopify.com` with primary domain `solepick.site` and timezone `Africa/Cairo`.
 
