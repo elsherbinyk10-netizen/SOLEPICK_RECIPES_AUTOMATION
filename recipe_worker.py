@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Publish the scheduled SolePick recipe to the configured Shopify blog."""
+"""Publish the scheduled SolePick recipe to the configured Shopify blog.
+
+Every publication is gated by recipe-specific instructions, approved publisher video,
+verified thumbnail provenance, and a read-after-write Shopify article check.
+"""
 import argparse
 import base64
 import datetime
