@@ -906,15 +906,17 @@ def get_access_token(domain):
     token = data.get("access_token")
     if not token:
         raise RuntimeError("Shopify returned no access token from the client-credentials exchange.")
-    granted_scopes = set(str(data.get("scope") or "").split(","))
-    required_scopes = {"read_content", "write_content"}
+    granted_scopes = {scope.strip() for scope in str(data.get("scope") or "").split(",") if scope.strip()}
+    # Shopify write_content includes the corresponding read_content capability.
+    # The token response may therefore list write_content without read_content.
+    required_scopes = {"write_content"}
     missing_scopes = sorted(required_scopes - granted_scopes)
     if missing_scopes:
         raise RuntimeError(
             "Shopify token is missing required granted scope(s): " + ", ".join(missing_scopes)
-            + ". Release/approve an app version with these scopes, then retry."
+            + ". Release/approve an app version with write_content, then retry."
         )
-    print("Shopify client-credentials authentication succeeded; required content scopes are present.")
+    print("Shopify client-credentials authentication succeeded; write_content grants the required read/write content access.")
     return token
 
 
