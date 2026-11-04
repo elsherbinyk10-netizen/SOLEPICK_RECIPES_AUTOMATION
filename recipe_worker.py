@@ -720,7 +720,7 @@ def recipe_json_ld(recipe):
             + [str(value).strip() for value in recipe.get("tags", [])]
             + [str(value).strip() for value in recipe.get("ingredients", [])]
         ))[:500],
-        "video": {"@type": "VideoObject", "name": video_title if False else recipe["title"]},
+        **({"video": {"@type": "VideoObject", "name": recipe["title"] + " video", "contentUrl": recipe.get("published_video_url"), "embedUrl": recipe.get("published_video_url"), "thumbnailUrl": image}} if recipe.get("published_video_url") else {}),
         "prepTime": f"PT{int(recipe['prep_minutes'])}M",
         "cookTime": f"PT{int(recipe['cook_minutes'])}M",
         "totalTime": f"PT{int(recipe['prep_minutes']) + int(recipe['cook_minutes'])}M",
