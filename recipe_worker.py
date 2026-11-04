@@ -1227,7 +1227,7 @@ def persist_generated_recipe_candidates(existing_recipes, generated_candidates, 
     if not additions:
         return []
     updated = current + additions
-    Path(path).write_text(json.dumps(updated, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    Path(path).write_text(json.dumps(updated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"PERSISTED TREND RECIPES: {len(additions)} new complete recipes added to recipes.json.")
     return additions
 
