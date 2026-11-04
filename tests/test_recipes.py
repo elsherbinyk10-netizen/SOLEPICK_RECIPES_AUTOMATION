@@ -231,6 +231,22 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(result["publisher"], "Tasty")
 
+    def test_real_creator_channel_is_accepted_when_live_oembed_matches(self):
+        recipe = {"title": "Crispy Salmon Rice Bowls"}
+        metadata = {
+            "title": "Crispy Salmon Rice Bowls You'll Want on Repeat",
+            "author_name": "Delightful Dishes",
+            "author_url": "https://www.youtube.com/@DelightfulDishes",
+        }
+        response = __import__("io").BytesIO(json.dumps(metadata).encode("utf-8"))
+        channel_id = "UC" + ("A" * 22)
+        with patch("recipe_worker.urllib.request.urlopen", return_value=response):
+            result = recipe_worker._check_video_candidate(
+                recipe, "abcdefghijk", metadata["title"], channel_id, "", "Delightful Dishes"
+            )
+        self.assertIsNotNone(result)
+        self.assertEqual(result["publisher"], "Delightful Dishes")
+
     def test_approved_channel_with_mismatched_oembed_author_is_rejected(self):
         recipe = {"title": "Crispy Salmon Rice Bowls"}
         metadata = {"title": "Crispy Salmon Rice Bowl Recipe", "author_name": "Imposter"}
