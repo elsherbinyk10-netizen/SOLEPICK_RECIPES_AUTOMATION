@@ -185,6 +185,30 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn("sweet corn", " ".join(recipe["ingredients"]).lower())
         self.assertIn("bell pepper", " ".join(recipe["ingredients"]).lower())
 
+    def test_official_channel_video_can_pass_without_optional_recipe_link(self):
+        recipe = {"title": "Hot Honey Chicken Rice Bowls"}
+        metadata = {"title": "Hot Honey Chicken Rice Bowl Recipe", "author_name": "Food Network"}
+        response = __import__("io").BytesIO(json.dumps(metadata).encode("utf-8"))
+        with patch("recipe_worker.urllib.request.urlopen", return_value=response):
+            result = recipe_worker._check_video_candidate(
+                recipe, "abcdefghijk", "Hot Honey Chicken Rice Bowl Recipe",
+                recipe_worker.FOOD_NETWORK_CHANNEL_ID, ""
+            )
+        self.assertIsNotNone(result)
+        self.assertEqual(result["publisher"], "Food Network")
+        self.assertEqual(result["source_article_url"], "")
+        self.assertEqual(result["embed_url"], "https://www.youtube-nocookie.com/embed/abcdefghijk")
+
+    def test_unapproved_video_channel_is_always_rejected(self):
+        recipe = {"title": "Hot Honey Chicken Rice Bowls"}
+        with patch("recipe_worker.urllib.request.urlopen") as mocked:
+            result = recipe_worker._check_video_candidate(
+                recipe, "abcdefghijk", "Hot Honey Chicken Rice Bowl Recipe",
+                "unapproved-channel-id", ""
+            )
+        self.assertIsNone(result)
+        mocked.assert_not_called()
+
     def test_video_match_rejects_unrelated_titles(self):
         self.assertLess(recipe_worker._video_title_score("Creamy Tomato Spinach Pasta", "How to make chocolate cake"), 0.45)
         self.assertGreaterEqual(recipe_worker._video_title_score("Honey Garlic Salmon Bowls", "Honey Garlic Salmon Bowl Recipe"), 0.45)
