@@ -425,6 +425,18 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(payload["image"]["url"], image["url"])
         self.assertTrue(payload["isPublished"])
 
+    def test_vegetarian_pasta_is_not_automatically_fresh_and_green(self):
+        recipe = recipe_worker.add_recipe_category_tags({
+            "title": "Creamy Baked Feta Tomato Pasta",
+            "description": "A savoury pasta with roasted tomatoes and feta.",
+            "tags": ["pasta", "vegetarian", "dinner"],
+            "prep_minutes": 10,
+            "cook_minutes": 25,
+        })
+        self.assertIn("comfort-food", recipe["tags"])
+        self.assertNotIn("fresh-and-green", recipe["tags"])
+        self.assertNotIn("sweet-things", recipe["tags"])
+
     def test_category_tagging_assigns_canonical_collection_tags(self):
         quick = recipe_worker.add_recipe_category_tags({
             "title": "Quick Lemon Chicken Tacos",
