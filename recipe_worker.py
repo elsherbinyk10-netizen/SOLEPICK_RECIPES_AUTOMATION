@@ -245,7 +245,9 @@ def make_recipe_specific(recipe):
     return result
 
 def _is_authorized_video_channel(channel_id):
-    return str(channel_id or "").strip() in AUTHORIZED_VIDEO_CHANNELS
+    # Accept a real YouTube channel ID; publisher identity is checked against
+    # search metadata and then re-confirmed with YouTube oEmbed below.
+    return bool(re.fullmatch(r"UC[A-Za-z0-9_-]{22}", str(channel_id or "").strip()))
 
 def food_network_recipe_article_url(description):
     """Extract a direct Food Network recipe-page URL from the official video's description."""
@@ -263,8 +265,8 @@ def food_network_recipe_article_url(description):
     return ""
 
 
-def _check_video_candidate(recipe, video_id, title, channel_id="", source_article_url=""):
-    """Validate an official Food Network video and its directly linked recipe article."""
+def _check_video_candidate(recipe, video_id, title, channel_id="", source_article_url="", expected_publisher=""):
+    """Validate a real creator-published YouTube recipe video and its live metadata."""
     if not _is_authorized_video_channel(channel_id):
         return None
     parsed_source = urllib.parse.urlparse(str(source_article_url or ""))
@@ -280,7 +282,7 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     if not _video_title_is_compatible(recipe, title):
         return None
     score = _video_title_score(recipe.get("title", ""), title)
-    if score < 0.45:
+    if score < 0.72:
         return None
     # YouTube oEmbed rejects removed/private videos and many videos that disallow embedding.
     oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
@@ -300,10 +302,14 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     if not live_title or not _video_title_is_compatible(recipe, live_title):
         return None
     live_score = _video_title_score(recipe.get("title", ""), live_title)
-    if live_score < 0.45:
+    if live_score < 0.72:
         return None
-    publisher = AUTHORIZED_VIDEO_CHANNELS.get(channel_id, "")
-    if not publisher or str(metadata.get("author_name") or "").strip().casefold() != publisher.casefold():
+    live_author = str(metadata.get("author_name") or "").strip()
+    publisher = str(expected_publisher or AUTHORIZED_VIDEO_CHANNELS.get(channel_id) or live_author).strip()
+    if not live_author or live_author.casefold() != publisher.casefold():
+        return None
+    author_url = urllib.parse.urlparse(str(metadata.get("author_url") or ""))
+    if channel_id not in AUTHORIZED_VIDEO_CHANNELS and (author_url.hostname or "").lower() not in {"youtube.com", "www.youtube.com", "m.youtube.com"}:
         return None
     return {
         "id": video_id,
@@ -317,12 +323,12 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     }
 
 
-def search_authorized_recipe_videos(query):
-    """Search public indexes for uploads from the verified recipe-publisher allowlist.
+def search_verified_recipe_videos(query):
+    """Search public indexes for real YouTube creator uploads with live-verifiable metadata.
 
     This is a fallback for hosted runners where YouTube's direct search endpoint
-    returns a bot-verification challenge. Results are still re-verified with
-    YouTube oEmbed, the official channel ID, live title and embeddability.
+    returns a bot-verification challenge. Results are re-verified with
+    YouTube oEmbed, channel ID, creator name, live title and embeddability.
     """
     instances = [
         "https://invidious.logicism.tv",
@@ -350,10 +356,8 @@ def search_authorized_recipe_videos(query):
                 if not isinstance(item, dict):
                     continue
                 channel_id = str(item.get("authorId") or "").strip()
-                publisher = AUTHORIZED_VIDEO_CHANNELS.get(channel_id)
-                if not publisher:
-                    continue
-                if str(item.get("author") or "").strip().casefold() != publisher.casefold():
+                publisher = str(item.get("author") or "").strip()
+                if not _is_authorized_video_channel(channel_id) or not publisher:
                     continue
                 video_id = str(item.get("videoId") or "").strip()
                 title = str(item.get("title") or "").strip()
@@ -362,10 +366,11 @@ def search_authorized_recipe_videos(query):
                         "id": video_id,
                         "title": title,
                         "channel_id": channel_id,
+                        "publisher": publisher,
                         "description": str(item.get("description") or ""),
                     })
             if matches:
-                print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} verified publisher candidate(s).")
+                print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} creator candidate(s) for live verification.")
                 return matches
         except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
             print(f"INVIDIOUS VIDEO SEARCH: {instance} unavailable ({type(error).__name__}); trying another public index.")
@@ -443,7 +448,8 @@ def find_verified_recipe_video(recipe):
                 # live oEmbed author/title checks are sufficient provenance;
                 # an optional Food Network recipe link is retained when present.
                 print("VIDEO SOURCE NOTE: official channel result has no exposed recipe URL; validating channel, live title and embeddability directly.")
-            candidate = _check_video_candidate(recipe, video_id, title_found, channel_id, source_article_url)
+            publisher = str(entry.get("channel") or entry.get("uploader") or "").strip()
+            candidate = _check_video_candidate(recipe, video_id, title_found, channel_id, source_article_url, publisher)
             if candidate:
                 print(f"AUTO-SELECTED VIDEO: {candidate['title']} | match={candidate['match_score']} | live oEmbed check passed.")
                 return candidate
@@ -452,7 +458,7 @@ def find_verified_recipe_video(recipe):
     # on GitHub-hosted runners. Only exact official Food Network channel results
     # are considered; every result must still pass live YouTube oEmbed checks.
     for query in (f"{title} recipe", f"{title} cooking"):
-        for entry in search_authorized_recipe_videos(query):
+        for entry in search_verified_recipe_videos(query):
             video_id = entry["id"]
             if video_id in seen:
                 continue
@@ -463,7 +469,7 @@ def find_verified_recipe_video(recipe):
                 continue
             source_article_url = food_network_recipe_article_url(entry.get("description", ""))
             candidate = _check_video_candidate(
-                recipe, video_id, entry["title"], entry["channel_id"], source_article_url
+                recipe, video_id, entry["title"], entry["channel_id"], source_article_url, entry.get("publisher", "")
             )
             if candidate:
                 print(f"AUTO-SELECTED VIDEO: {candidate['title']} | publisher={candidate['publisher']} | live oEmbed check passed.")
@@ -804,8 +810,8 @@ def featured_image_for(recipe, generated_image):
         raise RuntimeError("Rejected low-resolution or soft recipe image for " + recipe["title"] + ": " + str(quality))
     alt = str(image.get("altText") or "").strip()
     publisher = str(image.get("publisher") or "").strip()
-    if not publisher or publisher not in AUTHORIZED_VIDEO_CHANNELS.values() or publisher.casefold() not in alt.casefold():
-        raise RuntimeError("Verified publisher thumbnail is missing approved publisher-specific alt text for " + recipe["title"])
+    if not publisher or publisher == "Verified publisher" or publisher.casefold() not in alt.casefold():
+        raise RuntimeError("Verified creator thumbnail is missing creator-specific alt text for " + recipe["title"])
     # Preserve the verification provenance for the second validation performed
     # inside create_published/articleUpdate. Dropping source_type here caused
     # already-verified thumbnails to be rejected at the final Shopify boundary.
