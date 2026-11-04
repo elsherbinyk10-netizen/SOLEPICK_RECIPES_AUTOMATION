@@ -13,3 +13,5 @@
 - Daily trend updates now save new complete trend-matched recipes back into recipes.json; the workflow commits those library additions after the worker exits, including when media checks correctly defer publication.
 - Video discovery now retries official Food Network channel search through public Invidious-compatible indexes when GitHub-hosted YouTube search is bot-challenged. The official channel ID, live title, oEmbed availability and embed response checks remain required.
 - The recipe library includes additional reviewed trend patterns for smash-burger tacos, chili-crisp peanut noodles, marry-me chickpeas and pesto eggs.
+
+- 2026-11-04: Final image-gate fix preserves verified thumbnail provenance through the second validation at the Shopify create/update boundary. Trusted official video publishers now include Food Network, Tasty, Jamie Oliver and Allrecipes; exact channel ID, matching oEmbed author/title and live embeddability remain mandatory.
