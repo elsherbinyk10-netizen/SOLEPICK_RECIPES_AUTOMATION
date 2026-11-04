@@ -49,7 +49,7 @@ concurrency:
   # guard is idempotent, but two simultaneous Shopify reads must not race before
   # either one creates its article.
   group: solepick-daily-recipe-publishing
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   publish-recipe:
