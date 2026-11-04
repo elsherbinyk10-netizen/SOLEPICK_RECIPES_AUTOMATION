@@ -17,3 +17,7 @@ For any additional publisher, add it only after confirming written permission or
 
 ## SEO and verification
 Every published recipe retains unique title/description metadata, canonical recipe URL, Recipe JSON-LD, ingredients, instructions, prep/cook times, servings, internal recipe links where available, image alt text, and the verified video URL. Publishing remains fail-closed on media verification.
+
+
+## Production verification
+- Source-linked publisher-video discovery is exercised by the scheduled recipe workflow. A run must skip publication if it cannot verify the matching publisher article, official channel video, embed permission, and thumbnail.
