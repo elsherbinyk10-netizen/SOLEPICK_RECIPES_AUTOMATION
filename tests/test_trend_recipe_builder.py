@@ -51,6 +51,23 @@ class TrendRecipeBuilderTests(unittest.TestCase):
         self.assertLessEqual(len(generate_trend_recipe_candidates(signals, limit=20)), 3)
 
 
+    def test_curated_fallback_replenishes_only_unused_complete_patterns(self):
+        from trend_recipe_builder import generate_curated_recipe_candidates
+        candidates = generate_curated_recipe_candidates(
+            existing_slugs={"high-protein-cottage-cheese-breakfast-bowl",
+                            "hot-honey-chicken-rice-bowls",
+                            "creamy-baked-feta-tomato-pasta",
+                            "crispy-salmon-rice-bowls"},
+            limit=3,
+        )
+        self.assertEqual(len(candidates), 3)
+        self.assertTrue(all(item["ingredients"] and len(item["instructions"]) >= 4 for item in candidates))
+        self.assertEqual(
+            [item["slug"] for item in candidates],
+            ["crispy-smash-burger-tacos", "chili-crisp-peanut-noodles", "creamy-marry-me-chickpeas"],
+        )
+        self.assertTrue(all(item["trend_evidence_count"] == 0 for item in candidates))
+
 if __name__ == "__main__":
     unittest.main()
 
