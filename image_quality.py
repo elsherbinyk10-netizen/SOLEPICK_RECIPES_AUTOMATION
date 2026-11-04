@@ -6,7 +6,7 @@ import urllib.request
 from PIL import Image, ImageFilter, ImageStat
 
 MIN_WIDTH = 1200
-MIN_HEIGHT = 800
+MIN_HEIGHT = 675
 MIN_EDGE_VARIANCE = 18.0
 MAX_BYTES = 18 * 1024 * 1024
 ALLOWED_FORMATS = {"JPEG", "PNG", "WEBP"}
