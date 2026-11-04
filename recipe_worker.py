@@ -812,6 +812,19 @@ def featured_image_for(recipe, generated_image):
     publisher = str(image.get("publisher") or "").strip()
     if not publisher or publisher == "Verified publisher" or publisher.casefold() not in alt.casefold():
         raise RuntimeError("Verified creator thumbnail is missing creator-specific alt text for " + recipe["title"])
+    # The thumbnail must identify this exact recipe, not merely the creator.
+    # The title is rendered over the image on the storefront, while this check
+    # protects the underlying media/alt text from cross-recipe substitutions.
+    title_tokens = {
+        token for token in re.findall(r"[a-z0-9]+", str(recipe.get("title") or "").lower())
+        if token not in {"recipe", "easy", "quick", "best", "the", "with", "for", "and", "a", "an", "of", "in", "on", "simple", "delicious"}
+    }
+    if not title_tokens or not title_tokens.issubset(alt_tokens):
+        missing = sorted(title_tokens - alt_tokens)
+        raise RuntimeError(
+            "Verified creator thumbnail alt text does not identify the recipe title for "
+            + recipe["title"] + "; missing title terms: " + ", ".join(missing)
+        )
     # Preserve the verification provenance for the second validation performed
     # inside create_published/articleUpdate. Dropping source_type here caused
     # already-verified thumbnails to be rejected at the final Shopify boundary.
