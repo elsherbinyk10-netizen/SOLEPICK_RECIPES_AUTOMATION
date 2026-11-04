@@ -44,7 +44,10 @@ permissions:
 # Keep scheduled ticks serialized, but give each explicit push/manual recovery
 # run its own queue key so a stale skipped push cannot block a real publish run.
 concurrency:
-  group: ${{ github.event_name == 'schedule' && format('solepick-schedule-{0}', github.event.schedule) || format('solepick-run-{0}', github.run_id) }}
+  # Serialize all scheduled and explicit recovery publishes. The worker's daily
+  # guard is idempotent, but two simultaneous Shopify reads must not race before
+  # either one creates its article.
+  group: solepick-daily-recipe-publishing
   cancel-in-progress: false
 
 jobs:
