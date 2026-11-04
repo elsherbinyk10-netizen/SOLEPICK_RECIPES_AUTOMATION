@@ -63,7 +63,7 @@ def add_recipe_category_tags(recipe):
         " ".join(map(str, tags)),
     ]).lower()
     categories = []
-    if any(term in text for term in ("dessert", "cake", "cookie", "brownie", "muffin", "pudding", "crumble", "pastry", "sweet treat", "baking", "bake")):
+    if any(term in text for term in ("dessert", "cake", "cookie", "brownie", "muffin", "pudding", "crumble", "pastry", "sweet treat", "baking")):
         categories.append("sweet-things")
     if any(term in normalized for term in ("fresh & green", "fresh-and-green", "vegetarian", "vegan", "plant-based", "salad", "vegetables")) or any(term in text for term in ("salad", "fresh & green", "rainbow bowl", "green goddess")):
         categories.append("fresh-and-green")
