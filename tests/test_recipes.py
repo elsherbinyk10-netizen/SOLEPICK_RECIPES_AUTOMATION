@@ -400,6 +400,41 @@ class RecipeLibraryTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
 
+    def test_category_archive_sync_updates_only_known_published_recipes(self):
+        recipes = [
+            {
+                "slug": "creamy-baked-feta-tomato-pasta",
+                "title": "Creamy Baked Feta Tomato Pasta",
+                "description": "Savoury pasta with roasted tomatoes and feta.",
+                "tags": ["pasta", "vegetarian", "dinner"],
+                "prep_minutes": 10, "cook_minutes": 25,
+            }
+        ]
+        articles = {
+            "creamy-baked-feta-tomato-pasta": {
+                "id": "gid://shopify/Article/1",
+                "handle": "creamy-baked-feta-tomato-pasta",
+                "isPublished": True,
+                "tags": ["pasta", "vegetarian", "dinner", "fresh-and-green"],
+            },
+            "unrelated-editorial": {
+                "id": "gid://shopify/Article/2",
+                "handle": "unrelated-editorial",
+                "isPublished": True,
+                "tags": ["editorial"],
+            },
+        }
+        response = {"articleUpdate": {"article": {"id": "gid://shopify/Article/1"}, "userErrors": []}}
+        with patch.object(recipe_worker, "graphql", return_value=response) as mocked:
+            updated = recipe_worker.sync_published_recipe_categories(articles, recipes)
+        self.assertEqual(updated, 1)
+        payload = mocked.call_args.args[1]
+        self.assertEqual(payload["id"], "gid://shopify/Article/1")
+        self.assertIn("comfort-food", payload["article"]["tags"])
+        self.assertIn("quick-and-easy", payload["article"]["tags"])
+        self.assertNotIn("fresh-and-green", payload["article"]["tags"])
+        self.assertEqual(articles["unrelated-editorial"]["tags"], ["editorial"])
+
     def test_existing_article_update_payload_includes_canonical_category_tags(self):
         recipe = recipe_worker.add_recipe_category_tags({
             "title": "Creamy Tomato Pasta",
