@@ -85,7 +85,7 @@ jobs:
       - name: Publish daily Shopify recipe
         if: success() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[publish-daily-recipe]'))))
         env:
-          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STORE_DOMAIN: 0mxbjk-cz.myshopify.com # Verified SolePick Recipes store; do not point this workflow at Valuted News.
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
           SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
