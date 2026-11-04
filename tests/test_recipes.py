@@ -12,9 +12,25 @@ import recipe_worker
 
 
 class RecipeLibraryTests(unittest.TestCase):
-    def test_direct_shopify_access_token_is_used_without_client_credentials(self):
-        with patch.dict("os.environ", {"SHOPIFY_ADMIN_ACCESS_TOKEN": "shpat_test_token", "SHOPIFY_ACCESS_TOKEN": "", "SHOPIFY_CLIENT_ID": "", "SHOPIFY_CLIENT_SECRET": ""}, clear=False):
-            self.assertEqual(recipe_worker.get_access_token("example.myshopify.com"), "shpat_test_token")
+    def test_shopify_client_credentials_exchange_returns_access_token(self):
+        import io
+        import urllib.parse
+        response = io.BytesIO(b'{"access_token":"short_lived_test_token","scope":"write_content"}')
+        with patch.dict("os.environ", {
+            "SHOPIFY_CLIENT_ID": "test-client-id",
+            "SHOPIFY_CLIENT_SECRET": "test-client-secret",
+            "SHOPIFY_ADMIN_ACCESS_TOKEN": "",
+            "SHOPIFY_ACCESS_TOKEN": "",
+        }, clear=False):
+            with patch("recipe_worker.urllib.request.urlopen", return_value=response) as mocked:
+                token = recipe_worker.get_access_token("example.myshopify.com")
+        self.assertEqual(token, "short_lived_test_token")
+        request = mocked.call_args.args[0]
+        payload = urllib.parse.parse_qs(request.data.decode("ascii"))
+        self.assertEqual(payload["grant_type"], ["client_credentials"])
+        self.assertEqual(payload["client_id"], ["test-client-id"])
+        self.assertEqual(payload["client_secret"], ["test-client-secret"])
+        self.assertEqual(request.full_url, "https://example.myshopify.com/admin/oauth/access_token")
 
     def test_recipes_have_unique_slugs_and_required_fields(self):
         recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
