@@ -5,7 +5,7 @@ never turned into invented recipes. Candidates still pass the normal video, imag
 instruction and Shopify publication gates in recipe_worker.py.
 """
 import re
-import unicodedata
+import unicodedata  # Standard-library normalization keeps daily recipe slugs stable.
 
 
 def _slug(value):
