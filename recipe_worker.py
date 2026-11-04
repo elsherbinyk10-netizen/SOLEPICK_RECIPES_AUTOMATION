@@ -1117,6 +1117,45 @@ def existing_articles(blog_id):
         after = conn["pageInfo"]["endCursor"]
 
 
+def sync_published_recipe_categories(articles, recipes):
+    """Backfill and correct canonical category tags for published library recipes."""
+    category_tags = {"quick-and-easy", "fresh-and-green", "sweet-things", "comfort-food"}
+    by_slug = {recipe.get("slug"): recipe for recipe in recipes}
+    updated = 0
+    mutation = """mutation SyncRecipeCategoryTags($id: ID!, $article: ArticleUpdateInput!) {
+      articleUpdate(id: $id, article: $article) {
+        article { id handle tags }
+        userErrors { field message }
+      }
+    }"""
+    for handle, article in articles.items():
+        if not article.get("isPublished") or handle not in by_slug:
+            continue
+        recipe = add_recipe_category_tags(dict(by_slug[handle]))
+        existing_tags = list(article.get("tags") or [])
+        preserved = [tag for tag in existing_tags if str(tag).strip().lower() not in category_tags]
+        desired = preserved + [tag for tag in recipe.get("tags", []) if tag in category_tags]
+        # De-duplicate case-insensitively without disturbing existing tag order.
+        deduped, seen = [], set()
+        for tag in desired:
+            key = str(tag).strip().lower()
+            if key and key not in seen:
+                deduped.append(str(tag).strip())
+                seen.add(key)
+        if set(map(str.lower, existing_tags)) == set(map(str.lower, deduped)):
+            continue
+        result = graphql(mutation, {"id": article["id"], "article": {"tags": deduped}}).get("articleUpdate") or {}
+        if result.get("userErrors"):
+            raise RuntimeError("Shopify rejected category-tag sync for " + handle + ": " + json.dumps(result["userErrors"]))
+        if not result.get("article"):
+            raise RuntimeError("Shopify did not confirm category-tag sync for " + handle)
+        article["tags"] = deduped
+        updated += 1
+        print("CATEGORY TAGS SYNCED: " + handle + " | " + ", ".join(tag for tag in deduped if tag in category_tags))
+    print(f"CATEGORY ARCHIVE SYNC: {updated} published recipe article(s) updated; unrelated blog posts left untouched.")
+    return updated
+
+
 def get_existing_article_for_repair(blog_id, handle):
     query = """query RepairArticleByHandle($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
@@ -1361,6 +1400,7 @@ def main():
         return
 
     articles = existing_articles(blog_id)
+    sync_published_recipe_categories(articles, recipes)
     published_today = already_published_today(articles, now, recipe_slugs={recipe['slug'] for recipe in recipes})
     if published_today and not args.one_time_test:
         body = str(published_today.get("body") or "")
