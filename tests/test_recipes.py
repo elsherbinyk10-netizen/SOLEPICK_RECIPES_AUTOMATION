@@ -450,5 +450,48 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertIn("Dry the chickpeas", markup)
         self.assertNotIn("FAQ", markup)
 
+class RecipeBlogRoutingTests(unittest.TestCase):
+    def test_existing_recipes_blog_is_selected_by_handle(self):
+        with patch.object(recipe_worker, "graphql", return_value={
+            "blogs": {"nodes": [
+                {"id": "gid://shopify/Blog/1", "title": "News", "handle": "news"},
+                {"id": "gid://shopify/Blog/2", "title": "Recipes", "handle": "recipes"},
+            ]}
+        }) as mocked:
+            self.assertEqual(
+                recipe_worker.resolve_recipe_blog(),
+                "gid://shopify/Blog/2",
+            )
+            mocked.assert_called_once()
+
+    def test_missing_recipes_blog_is_created_and_verified(self):
+        def fake_graphql(query, variables):
+            if "query SolePickBlogs" in query:
+                return {"blogs": {"nodes": [
+                    {"id": "gid://shopify/Blog/1", "title": "News", "handle": "news"}
+                ]}}
+            return {"blogCreate": {
+                "blog": {"id": "gid://shopify/Blog/3", "title": "Recipes", "handle": "recipes"},
+                "userErrors": [],
+            }}
+        with patch.object(recipe_worker, "graphql", side_effect=fake_graphql):
+            self.assertEqual(
+                recipe_worker.resolve_recipe_blog(),
+                "gid://shopify/Blog/3",
+            )
+
+    def test_blog_creation_errors_fail_closed(self):
+        def fake_graphql(query, variables):
+            if "query SolePickBlogs" in query:
+                return {"blogs": {"nodes": []}}
+            return {"blogCreate": {
+                "blog": None,
+                "userErrors": [{"field": ["handle"], "message": "Taken"}],
+            }}
+        with patch.object(recipe_worker, "graphql", side_effect=fake_graphql):
+            with self.assertRaisesRegex(RuntimeError, "Unable to create dedicated Recipes blog"):
+                recipe_worker.resolve_recipe_blog()
+
+
 if __name__ == "__main__":
     unittest.main()
