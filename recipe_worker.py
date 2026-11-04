@@ -359,10 +359,15 @@ def recipe_video_section_html(recipe, video):
     """Render the base recipe video without the custom caption-selection box."""
     video_id = str(video.get("id") or "")
     frame_id = "solepick-video-" + video_id
+    source_article_url = str(video.get("source_article_url") or "").strip()
+    source_article_link = (
+        f" <a href='{esc(source_article_url)}' target='_blank' rel='noopener noreferrer'>View the publisher's original recipe article</a>."
+        if source_article_url else ""
+    )
     return (
         "<h2>Watch the Recipe Video Here</h2>"
-        f"<p><small>Video: {esc(video.get('publisher', 'Food Network'))}. <a href='{esc(video['url'])}' target='_blank' rel='noopener noreferrer'>Watch the original video</a>. "
-        f"<a href='{esc(video['source_article_url'])}' target='_blank' rel='noopener noreferrer'>View the publisher's original recipe article</a>.</small></p>"
+        f"<p><small>Video: {esc(video.get('publisher', 'Food Network'))}. <a href='{esc(video['url'])}' target='_blank' rel='noopener noreferrer'>Watch the original video</a>."
+        f"{source_article_link}</small></p>"
         f"<div class=\"solepick-recipe-video\" style=\"position:relative;width:100%;aspect-ratio:16/9;background:#111;margin:0 0 1rem;overflow:hidden;\">"
         f"<iframe id=\"{esc(frame_id)}\" class=\"solepick-language-aware-video\" data-video-base=\"{esc(video['embed_url'])}\" src=\"{esc(video['embed_url'])}?playsinline=1\" title=\"{esc(recipe['title'])} recipe video\" "
         "loading=\"eager\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
