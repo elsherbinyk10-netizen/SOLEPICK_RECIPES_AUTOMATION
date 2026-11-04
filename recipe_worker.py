@@ -802,7 +802,10 @@ def featured_image_for(recipe, generated_image):
     publisher = str(image.get("publisher") or "").strip()
     if not publisher or publisher not in AUTHORIZED_VIDEO_CHANNELS.values() or publisher.casefold() not in alt.casefold():
         raise RuntimeError("Verified publisher thumbnail is missing approved publisher-specific alt text for " + recipe["title"])
-    return {"url": url, "altText": alt}
+    # Preserve the verification provenance for the second validation performed
+    # inside create_published/articleUpdate. Dropping source_type here caused
+    # already-verified thumbnails to be rejected at the final Shopify boundary.
+    return {**image, "url": url, "altText": alt}
 
 def seo_metadata(recipe):
     """Create concise, intent-led search metadata without keyword stuffing."""
