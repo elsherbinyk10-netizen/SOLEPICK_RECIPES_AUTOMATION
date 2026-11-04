@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths-ignore:
       - '.github/workflows/shopify-auth-check.yml'
+      - '.github/workflows/daily-recipes.yml'
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -38,6 +39,7 @@ concurrency:
 
 jobs:
   publish-recipe:
+    if: github.event_name != 'push' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
