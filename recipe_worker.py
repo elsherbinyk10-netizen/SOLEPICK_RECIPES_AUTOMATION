@@ -1206,6 +1206,32 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
     return published
 
 
+def persist_generated_recipe_candidates(existing_recipes, generated_candidates, path=RECIPES_PATH):
+    """Persist new trend-matched, complete recipes so the daily library grows over time."""
+    known = {item.get("slug") for item in existing_recipes}
+    additions = []
+    required = {"slug", "title", "description", "ingredients", "instructions", "prep_minutes", "cook_minutes", "servings"}
+    for candidate in generated_candidates or []:
+        missing = sorted(required - set(candidate))
+        if missing or candidate.get("slug") in known:
+            continue
+        if not candidate.get("ingredients") or len(candidate.get("instructions") or []) < 4:
+            continue
+        additions.append(candidate)
+        known.add(candidate["slug"])
+    if not additions:
+        return []
+    current = json.loads(Path(path).read_text(encoding="utf-8"))
+    current_slugs = {item.get("slug") for item in current}
+    additions = [item for item in additions if item["slug"] not in current_slugs]
+    if not additions:
+        return []
+    updated = current + additions
+    Path(path).write_text(json.dumps(updated, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    print(f"PERSISTED TREND RECIPES: {len(additions)} new complete recipes added to recipes.json.")
+    return additions
+
+
 def configured_max_recipes_per_run():
     """Read the daily batch size, capped at three to keep each publishing run controlled."""
     raw = os.environ.get("MAX_RECIPES_PER_RUN", "3").strip()
@@ -1360,6 +1386,9 @@ def main():
             existing_slugs=set(articles) | {item["slug"] for item in recipes},
             limit=3,
         )
+        persisted_candidates = persist_generated_recipe_candidates(recipes, generated_candidates)
+        if persisted_candidates:
+            recipes.extend(persisted_candidates)
         if generated_candidates:
             print("TREND RECIPE GENERATION: " + json.dumps([
                 {"title": item["title"], "slug": item["slug"],
