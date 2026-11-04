@@ -45,6 +45,26 @@ class RecipeLibraryTests(unittest.TestCase):
             slugs.append(recipe["slug"])
         self.assertEqual(len(slugs), len(set(slugs)))
 
+    def test_generated_trend_recipes_are_persisted_without_duplicates(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "recipes.json"
+            original = [{"slug": "existing", "title": "Existing"}]
+            path.write_text(json.dumps(original), encoding="utf-8")
+            candidate = {
+                "slug": "new-trend-meal", "title": "New Trend Meal",
+                "description": "A complete new meal.",
+                "ingredients": ["1 cup rice"],
+                "instructions": ["Step one.", "Step two.", "Step three.", "Step four."],
+                "prep_minutes": 5, "cook_minutes": 10, "servings": 2,
+            }
+            added = recipe_worker.persist_generated_recipe_candidates(original, [candidate], path)
+            self.assertEqual([item["slug"] for item in added], ["new-trend-meal"])
+            saved = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual([item["slug"] for item in saved], ["existing", "new-trend-meal"])
+            self.assertEqual(recipe_worker.persist_generated_recipe_candidates(saved, [candidate], path), [])
+            self.assertEqual(len(json.loads(path.read_text(encoding="utf-8"))), 2)
+
     def test_daily_batch_limit_is_configurable_but_capped_at_three(self):
         with patch.dict("os.environ", {"MAX_RECIPES_PER_RUN": "3"}, clear=False):
             self.assertEqual(recipe_worker.configured_max_recipes_per_run(), 3)
