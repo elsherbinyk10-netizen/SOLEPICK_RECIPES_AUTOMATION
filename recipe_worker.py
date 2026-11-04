@@ -210,7 +210,7 @@ def _is_authorized_video_channel(channel_id):
 def food_network_recipe_article_url(description):
     """Extract a direct Food Network recipe-page URL from the official video's description."""
     text = str(description or "")
-    candidates = re.findall(r"https?://[^\s<>\\"']+", text)
+    candidates = re.findall(r"https?://[^\s<>\"']+", text)
     for candidate in candidates:
         candidate = candidate.rstrip(").,;]")
         parsed = urllib.parse.urlparse(candidate)
