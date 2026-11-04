@@ -820,6 +820,38 @@ def graphql(query, variables):
     return data.get("data", {})
 
 
+def resolve_recipe_blog():
+    """Always publish to the dedicated Recipes blog, not a legacy News/default blog."""
+    query = """query SolePickBlogs {
+      blogs(first: 50) { nodes { id title handle } }
+    }"""
+    data = graphql(query, {})
+    blogs = (data.get("blogs") or {}).get("nodes") or []
+    recipes_blog = next((item for item in blogs if item.get("handle") == "recipes"), None)
+    if recipes_blog:
+        print("SHOPIFY BLOG VERIFIED: " + recipes_blog.get("title", "Recipes") +
+              " | handle=recipes | id=" + recipes_blog["id"])
+        return recipes_blog["id"]
+
+    mutation = """mutation CreateSolePickRecipesBlog($blog: BlogCreateInput!) {
+      blogCreate(blog: $blog) {
+        blog { id title handle }
+        userErrors { field message }
+      }
+    }"""
+    result = graphql(mutation, {"blog": {
+        "title": "Recipes", "handle": "recipes", "commentPolicy": "CLOSED"
+    }}).get("blogCreate") or {}
+    errors = result.get("userErrors") or []
+    if errors:
+        raise RuntimeError("Unable to create dedicated Recipes blog: " + json.dumps(errors))
+    created = result.get("blog")
+    if not created or created.get("handle") != "recipes" or not created.get("id"):
+        raise RuntimeError("Shopify did not confirm creation of the dedicated Recipes blog.")
+    print("SHOPIFY BLOG CREATED AND VERIFIED: Recipes | handle=recipes | id=" + created["id"])
+    return created["id"]
+
+
 def existing_articles(blog_id):
     query = """query ArticleHandles($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
@@ -1006,9 +1038,9 @@ def main():
         print("Dry run only; no Shopify request made.")
         return
 
-    blog_id = os.environ.get("SHOPIFY_BLOG_ID", "").strip()
-    if not blog_id:
-        raise RuntimeError("Set SHOPIFY_BLOG_ID in GitHub Actions Secrets.")
+    # Resolve by the stable Recipes blog handle. This deliberately overrides a
+    # stale SHOPIFY_BLOG_ID that may still point at the old empty "News" blog.
+    blog_id = resolve_recipe_blog()
 
     if args.repair_handle:
         repair_existing_article_video(blog_id, args.repair_handle.strip(), recipes)
