@@ -43,6 +43,36 @@ def esc(value):
     return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
+def add_recipe_category_tags(recipe):
+    """Attach the canonical SolePick collection tags before saving an article."""
+    tags = list(recipe.get("tags") or [])
+    normalized = {str(tag).strip().lower() for tag in tags}
+    text = " ".join([
+        str(recipe.get("title") or ""),
+        str(recipe.get("description") or ""),
+        " ".join(map(str, tags)),
+    ]).lower()
+    categories = []
+    if any(term in text for term in ("dessert", "cake", "cookie", "brownie", "muffin", "pudding", "crumble", "pastry", "sweet treat", "baking", "bake")):
+        categories.append("sweet-things")
+    if any(term in normalized for term in ("fresh & green", "fresh-and-green", "vegetarian", "vegan", "plant-based", "salad", "vegetables")) or any(term in text for term in ("salad", "fresh & green", "rainbow bowl", "green goddess")):
+        categories.append("fresh-and-green")
+    if any(term in normalized for term in ("comfort food", "comfort-food", "family meals", "soup", "pasta", "curry", "stew", "casserole")) or any(term in text for term in ("one-pot soup", "comfort food", "casserole", "slow-cooked", "mac and cheese")):
+        categories.append("comfort-food")
+    prep = int(recipe.get("prep_minutes") or 0)
+    cook = int(recipe.get("cook_minutes") or 0)
+    if any(term in normalized for term in ("quick", "quick & easy", "quick-and-easy", "easy", "one-pan", "one pan")) or prep + cook <= 35 or any(term in text for term in ("tacos", "wraps", "parfait", "breakfast bowl")):
+        categories.append("quick-and-easy")
+    if not categories:
+        categories.append("comfort-food" if any(term in text for term in ("roast", "family dinner", "baked", "hearty")) else "quick-and-easy")
+    for category in categories:
+        if category not in normalized:
+            tags.append(category)
+            normalized.add(category)
+    recipe["tags"] = tags
+    return recipe
+
+
 def _video_title_score(recipe_title, video_title):
     stop = {"recipe", "easy", "best", "how", "to", "make", "the", "with", "for", "and", "a", "an", "of", "in", "on", "quick", "simple", "delicious"}
     wanted = {x for x in re.findall(r"[a-z0-9]+", recipe_title.lower()) if x not in stop}
@@ -1231,6 +1261,7 @@ def main():
         print(f"Selected for {now.date()} Cairo time: {recipe['title']} ({recipe['slug']})")
         try:
             recipe = make_recipe_specific(recipe)
+            recipe = add_recipe_category_tags(recipe)
         except ValueError as error:
             print(f"SKIPPING recipe with low-quality instructions: {error}")
             continue
