@@ -219,6 +219,29 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(result["source_article_url"], "")
         self.assertEqual(result["embed_url"], "https://www.youtube-nocookie.com/embed/abcdefghijk")
 
+    def test_second_approved_publisher_video_is_verified_by_exact_channel_and_author(self):
+        recipe = {"title": "Crispy Salmon Rice Bowls"}
+        metadata = {"title": "Crispy Salmon Rice Bowl Recipe", "author_name": "Tasty"}
+        response = __import__("io").BytesIO(json.dumps(metadata).encode("utf-8"))
+        with patch("recipe_worker.urllib.request.urlopen", return_value=response):
+            result = recipe_worker._check_video_candidate(
+                recipe, "abcdefghijk", "Crispy Salmon Rice Bowl Recipe",
+                "UCJFp8uSYCjXOMnkUyb3CQ3Q", ""
+            )
+        self.assertIsNotNone(result)
+        self.assertEqual(result["publisher"], "Tasty")
+
+    def test_approved_channel_with_mismatched_oembed_author_is_rejected(self):
+        recipe = {"title": "Crispy Salmon Rice Bowls"}
+        metadata = {"title": "Crispy Salmon Rice Bowl Recipe", "author_name": "Imposter"}
+        response = __import__("io").BytesIO(json.dumps(metadata).encode("utf-8"))
+        with patch("recipe_worker.urllib.request.urlopen", return_value=response):
+            result = recipe_worker._check_video_candidate(
+                recipe, "abcdefghijk", "Crispy Salmon Rice Bowl Recipe",
+                "UCJFp8uSYCjXOMnkUyb3CQ3Q", ""
+            )
+        self.assertIsNone(result)
+
     def test_unapproved_video_channel_is_always_rejected(self):
         recipe = {"title": "Hot Honey Chicken Rice Bowls"}
         with patch("recipe_worker.urllib.request.urlopen") as mocked:
@@ -304,6 +327,7 @@ class RecipeLibraryTests(unittest.TestCase):
             "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
             "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
             "source_type": "official_youtube_thumbnail",
+            "publisher": "Food Network",
         }
         from unittest.mock import patch
         with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
