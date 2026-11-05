@@ -582,7 +582,7 @@ def _is_document_like_image(title_text, image_url, metadata):
 
 
 def generate_recipe_image(recipe, published_articles=None):
-    """Find a dish-relevant, commercially reusable Commons photo and retain full attribution metadata."""
+    """Find a dish-relevant Commons photo with verified commercial-use licence and attribution metadata."""
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
     used_urls = {
         str(item.get("image_url") or "").strip()
@@ -661,12 +661,11 @@ def generate_recipe_image(recipe, published_articles=None):
             metadata = info.get("extmetadata") or {}
             license_name = str((metadata.get("LicenseShortName") or {}).get("value") or "").strip()
             license_lower = re.sub(r"<[^>]+>", "", license_name).lower()
-            # Allow only commercial-use licences: PD, CC0, CC BY and CC BY-SA.
-            # NC and ND variants are excluded; licence metadata is retained for attribution.
+            # Allow public domain, CC0, CC BY and CC BY-SA; reject NC/ND.
             cc_reusable = bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_lower))
             if not ("public domain" in license_lower or "cc0" in license_lower or cc_reusable):
                 continue
-            if "noncommercial" in license_lower or "no derivatives" in license_lower or "nd" == license_lower[-2:]:
+            if "noncommercial" in license_lower or "no derivatives" in license_lower or license_lower.endswith(" nd"):
                 continue
             image_url = str(info.get("thumburl") or info.get("url") or "").strip()
             # Commons can expose scans and PDF pages as ordinary JPEG thumbnails.
@@ -714,8 +713,18 @@ def generate_recipe_image(recipe, published_articles=None):
             alt = " ".join((title_text.removeprefix("file:")).replace("_", " ").split())
             alt = re.sub(r"\.(jpg|jpeg|png|webp|svg)$", "", alt, flags=re.I)
             alt = (alt[:240] or "Food photograph for " + title)
-            print("AUTO-SELECTED PUBLIC-DOMAIN PHOTO: " + title_text + " | license=" + license_name)
-            return {"url": image_url, "altText": alt}
+            def meta_value(key):
+                value = metadata.get(key) or {}
+                raw = value.get("value", "") if isinstance(value, dict) else value
+                return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", str(raw or ""))).strip()
+            author = meta_value("Artist") or meta_value("Credit") or "Author not stated"
+            work_title = meta_value("ObjectName") or title_text.removeprefix("File:")
+            license_url = meta_value("LicenseUrl")
+            source_page = str(info.get("descriptionurl") or "")
+            print("AUTO-SELECTED CREATIVE COMMONS FOOD PHOTO: " + title_text + " | license=" + license_name)
+            return {"url": image_url, "altText": alt, "source_type": "wikimedia_commons",
+                    "title": work_title, "author": author, "source_url": source_page,
+                    "license": license_name, "license_url": license_url}
     # No unreviewed catalogue fallback: that was the cause of repeated/mismatched photos.
     raise RuntimeError(
         "No unique, relevant public-domain/CC0 Wikimedia photo found automatically for '"
@@ -797,7 +806,7 @@ def youtube_thumbnail_for(recipe, video):
 
 
 def featured_image_for(recipe, generated_image):
-    """Accept only verified, dish-relevant Wikimedia Commons photos with reusable licences."""
+    """Accept only verified Commons photos with commercial-use licences."""
     image = generated_image or {}
     url = str(image.get("url") or "").strip()
     if image.get("source_type") != "wikimedia_commons" or not url.startswith("https://upload.wikimedia.org/"):
@@ -805,17 +814,74 @@ def featured_image_for(recipe, generated_image):
     license_name = str(image.get("license") or "").strip().lower()
     allowed = ("public domain" in license_name or "cc0" in license_name
                or bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_name)))
-    if not allowed or "noncommercial" in license_name or "no derivatives" in license_name:
+    if not allowed or "noncommercial" in license_name or "no derivatives" in license_name or license_name.endswith(" nd"):
         raise RuntimeError("Featured image licence is not approved for commercial reuse.")
     if not image.get("author") or not image.get("source_url") or not image.get("license_url"):
         if "public domain" not in license_name and "cc0" not in license_name:
-            raise RuntimeError("Creative Commons image is missing required author/source/licence attribution.")
+            raise RuntimeError("Creative Commons image is missing required attribution.")
     quality = inspect_image_url(url)
     if not is_high_quality_image(quality):
-        raise RuntimeError("Rejected low-resolution, soft or unsuitable Commons photo for " + recipe["title"] + ": " + str(quality))
-    if _is_retail_product_image(str(image.get("altText") or ""), url):
-        raise RuntimeError("Rejected retail/package image for " + recipe["title"])
+        raise RuntimeError("Rejected low-resolution or soft Commons photo for " + recipe["title"] + ": " + str(quality))
+    if _is_document_like_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
+        raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"])
+    if _is_retail_product_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
+        raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"])
     return image
+
+def seo_metadata(recipe):
+    """Create concise, intent-led search metadata without keyword stuffing."""
+    title = re.sub(r"\s+", " ", str(recipe.get("title", "")).strip())
+    seo_title = title if len(title) <= 58 else title[:55].rsplit(" ", 1)[0].rstrip(" -|:") + " | SolePick"
+    description = re.sub(r"\s+", " ", str(recipe.get("description", "")).strip())
+    if not description:
+        description = f"Make {title} with clear step-by-step instructions and everyday ingredients."
+    if len(description) > 155:
+        description = description[:152].rsplit(" ", 1)[0].rstrip(" ,;:") + "..."
+    elif len(description) < 110:
+        description = (description.rstrip(".") + ". Get the ingredients, prep time and easy step-by-step method.").strip()
+        description = description[:155].rsplit(" ", 1)[0].rstrip(" ,;:")
+    return {"title": seo_title, "description": description}
+
+
+def recipe_editorial_sections(recipe):
+    """Render only recipe-specific practical notes supplied and reviewed in recipes.json."""
+    sections = []
+    notes = [str(value).strip() for value in recipe.get("cook_notes", []) if str(value).strip()]
+    swaps = [str(value).strip() for value in recipe.get("substitutions", []) if str(value).strip()]
+    storage = str(recipe.get("storage") or "").strip()
+    if notes:
+        sections.append("<h2>Recipe Tips</h2><ul>" + "".join(f"<li>{esc(value)}</li>" for value in notes) + "</ul>")
+    if swaps:
+        sections.append("<h2>Ingredient Swaps</h2><ul>" + "".join(f"<li>{esc(value)}</li>" for value in swaps) + "</ul>")
+    if storage:
+        sections.append("<h2>Make-Ahead and Storage</h2><p>" + esc(storage) + "</p>")
+    return "".join(sections)
+
+
+def related_recipe_links(recipe, published_handles=None):
+    """Add up to three contextual links to published/approved related SolePick recipes."""
+    try:
+        catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return ""
+    current_tags = set(recipe.get("tags") or [])
+    allowed_handles = set(published_handles or [])
+    ranked = []
+    for item in catalogue:
+        if item.get("slug") == recipe.get("slug") or item.get("slug") not in allowed_handles:
+            continue
+        overlap = len(current_tags & set(item.get("tags") or []))
+        if overlap:
+            ranked.append((overlap, item.get("title", ""), item.get("slug", "")))
+    ranked.sort(key=lambda row: (-row[0], row[1]))
+    links = [
+        f'<li><a href="https://solepick.site/blogs/recipes/{esc(slug)}">{esc(title)}</a></li>'
+        for _, title, slug in ranked[:3] if title and slug
+    ]
+    if not links:
+        return ""
+    return "<h2>More Recipes to Try</h2><ul>" + "".join(links) + "</ul>"
+
 
 def recipe_json_ld(recipe):
     """Schema.org Recipe JSON-LD for search engines and recipe rich results."""
@@ -868,18 +934,10 @@ def article_html(recipe, video=None, published_handles=None, featured_image=None
     related = related_recipe_links(recipe, published_handles)
     image_credit = ""
     if featured_image and featured_image.get("source_type") == "wikimedia_commons":
-        author = esc(featured_image.get("author") or "Author not stated")
-        work_title = esc(featured_image.get("title") or "Food photograph")
         source_url = featured_image.get("source_url") or ""
-        license_name = esc(featured_image.get("license") or "")
         license_url = featured_image.get("license_url") or ""
         if source_url.startswith("https://") and license_url.startswith("https://"):
-            image_credit = (
-                f'<p class="solepick-image-credit"><small>Food photo: '
-                f'<a href="{esc(source_url)}" target="_blank" rel="noopener noreferrer">{work_title}</a> '
-                f'by {author} · <a href="{esc(license_url)}" target="_blank" rel="noopener noreferrer">{license_name}</a> '
-                f'· via Wikimedia Commons</small></p>'
-            )
+            image_credit = (f'<p class="solepick-image-credit"><small>Food photo: <a href="{esc(source_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("title") or "Food photograph")}</a> by {esc(featured_image.get("author") or "Author not stated")} · <a href="{esc(license_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("license") or "")}</a> · via Wikimedia Commons</small></p>')
     return (
         f"<p>{esc(metadata['description'])}</p>"
         f"{image_credit}"
@@ -1230,7 +1288,7 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
     recipe_for_markup["published_video_url"] = video.get("url") if video else ""
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
-        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe_for_markup, video, published_handles, generated_image),
+        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe_for_markup, video, published_handles),
         "summary": seo_metadata(recipe)["description"],
         "metafields": [
             {"namespace": "global", "key": "title_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["title"]},
