@@ -663,7 +663,7 @@ def generate_recipe_image(recipe, published_articles=None):
             license_lower = re.sub(r"<[^>]+>", "", license_name).lower()
             # Allow only commercial-use licences: PD, CC0, CC BY and CC BY-SA.
             # NC and ND variants are excluded; licence metadata is retained for attribution.
-            cc_reusable = bool(re.search(r"cc by(?:-sa)?(?:\\s|$)", license_lower))
+            cc_reusable = bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_lower))
             if not ("public domain" in license_lower or "cc0" in license_lower or cc_reusable):
                 continue
             if "noncommercial" in license_lower or "no derivatives" in license_lower or "nd" == license_lower[-2:]:
@@ -804,7 +804,7 @@ def featured_image_for(recipe, generated_image):
         raise RuntimeError("Featured image must be a verified Wikimedia Commons food photograph.")
     license_name = str(image.get("license") or "").strip().lower()
     allowed = ("public domain" in license_name or "cc0" in license_name
-               or bool(re.search(r"cc by(?:-sa)?(?:\\s|$)", license_name)))
+               or bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_name)))
     if not allowed or "noncommercial" in license_name or "no derivatives" in license_name:
         raise RuntimeError("Featured image licence is not approved for commercial reuse.")
     if not image.get("author") or not image.get("source_url") or not image.get("license_url"):
