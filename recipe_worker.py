@@ -809,6 +809,10 @@ def featured_image_for(recipe, generated_image):
     """Accept only verified Commons photos with commercial-use licences."""
     image = generated_image or {}
     url = str(image.get("url") or "").strip()
+    if _is_document_like_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
+        raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"])
+    if _is_retail_product_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
+        raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"])
     if image.get("source_type") != "wikimedia_commons" or not url.startswith("https://upload.wikimedia.org/"):
         raise RuntimeError("Featured image must be a verified Wikimedia Commons food photograph.")
     license_name = str(image.get("license") or "").strip().lower()
@@ -822,10 +826,6 @@ def featured_image_for(recipe, generated_image):
     quality = inspect_image_url(url)
     if not is_high_quality_image(quality):
         raise RuntimeError("Rejected low-resolution or soft Commons photo for " + recipe["title"] + ": " + str(quality))
-    if _is_document_like_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
-        raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"])
-    if _is_retail_product_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
-        raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"])
     return image
 
 def seo_metadata(recipe):
