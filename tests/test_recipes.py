@@ -344,61 +344,60 @@ class RecipeLibraryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
             recipe_worker.make_recipe_specific(recipe)
 
-    def test_featured_image_uses_verified_generated_recipe_photo(self):
+    def test_featured_image_accepts_verified_commons_cc_by_photo(self):
         recipe = {"title": "Sample Salmon Pasta"}
         generated_image = {
-            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
-            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
-            "source_type": "official_youtube_thumbnail",
-            "publisher": "Food Network",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/sample.jpg",
+            "altText": "Salmon pasta served on a plate",
+            "source_type": "wikimedia_commons",
+            "title": "Salmon pasta",
+            "author": "Example Photographer",
+            "source_url": "https://commons.wikimedia.org/wiki/File:Sample.jpg",
+            "license": "CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/",
         }
-        from unittest.mock import patch
         with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
             image = recipe_worker.featured_image_for(recipe, generated_image)
-        self.assertEqual(image["url"], generated_image["url"])
-        self.assertEqual(image["altText"], generated_image["altText"])
+        self.assertEqual(image["source_type"], "wikimedia_commons")
+        self.assertEqual(image["license"], "CC BY 4.0")
 
-    def test_featured_image_rejects_thumbnail_for_a_different_recipe(self):
-        recipe = {"title": "Crispy Salmon Rice Bowls"}
-        generated_image = {
-            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
-            "altText": "Natashas Kitchen cooking video thumbnail for Crispy Chicken Rice Bowls",
-            "source_type": "official_youtube_thumbnail",
-            "publisher": "Natashas Kitchen",
+    def test_featured_image_accepts_public_domain_without_creator_attribution(self):
+        image = {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/sample.jpg",
+            "altText": "Salmon pasta",
+            "source_type": "wikimedia_commons",
+            "license": "Public domain",
         }
-        from unittest.mock import patch
-        with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 900, "edge_variance": 42}):
-            with self.assertRaisesRegex(RuntimeError, "does not identify the recipe title"):
-                recipe_worker.featured_image_for(recipe, generated_image)
-
-    def test_featured_image_validation_preserves_provenance_for_repeat_validation(self):
-        recipe = {"title": "Sample Salmon Pasta"}
-        generated_image = {
-            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
-            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
-            "source_type": "official_youtube_thumbnail",
-            "publisher": "Food Network",
-        }
-        from unittest.mock import patch
         with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
-            first = recipe_worker.featured_image_for(recipe, generated_image)
-            second = recipe_worker.featured_image_for(recipe, first)
-        self.assertEqual(first["source_type"], "official_youtube_thumbnail")
-        self.assertEqual(first["publisher"], "Food Network")
-        self.assertEqual(second["url"], generated_image["url"])
+            result = recipe_worker.featured_image_for({"title": "Salmon pasta"}, image)
+        self.assertEqual(result["url"], image["url"])
+
+    def test_featured_image_rejects_noncommercial_and_no_derivatives_licences(self):
+        base = {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/sample.jpg",
+            "altText": "Salmon pasta",
+            "source_type": "wikimedia_commons",
+            "title": "Salmon pasta",
+            "author": "Example Photographer",
+            "source_url": "https://commons.wikimedia.org/wiki/File:Sample.jpg",
+            "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+        }
+        for licence in ("CC BY-NC 4.0", "CC BY-ND 4.0"):
+            with self.subTest(licence=licence):
+                candidate = {**base, "license": licence}
+                with self.assertRaisesRegex(RuntimeError, "licence is not approved"):
+                    recipe_worker.featured_image_for({"title": "Salmon pasta"}, candidate)
 
     def test_featured_image_rejects_unverified_recipe_fallback(self):
-        recipe = {
-            "title": "Sample Dish",
-            "image_url": "https://images.example.com/sample-dish.jpg",
-            "image_alt": "Sample dish on a plate",
-        }
-        # An image URL in recipe data is not proof that the photo matches the dish.
-        # Keep the publisher's no-mismatched-image safeguard in place.
-        with self.assertRaisesRegex(RuntimeError, "Featured image must be the verified official publisher video thumbnail"):
+        recipe = {"title": "Sample Dish", "image_url": "https://images.example.com/sample-dish.jpg"}
+        with self.assertRaisesRegex(RuntimeError, "verified Wikimedia Commons food photograph"):
             recipe_worker.featured_image_for(recipe, None)
         with self.assertRaises(RuntimeError):
-            recipe_worker.featured_image_for({"title": "Sample Dish"}, None)
+            recipe_worker.featured_image_for({"title": "Sample Dish"}, {
+                "url": "https://images.example.com/sample-dish.jpg",
+                "altText": "Sample dish",
+                "source_type": "unknown",
+            })
 
     def test_category_archive_sync_updates_only_known_published_recipes(self):
         recipes = [
@@ -684,10 +683,14 @@ class RecipeLibraryTests(unittest.TestCase):
             "tags": ["Seafood", "Pasta"],
         }
         generated = {
-            "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
-            "altText": "Food Network cooking video thumbnail for Sample Salmon Pasta",
-            "source_type": "official_youtube_thumbnail",
-            "publisher": "Food Network",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/sample.jpg",
+            "altText": "Salmon pasta served on a plate",
+            "source_type": "wikimedia_commons",
+            "title": "Salmon pasta",
+            "author": "Example Photographer",
+            "source_url": "https://commons.wikimedia.org/wiki/File:Sample.jpg",
+            "license": "CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/",
         }
         video = {
             "title": "Sample Salmon Pasta Recipe",
@@ -707,6 +710,9 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(set(captured["image"]), {"url", "altText"})
         self.assertNotIn("source_type", captured["image"])
         self.assertNotIn("publisher", captured["image"])
+        self.assertIn("Example Photographer", body)
+        self.assertIn("CC BY 4.0", body)
+        self.assertIn("https://creativecommons.org/licenses/by/4.0/", body)
         self.assertIn("Video credit: YouTube creator", body)
         self.assertIn('"image": ["' + generated["url"] + '"]', body)
         self.assertIn('"url": "https://solepick.site/blogs/recipes/sample-salmon-pasta"', body)
