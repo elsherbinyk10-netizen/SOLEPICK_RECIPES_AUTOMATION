@@ -1288,7 +1288,7 @@ def create_published(blog_id, recipe, video, generated_image, published_handles=
     recipe_for_markup["published_video_url"] = video.get("url") if video else ""
     article = {
         "blogId": blog_id, "title": recipe["title"], "handle": recipe["slug"],
-        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe_for_markup, video, published_handles),
+        "author": {"name": "SolePick Recipes"}, "body": article_html(recipe_for_markup, video, published_handles, generated_image),
         "summary": seo_metadata(recipe)["description"],
         "metafields": [
             {"namespace": "global", "key": "title_tag", "type": "single_line_text_field", "value": seo_metadata(recipe)["title"]},
