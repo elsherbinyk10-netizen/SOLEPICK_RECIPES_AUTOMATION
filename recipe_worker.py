@@ -605,20 +605,36 @@ def generate_recipe_image(recipe, published_articles=None):
     main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
     formats = {"salad","pasta","noodle","noodles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
     wanted_formats = wanted & formats
-    # Wikimedia added global API rate limits in 2026. Use three distinct
-    # searches instead of five near-duplicates for every recipe.
+    # Expand search coverage while retaining strict metadata relevance checks below.
+    # The old three-query / ten-result search often missed perfectly usable photos.
+    # Keep queries distinct to reduce Wikimedia rate-limit pressure.
+    ingredient_terms = []
+    for ingredient in recipe.get("ingredients", [])[:8]:
+        cleaned = re.sub(r"^\s*(?:[\d./]+\s*)?(?:g|kg|ml|l|tbsp|tsp|cup|cups|oz|lb|clove|cloves|can|cans|piece|pieces)?\s*", "", str(ingredient), flags=re.I)
+        tokens = [word for word in re.findall(r"[a-z]+", cleaned.lower()) if len(word) > 2 and word not in stop]
+        ingredient_terms.extend(tokens[:3])
+    ingredient_terms = list(dict.fromkeys(ingredient_terms))[:5]
+    core_title = " ".join(word for word in query_terms if word not in stop and word not in {
+        "creamy", "crispy", "easy", "quick", "fresh", "loaded", "one", "pan", "sheet", "baked"
+    })
     searches = [
         title + " food",
-        " ".join(word for word in query_terms if word not in stop) + " plated meal",
-        (main_food or title) + " " + (" ".join(sorted(wanted_formats)) if wanted_formats else "cooked dish"),
+        title + " recipe",
+        (core_title + " plated food").strip(),
     ]
+    if ingredient_terms:
+        searches.append(" ".join(ingredient_terms[:4]) + " " + (main_food or "meal") + " dish")
+    if main_food and wanted_formats:
+        searches.append(main_food + " " + " ".join(sorted(wanted_formats)) + " food photograph")
+    # Normalize and deduplicate without changing priority.
+    searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
     seen = set()
     # Reject non-food scans and document thumbnails, including PDF previews Shopify can show as .pdf.jpg.
     reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
     for search_text in searches:
         params = urllib.parse.urlencode({
             "action": "query", "generator": "search", "gsrsearch": search_text,
-            "gsrnamespace": 6, "gsrlimit": 10, "prop": "imageinfo",
+            "gsrnamespace": 6, "gsrlimit": 25, "prop": "imageinfo",
             "iiprop": "url|extmetadata", "iiurlwidth": 1600, "format": "json",
         })
         request = urllib.request.Request(
@@ -727,9 +743,9 @@ def generate_recipe_image(recipe, published_articles=None):
                     "license": license_name, "license_url": license_url}
     # No unreviewed catalogue fallback: that was the cause of repeated/mismatched photos.
     raise RuntimeError(
-        "No unique, relevant public-domain/CC0 Wikimedia photo found automatically for '"
-        + title + "'. Recipe was not published with a repeated or unverified image; "
-        "the next scheduled run will retry."
+        "No unique, relevant commercially reusable Wikimedia photo (Public Domain, CC0, CC BY or CC BY-SA) "
+        "passed the image and relevance checks for '" + title
+        + "'. Recipe was not published with a repeated or unverified image; the next scheduled run will retry."
     )
 
 def catalogue_image_fallback(recipe, published_articles=None):
