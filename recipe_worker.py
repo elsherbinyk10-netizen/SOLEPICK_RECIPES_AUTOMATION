@@ -603,8 +603,8 @@ def generate_recipe_image(recipe, published_articles=None):
     query_terms = re.findall(r"[a-z0-9]+", title.lower())
     stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe"}
     wanted = {word for word in query_terms if word not in stop and len(word) > 2}
-    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
-    formats = {"salad","pasta","noodle","noodles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
+    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
+    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
     wanted_formats = wanted & formats
     # Expand search coverage while retaining strict metadata relevance checks below.
     # The old three-query / ten-result search often missed perfectly usable photos.
@@ -627,6 +627,11 @@ def generate_recipe_image(recipe, published_articles=None):
         searches.append(" ".join(ingredient_terms[:4]) + " " + (main_food or "meal") + " dish")
     if main_food and wanted_formats:
         searches.append(main_food + " " + " ".join(sorted(wanted_formats)) + " food photograph")
+    # Common dish-name variants improve retrieval without relaxing verification.
+    if "pancakes" in wanted or "pancake" in wanted:
+        searches.extend(["banana pancakes", "oat banana pancakes"])
+    if "orzo" in wanted or "risoni" in wanted:
+        searches.extend(["chicken orzo pasta", "chicken risoni"])
     # Normalize and deduplicate without changing priority.
     searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
     seen = set()
@@ -717,9 +722,27 @@ def generate_recipe_image(recipe, published_articles=None):
             if found & reject_terms:
                 print("REJECTED UNRELATED IMAGE TITLE: " + title_text)
                 continue
-            overlap = len(wanted & found) / max(1, len(wanted))
-            has_main = bool(main_food and main_food in found)
-            has_format = bool(wanted_formats & found)
+            # Normalize common culinary synonyms and singular/plural forms.
+            normalized_found = set(found)
+            if "risoni" in normalized_found:
+                normalized_found.add("orzo")
+            if "pancake" in normalized_found:
+                normalized_found.add("pancakes")
+            if "waffle" in normalized_found:
+                normalized_found.add("waffles")
+            normalized_wanted = set(wanted)
+            if "pancake" in normalized_wanted:
+                normalized_wanted.add("pancakes")
+            if "waffle" in normalized_wanted:
+                normalized_wanted.add("waffles")
+            if "risoni" in normalized_wanted:
+                normalized_wanted.add("orzo")
+            overlap = len(normalized_wanted & normalized_found) / max(1, len(normalized_wanted))
+            has_main = bool(main_food and main_food in normalized_found)
+            normalized_formats = set(wanted_formats)
+            if "risoni" in normalized_formats:
+                normalized_formats.add("orzo")
+            has_format = bool(normalized_formats & normalized_found)
             # Require meaningful dish relevance, not merely a generic food photograph.
             if overlap < 0.40 and not (has_main and (has_format or len(wanted_formats) == 0)):
                 continue
