@@ -1,3 +1,4 @@
+# Retry daily SolePick publication after tested recipe media matching fixes [publish-daily-recipe]
 # Verified photo discovery expanded; scheduled publish retry marker [publish-daily-recipe]
 #!/usr/bin/env python3
 """Publish the scheduled SolePick recipe to the configured Shopify blog.
