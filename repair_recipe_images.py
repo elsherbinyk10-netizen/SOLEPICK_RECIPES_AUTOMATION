@@ -7,7 +7,6 @@ import sys
 import recipe_worker as worker
 from image_quality import inspect_image_url, is_high_quality_image
 
-BLOG_ID = os.environ.get("SHOPIFY_BLOG_ID", "").strip()
 MAX_REPAIRS = max(1, min(50, int(os.environ.get("MAX_IMAGE_REPAIRS", "10"))))
 
 
@@ -20,9 +19,8 @@ def is_recipe_article(article):
 
 
 def main():
-    if not BLOG_ID:
-        raise RuntimeError("SHOPIFY_BLOG_ID is required.")
-    articles = worker.existing_articles(BLOG_ID)
+    blog_id = worker.resolve_recipe_blog()
+    articles = worker.existing_articles(blog_id)
     published = [a for a in articles.values() if a.get("isPublished")]
     recipe_articles = [a for a in published if is_recipe_article(a)]
     print(f"Published articles scanned: {len(published)}; recipe articles identified: {len(recipe_articles)}")
