@@ -18,7 +18,7 @@ def inspect_image_url(url):
         return {"ok": False, "reason": "image URL must use HTTPS"}
     request = urllib.request.Request(url, headers={"User-Agent": "SolePickRecipesBot/1.2 (+https://solepick.site)"})
     try:
-        with urllib.request.urlopen(request, timeout=25) as response:
+        with urllib.request.urlopen(request, timeout=12) as response:
             content_type = response.headers.get("Content-Type", "").split(";")[0].lower()
             data = response.read(MAX_BYTES + 1)
     except Exception as exc:
