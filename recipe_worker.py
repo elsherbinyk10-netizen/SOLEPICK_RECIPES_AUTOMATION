@@ -1,3 +1,4 @@
+# Fresh bounded media-verification recovery run [publish-daily-recipe]
 # Retry daily SolePick publication after tested recipe media matching fixes [publish-daily-recipe]
 # Verified photo discovery expanded; scheduled publish retry marker [publish-daily-recipe]
 #!/usr/bin/env python3
