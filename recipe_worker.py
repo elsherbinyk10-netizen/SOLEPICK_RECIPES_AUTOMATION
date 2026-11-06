@@ -411,7 +411,10 @@ def find_verified_recipe_video(recipe):
     ]
     seen = set()
     failures = 0
+    max_video_candidates = 12
     for search_query in queries:
+        if len(seen) >= max_video_candidates:
+            break
         options = {
             "quiet": True, "no_warnings": True, "skip_download": True,
             "extract_flat": True, "noplaylist": True, "ignoreerrors": True,
@@ -430,6 +433,8 @@ def find_verified_recipe_video(recipe):
         for entry in entries:
             if not isinstance(entry, dict):
                 continue
+            if len(seen) >= max_video_candidates:
+                break
             video_id = str(entry.get("id") or "").strip()
             title_found = str(entry.get("title") or "").strip()
             channel_id = str(entry.get("channel_id") or "").strip()
@@ -670,9 +675,13 @@ def generate_recipe_image(recipe, published_articles=None):
     # are enough before the next scheduled recovery run.
     searches = searches[:5]
     seen = set()
+    image_quality_checks = 0
+    max_image_quality_checks = 8
     # Reject non-food scans and document thumbnails, including PDF previews Shopify can show as .pdf.jpg.
     reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
     for search_text in searches:
+        if image_quality_checks >= max_image_quality_checks:
+            break
         params = urllib.parse.urlencode({
             "action": "query", "generator": "search", "gsrsearch": search_text,
             "gsrnamespace": 6, "gsrlimit": 25, "prop": "imageinfo",
@@ -762,7 +771,8 @@ def generate_recipe_image(recipe, published_articles=None):
                 continue
             if wanted_formats and not has_format:
                 continue
-            # Only the small set of genuinely relevant candidates are downloaded.
+            # Bound image downloads to avoid long hangs on remote Wikimedia mirrors.
+            image_quality_checks += 1
             quality = inspect_image_url(image_url)
             if not is_high_quality_image(quality):
                 print("REJECTED LOW-QUALITY IMAGE: " + title_text + " | " + str(quality))
