@@ -802,5 +802,34 @@ class RecipeBlogRoutingTests(unittest.TestCase):
                 recipe_worker.resolve_recipe_blog()
 
 
+class RecipePhotoRelevanceTests(unittest.TestCase):
+    def test_banana_oat_pancake_photo_matches_common_filename(self):
+        score, has_main, has_format = recipe_worker._photo_title_relevance(
+            "Banana Oat Breakfast Pancakes",
+            "File:Banana pancakes with oats.jpg",
+        )
+        self.assertGreaterEqual(score, 0.4)
+        self.assertTrue(has_main)
+        self.assertTrue(has_format)
+
+    def test_chicken_orzo_matches_risoni_synonym(self):
+        score, has_main, has_format = recipe_worker._photo_title_relevance(
+            "Creamy Lemon Garlic Chicken Orzo",
+            "File:Chicken risoni pasta with lemon.jpg",
+        )
+        self.assertGreaterEqual(score, 0.4)
+        self.assertTrue(has_main)
+        self.assertTrue(has_format)
+
+    def test_unrelated_dish_does_not_match(self):
+        score, has_main, has_format = recipe_worker._photo_title_relevance(
+            "Banana Oat Breakfast Pancakes",
+            "File:Roasted salmon rice bowl.jpg",
+        )
+        self.assertLess(score, 0.4)
+        self.assertFalse(has_main)
+        self.assertFalse(has_format)
+
+
 if __name__ == "__main__":
     unittest.main()
