@@ -1368,6 +1368,13 @@ def persist_generated_recipe_candidates(existing_recipes, generated_candidates, 
             continue
         if not candidate.get("ingredients") or len(candidate.get("instructions") or []) < 4:
             continue
+        # Never persist a trend candidate whose instructions fail the same
+        # recipe-specific safety/quality validator used before publishing.
+        try:
+            make_recipe_specific(candidate)
+        except ValueError as error:
+            print(f"REJECTED GENERATED RECIPE BEFORE PERSISTENCE: {candidate.get('title', candidate.get('slug'))} | {error}")
+            continue
         additions.append(candidate)
         known.add(candidate["slug"])
     if not additions:
