@@ -582,6 +582,37 @@ def _is_document_like_image(title_text, image_url, metadata):
     return bool(tokens & reject_terms)
 
 
+def _photo_title_relevance(recipe_title, image_title):
+    """Score dish-title overlap while recognizing common food-name synonyms."""
+    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe"}
+    wanted = {word for word in re.findall(r"[a-z0-9]+", str(recipe_title).lower()) if word not in stop and len(word) > 2}
+    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
+    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
+    wanted_formats = wanted & formats
+    found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
+    normalized_found = set(found)
+    if "risoni" in normalized_found:
+        normalized_found.add("orzo")
+    if "pancake" in normalized_found:
+        normalized_found.add("pancakes")
+    if "waffle" in normalized_found:
+        normalized_found.add("waffles")
+    normalized_wanted = set(wanted)
+    if "pancake" in normalized_wanted:
+        normalized_wanted.add("pancakes")
+    if "waffle" in normalized_wanted:
+        normalized_wanted.add("waffles")
+    if "risoni" in normalized_wanted:
+        normalized_wanted.add("orzo")
+    overlap = len(normalized_wanted & normalized_found) / max(1, len(normalized_wanted))
+    has_main = bool(main_food and main_food in normalized_found)
+    normalized_formats = set(wanted_formats)
+    if "risoni" in normalized_formats:
+        normalized_formats.add("orzo")
+    has_format = bool(normalized_formats & normalized_found)
+    return overlap, has_main, has_format
+
+
 def generate_recipe_image(recipe, published_articles=None):
     """Find a dish-relevant Commons photo with verified commercial-use licence and attribution metadata."""
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
@@ -722,27 +753,7 @@ def generate_recipe_image(recipe, published_articles=None):
             if found & reject_terms:
                 print("REJECTED UNRELATED IMAGE TITLE: " + title_text)
                 continue
-            # Normalize common culinary synonyms and singular/plural forms.
-            normalized_found = set(found)
-            if "risoni" in normalized_found:
-                normalized_found.add("orzo")
-            if "pancake" in normalized_found:
-                normalized_found.add("pancakes")
-            if "waffle" in normalized_found:
-                normalized_found.add("waffles")
-            normalized_wanted = set(wanted)
-            if "pancake" in normalized_wanted:
-                normalized_wanted.add("pancakes")
-            if "waffle" in normalized_wanted:
-                normalized_wanted.add("waffles")
-            if "risoni" in normalized_wanted:
-                normalized_wanted.add("orzo")
-            overlap = len(normalized_wanted & normalized_found) / max(1, len(normalized_wanted))
-            has_main = bool(main_food and main_food in normalized_found)
-            normalized_formats = set(wanted_formats)
-            if "risoni" in normalized_formats:
-                normalized_formats.add("orzo")
-            has_format = bool(normalized_formats & normalized_found)
+            overlap, has_main, has_format = _photo_title_relevance(title, title_text)
             # Require meaningful dish relevance, not merely a generic food photograph.
             if overlap < 0.40 and not (has_main and (has_format or len(wanted_formats) == 0)):
                 continue
