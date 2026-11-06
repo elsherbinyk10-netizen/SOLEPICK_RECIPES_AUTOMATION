@@ -666,6 +666,9 @@ def generate_recipe_image(recipe, published_articles=None):
         searches.extend(["chicken orzo pasta", "chicken risoni"])
     # Normalize and deduplicate without changing priority.
     searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
+    # Bound external API work per recipe; the first five targeted searches
+    # are enough before the next scheduled recovery run.
+    searches = searches[:5]
     seen = set()
     # Reject non-food scans and document thumbnails, including PDF previews Shopify can show as .pdf.jpg.
     reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
@@ -736,10 +739,9 @@ def generate_recipe_image(recipe, published_articles=None):
             if mime and not mime.startswith("image/"):
                 print("REJECTED NON-IMAGE MEDIA: " + title_text + " | mime=" + mime)
                 continue
-            quality = inspect_image_url(image_url)
-            if not is_high_quality_image(quality):
-                print("REJECTED LOW-QUALITY IMAGE: " + title_text + " | " + str(quality))
-                continue
+            # Apply cheap metadata, licence, uniqueness and dish-relevance filters
+            # BEFORE downloading/decoding image bytes. Previously every licensed
+            # Commons result could trigger a 25-second image download, stalling runs.
             if (
                 not image_url.startswith("https://")
                 or image_url in used_urls
@@ -749,19 +751,23 @@ def generate_recipe_image(recipe, published_articles=None):
             ):
                 print("REJECTED DUPLICATE PHOTO: " + title_text)
                 continue
-            seen.add(image_url)
             found = set(re.findall(r"[a-z0-9]+", title_text))
             if found & reject_terms:
                 print("REJECTED UNRELATED IMAGE TITLE: " + title_text)
                 continue
             overlap, has_main, has_format = _photo_title_relevance(title, title_text)
-            # Require meaningful dish relevance, not merely a generic food photograph.
             if overlap < 0.40 and not (has_main and (has_format or len(wanted_formats) == 0)):
                 continue
             if main_food and not has_main:
                 continue
             if wanted_formats and not has_format:
                 continue
+            # Only the small set of genuinely relevant candidates are downloaded.
+            quality = inspect_image_url(image_url)
+            if not is_high_quality_image(quality):
+                print("REJECTED LOW-QUALITY IMAGE: " + title_text + " | " + str(quality))
+                continue
+            seen.add(image_url)
             alt = " ".join((title_text.removeprefix("file:")).replace("_", " ").split())
             alt = re.sub(r"\.(jpg|jpeg|png|webp|svg)$", "", alt, flags=re.I)
             alt = (alt[:240] or "Food photograph for " + title)
