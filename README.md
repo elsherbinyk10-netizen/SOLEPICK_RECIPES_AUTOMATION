@@ -75,3 +75,6 @@ A targeted recovery can be triggered with a reviewed `[publish-recipes:recipe-sl
 
 
 <!-- Retry after allowing Wikimedia thumbnail CDN. -->
+
+
+<!-- Test-only trigger for the newly replenished recipe library. -->
