@@ -514,16 +514,22 @@ def recipe_video_section_html(recipe, video):
     )
 
 def upsert_recipe_video_section(existing_body, recipe, video):
-    """Insert or replace only the video section, preserving the article's other content."""
+    """Insert or replace video sections, removing duplicates while preserving article content."""
     section = recipe_video_section_html(recipe, video)
-    pattern = r"<h2\b[^>]*>\s*(?:Recipe Video|Watch the Recipe Video Here)\s*</h2>.*?(?=<h2\b|$)"
+    pattern = r"<h2\b[^>]*>\s*(?:Recipe Video|Watch the Recipe Video Here|Watch the Recipe Video)\s*</h2>.*?(?=<h2\b|$)"
     if re.search(pattern, existing_body, flags=re.IGNORECASE | re.DOTALL):
-        return re.sub(pattern, lambda _match: section, existing_body, count=1, flags=re.IGNORECASE | re.DOTALL)
+        first = True
+        def replace_video(_match):
+            nonlocal first
+            if first:
+                first = False
+                return section
+            return ""
+        return re.sub(pattern, replace_video, existing_body, flags=re.IGNORECASE | re.DOTALL)
     match = re.search(r"<h2\b", existing_body, flags=re.IGNORECASE)
     if match:
         return existing_body[:match.start()] + section + existing_body[match.start():]
     return existing_body.rstrip() + "\n" + section
-
 
 def _image_identity(url):
     """Normalize CDN copies of the same source photo to one stable identity."""
@@ -1270,14 +1276,14 @@ def get_existing_article_for_repair(blog_id, handle):
 
 
 def article_needs_video_repair(body):
-    """Return true unless the saved recipe body contains the expected embedded player."""
+    """Return true unless the saved recipe body contains exactly one expected embedded player."""
     body = str(body or "")
+    iframe_count = len(re.findall(r"<iframe\b", body, flags=re.IGNORECASE))
     return not (
-        "<iframe" in body.lower()
+        iframe_count == 1
         and "youtube-nocookie.com/embed/" in body
         and bool(re.search(r"<h2\b[^>]*>\s*Watch the Recipe Video Here\s*</h2>", body, flags=re.IGNORECASE))
     )
-
 
 def audit_and_repair_missing_recipe_videos(blog_id, articles, recipes):
     """Repair missing players in-place on already-published Recipes blog articles."""
@@ -1324,8 +1330,8 @@ def repair_existing_article_video(blog_id, handle, recipes):
     if not updated or updated.get("handle") != handle or not updated.get("isPublished"):
         raise RuntimeError("Shopify did not confirm the existing published article was updated.")
     saved_body = updated.get("body") or ""
-    if video["embed_url"] not in saved_body or "<iframe" not in saved_body.lower():
-        raise RuntimeError("Shopify update response did not contain the verified embedded video iframe.")
+    if video["embed_url"] not in saved_body or len(re.findall(r"<iframe\b", saved_body, flags=re.IGNORECASE)) != 1:
+        raise RuntimeError("Shopify update response did not contain exactly one verified embedded video iframe.")
     if re.search(r"<h[1-6][^>]*>\s*Recipe Video\s*</h[1-6]>", saved_body, flags=re.IGNORECASE):
         raise RuntimeError("Shopify saved the legacy Recipe Video heading that the storefront cleanup script removes.")
     print(f"REPAIR VERIFIED: existing article updated without creating a new article | handle={handle} | video={video['url']}")
