@@ -29,8 +29,21 @@ def get_token(domain, client_id, client_secret):
         },
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=30) as response:
-        data = json.loads(response.read().decode())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            data = json.loads(response.read().decode())
+    except urllib.error.HTTPError as error:
+        detail = ""
+        try:
+            payload = json.loads(error.read().decode())
+            detail = str(payload.get("error") or payload.get("error_description") or "")
+        except Exception:
+            pass
+        suffix = f" ({detail})" if detail else ""
+        raise RuntimeError(
+            f"Shopify caption-backfill token exchange failed with HTTP {error.code}{suffix}. "
+            "The main publisher's store domain and app credentials should be identical."
+        ) from None
     token = data.get("access_token")
     if not token:
         raise RuntimeError("Shopify credential exchange returned no access_token.")
