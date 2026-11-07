@@ -59,3 +59,6 @@ The worker rotates through `recipes.json`, skips recipes already published by ha
 ## Published recipe video audit
 
 The SolePick Daily Recipe Publishing workflow supports a guarded video audit. Run it manually with the `Audit missing videos` option, or use a reviewed push commit containing `[audit-repair-videos]`. The worker checks every published article in the Recipes blog, repairs missing embedded players in place using the verified video-source and embeddability checks, then re-reads Shopify before applying the normal Cairo-day duplicate guard. If today's recipe has not already been published, the same run may publish one eligible recipe; otherwise it does not create a duplicate. Articles whose video or image fails validation remain unchanged and are reported as unresolved.
+
+
+<!-- Embedded-video audit trigger: 2026-11-07 -->
