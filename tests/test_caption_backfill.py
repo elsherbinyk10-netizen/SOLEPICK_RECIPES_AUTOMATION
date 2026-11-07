@@ -6,6 +6,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs
 
 import caption_backfill
+from generate_captions import validate_vtt_file
 
 
 class CaptionShopifyAuthTests(unittest.TestCase):
@@ -67,7 +68,7 @@ class CaptionShopifyAuthTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "valid.vtt"
             path.write_text("WEBVTT\n\n1\n00:00:01.000 --> 00:00:02.000\nHello recipe\n", encoding="utf-8")
-            self.assertEqual(caption_backfill.validate_vtt_file(path), 1)
+            self.assertEqual(validate_vtt_file(path), 1)
             path.write_text("not a vtt", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "WEBVTT"):
                 caption_backfill.validate_vtt_file(path)
