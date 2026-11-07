@@ -71,7 +71,7 @@ class CaptionShopifyAuthTests(unittest.TestCase):
             self.assertEqual(validate_vtt_file(path), 1)
             path.write_text("not a vtt", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "WEBVTT"):
-                caption_backfill.validate_vtt_file(path)
+                validate_vtt_file(path)
 
 if __name__ == "__main__":
     unittest.main()
