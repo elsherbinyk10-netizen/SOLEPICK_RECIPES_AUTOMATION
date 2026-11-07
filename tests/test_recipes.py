@@ -103,6 +103,13 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 9 * * *", winter_recovery))
         self.assertFalse(recipe_worker.should_run_scheduled_event("0 7 * * *", before_publish_window))
 
+    def test_video_audit_flags_missing_or_invalid_embeds_only(self):
+        valid = '<h2>Watch the Recipe Video Here</h2><iframe src="https://www.youtube-nocookie.com/embed/abcdefghijk"></iframe>'
+        self.assertFalse(recipe_worker.article_needs_video_repair(valid))
+        self.assertTrue(recipe_worker.article_needs_video_repair("<p>Watch on YouTube</p>"))
+        self.assertTrue(recipe_worker.article_needs_video_repair('<iframe src="https://www.youtube.com/embed/abcdefghijk"></iframe>'))
+        self.assertTrue(recipe_worker.article_needs_video_repair('<iframe src="https://www.youtube-nocookie.com/embed/abcdefghijk"></iframe>'))
+
     def test_daily_guard_blocks_second_publication(self):
         cairo = ZoneInfo("Africa/Cairo")
         now = datetime(2026, 10, 14, 10, 0, tzinfo=cairo)
