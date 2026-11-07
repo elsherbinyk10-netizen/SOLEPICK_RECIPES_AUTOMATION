@@ -103,6 +103,22 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 9 * * *", winter_recovery))
         self.assertFalse(recipe_worker.should_run_scheduled_event("0 7 * * *", before_publish_window))
 
+    def test_orzo_photo_relevance_accepts_chicken_pasta_alias(self):
+        overlap, has_main, has_format = recipe_worker._photo_title_relevance(
+            "Creamy Lemon Garlic Chicken Orzo",
+            "Chicken pasta with lemon sauce"
+        )
+        self.assertTrue(has_main)
+        self.assertTrue(has_format)
+        self.assertGreaterEqual(overlap, 0.40)
+
+    def test_orzo_photo_relevance_rejects_wrong_protein(self):
+        overlap, has_main, has_format = recipe_worker._photo_title_relevance(
+            "Creamy Lemon Garlic Chicken Orzo",
+            "Lemon shrimp pasta"
+        )
+        self.assertFalse(has_main)
+
     def test_video_audit_flags_missing_or_invalid_embeds_only(self):
         valid = '<h2>Watch the Recipe Video Here</h2><iframe src="https://www.youtube-nocookie.com/embed/abcdefghijk"></iframe>'
         self.assertFalse(recipe_worker.article_needs_video_repair(valid))
