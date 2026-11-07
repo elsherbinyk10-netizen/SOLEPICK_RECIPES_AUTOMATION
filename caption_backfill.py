@@ -14,18 +14,34 @@ LANGUAGES = "en,ar,es,fr,de,it,pt,ja,ko,tr,ru,zh-CN,zh-TW,af,sq,am,hy,az,eu,be,b
 
 def get_token(domain, client_id, client_secret):
     import urllib.request
+    import urllib.parse
+    payload = urllib.parse.urlencode({
+        "grant_type": "client_credentials",
+        "client_id": client_id,
+        "client_secret": client_secret,
+    }).encode("ascii")
     req = urllib.request.Request(
         f"https://{domain}/admin/oauth/access_token",
-        data=json.dumps({"client_id": client_id, "client_secret": client_secret, "grant_type": "client_credentials"}).encode(),
-        headers={"Content-Type": "application/json"}, method="POST")
+        data=payload,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+        },
+        method="POST",
+    )
     with urllib.request.urlopen(req, timeout=30) as response:
-        return json.loads(response.read().decode())["access_token"]
+        data = json.loads(response.read().decode())
+    token = data.get("access_token")
+    if not token:
+        raise RuntimeError("Shopify credential exchange returned no access_token.")
+    return token
 
 def shopify_articles():
     import urllib.request
     domain = os.environ["SHOPIFY_STORE_DOMAIN"].replace("https://", "").replace("http://", "").strip("/")
     token = get_token(domain, os.environ["SHOPIFY_CLIENT_ID"], os.environ["SHOPIFY_CLIENT_SECRET"])
     blog_id = os.environ["SHOPIFY_BLOG_ID"]
+    api_version = os.environ.get("SHOPIFY_API_VERSION", "2026-10").strip()
     query = """query RecipeCaptionBackfill($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
         nodes { title handle body publishedAt }
@@ -35,7 +51,7 @@ def shopify_articles():
     articles, after = [], None
     while True:
         payload = json.dumps({"query": query, "variables": {"id": blog_id, "after": after}}).encode()
-        req = urllib.request.Request(f"https://{domain}/admin/api/2026-07/graphql.json", data=payload,
+        req = urllib.request.Request(f"https://{domain}/admin/api/{api_version}/graphql.json", data=payload,
             headers={"Content-Type":"application/json","X-Shopify-Access-Token":token}, method="POST")
         with urllib.request.urlopen(req, timeout=45) as response:
             data = json.loads(response.read().decode())
