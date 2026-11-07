@@ -45,6 +45,33 @@ class RecipeLibraryTests(unittest.TestCase):
             slugs.append(recipe["slug"])
         self.assertEqual(len(slugs), len(set(slugs)))
 
+    def test_newly_replenished_recipes_have_complete_specific_methods(self):
+        recipes = recipe_worker.load_recipes()
+        expected = {
+            "lemon-herb-chicken-couscous-bowls",
+            "garlic-butter-shrimp-rice-skillet",
+            "greek-chicken-pita-salad",
+            "turkey-meatballs-tomato-orzo",
+            "roasted-vegetable-chickpea-couscous",
+            "blueberry-banana-overnight-oats",
+            "sheet-pan-sausage-peppers-potatoes",
+            "creamy-mushroom-spinach-risotto",
+        }
+        selected = {item["slug"]: item for item in recipes if item["slug"] in expected}
+        self.assertEqual(set(selected), expected)
+        for recipe in selected.values():
+            self.assertGreaterEqual(len(recipe["ingredients"]), 6)
+            self.assertGreaterEqual(len(recipe["instructions"]), 4)
+            self.assertGreater(recipe["servings"], 0)
+            self.assertTrue(recipe.get("seo_title"))
+            self.assertTrue(recipe.get("seo_description"))
+            self.assertEqual(recipe.get("editorial_status"), "original-recipe-written-awaiting-media-verification")
+            # No guessed image or video is attached; the normal live media gates must find and verify both.
+            self.assertFalse(recipe.get("image_url"))
+            self.assertFalse(recipe.get("video_url"))
+            reviewed = recipe_worker.make_recipe_specific(recipe)
+            self.assertEqual(reviewed["instructions"], recipe["instructions"])
+
     def test_generated_trend_recipes_are_persisted_without_duplicates(self):
         import tempfile
         with tempfile.TemporaryDirectory() as directory:
