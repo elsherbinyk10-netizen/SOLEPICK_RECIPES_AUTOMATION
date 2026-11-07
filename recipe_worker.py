@@ -1725,7 +1725,12 @@ def main():
     if published_count:
         print(f"DAILY PUBLISH COMPLETE: {published_count}/{max_publish} verified recipe(s) published. Unqualified candidates were skipped; no quality gate was bypassed.")
         return
-    raise RuntimeError("No eligible recipe passed all quality gates. No unverified recipe was published.")
+    print(
+        "NO_ELIGIBLE_RECIPE: no candidate passed every instruction, verified-video, "
+        "dish-photo, and Shopify publication gate. Nothing was published; this is a "
+        "safe content hold, not a publishing-code failure. The next scheduled run will retry."
+    )
+    return
 
 
 if __name__ == "__main__":
