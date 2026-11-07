@@ -58,7 +58,7 @@ concurrency:
 
 jobs:
   publish-recipe:
-    if: github.event_name != 'pull_request' && (github.event_name != 'push' || contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[audit-repair-videos]') || contains(github.event.head_commit.message, '[publish-daily-recipe]'))
+    if: github.event_name != 'pull_request' && (github.event_name != 'push' || contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[audit-repair-videos]') || contains(github.event.head_commit.message, '[publish-daily-recipe]') || contains(github.event.head_commit.message, '[validate-recipe-library]'))
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
