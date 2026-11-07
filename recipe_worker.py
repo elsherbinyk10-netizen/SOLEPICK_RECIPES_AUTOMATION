@@ -920,7 +920,7 @@ def featured_image_for(recipe, generated_image):
     if _is_retail_product_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
         raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"])
     image_host = (urllib.parse.urlparse(url).hostname or "").lower()
-    if image.get("source_type") != "wikimedia_commons" or image_host not in {"upload.wikimedia.org"}:
+    if image.get("source_type") != "wikimedia_commons" or image_host not in {"upload.wikimedia.org", "thumb.wikimedia.org"}:
         raise RuntimeError(
             "Featured image must be a verified Wikimedia Commons food photograph "
             + f"(source_type={image.get('source_type')!r}, host={image_host or 'missing'})."
