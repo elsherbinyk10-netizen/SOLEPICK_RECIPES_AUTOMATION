@@ -4806,5 +4806,387 @@
     ],
     "storage": "Refrigerate covered for up to 1 day. Keep the oats separate until serving so they retain their texture.",
     "editorial_status": "original-recipe-written-awaiting-media-verification"
+  },
+  {
+    "slug": "lemon-herb-chicken-couscous-bowls",
+    "title": "Lemon Herb Chicken Couscous Bowls",
+    "description": "Juicy lemon-herb chicken is served over fluffy couscous with cucumber, tomatoes and a quick yoghurt dressing for a fresh, balanced dinner.",
+    "tags": [
+      "dinner",
+      "chicken",
+      "couscous",
+      "fresh-and-green",
+      "high-protein"
+    ],
+    "ingredients": [
+      "500 g boneless skinless chicken breast, cut into strips",
+      "1 tablespoon olive oil",
+      "1 teaspoon dried oregano",
+      "1 teaspoon sweet paprika",
+      "1 lemon, zest and juice",
+      "1/2 teaspoon fine salt",
+      "1 cup dry couscous",
+      "1 cup boiling chicken stock",
+      "1 cucumber, diced",
+      "200 g cherry tomatoes, halved",
+      "1/2 cup plain Greek yoghurt",
+      "1 tablespoon chopped fresh parsley"
+    ],
+    "instructions": [
+      "Place the chicken in a bowl with olive oil, oregano, paprika, half the lemon juice, lemon zest and salt. Toss to coat and leave for 10 minutes while preparing the couscous.",
+      "Put the couscous in a heatproof bowl and pour over the boiling stock. Cover for 5 minutes, then fluff with a fork.",
+      "Heat a large skillet over medium-high heat. Cook the chicken in a single layer for 5–7 minutes, turning until browned and the thickest pieces reach 74°C (165°F) on a food thermometer. Cook in batches if needed.",
+      "Stir the yoghurt with the remaining lemon juice and parsley. Add a teaspoon of water if needed to make a spoonable dressing.",
+      "Divide the couscous between bowls. Add cucumber, tomatoes and chicken, then spoon over the yoghurt dressing."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 12,
+    "servings": 4,
+    "cook_notes": [
+      "Let the chicken rest for 2 minutes before serving so the juices settle.",
+      "Fluff couscous gently with a fork rather than stirring it into a paste."
+    ],
+    "substitutions": [
+      "Use quinoa instead of couscous for a gluten-free bowl.",
+      "Swap Greek yoghurt for a plain unsweetened dairy-free yoghurt."
+    ],
+    "storage": "Store chicken, couscous and chopped vegetables separately in sealed containers in the refrigerator for up to 3 days. Keep the yoghurt dressing chilled and add just before serving.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Lemon Herb Chicken Couscous Bowls | SolePick Recipes",
+    "seo_description": "Juicy lemon-herb chicken is served over fluffy couscous with cucumber, tomatoes and a quick yoghurt dressing for a fresh, balanced dinner."
+  },
+  {
+    "slug": "garlic-butter-shrimp-rice-skillet",
+    "title": "Garlic Butter Shrimp Rice Skillet",
+    "description": "A quick one-pan shrimp and rice dinner with garlic butter, lemon and peas. The rice warms in a savoury stock while the shrimp cook until tender.",
+    "tags": [
+      "dinner",
+      "shrimp",
+      "seafood",
+      "rice",
+      "one-pan",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "400 g raw peeled and deveined shrimp, thawed and patted dry",
+      "1 tablespoon olive oil",
+      "2 tablespoons unsalted butter",
+      "3 garlic cloves, minced",
+      "1 cup long-grain rice, rinsed",
+      "2 cups low-sodium chicken or vegetable stock",
+      "1/2 teaspoon smoked paprika",
+      "1 cup frozen peas",
+      "1 lemon, zest and juice",
+      "2 tablespoons chopped fresh parsley",
+      "Black pepper, to taste"
+    ],
+    "instructions": [
+      "Pat the shrimp dry and season lightly with paprika and black pepper. Keep chilled while starting the rice.",
+      "Heat the olive oil and 1 tablespoon butter in a deep lidded skillet over medium heat. Add the garlic and cook for 30 seconds until fragrant.",
+      "Stir in the rinsed rice and stock. Bring to a boil, cover, reduce the heat to low and simmer for 12–15 minutes, until the rice is nearly tender and most of the liquid is absorbed.",
+      "Stir in the peas. Arrange the shrimp over the rice, cover and cook for 3–5 minutes, turning once, until the shrimp are opaque and firm throughout.",
+      "Turn off the heat. Stir in the remaining butter, lemon zest, lemon juice and parsley. Rest covered for 2 minutes, then fluff the rice and serve."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 22,
+    "servings": 4,
+    "cook_notes": [
+      "Use raw shrimp rather than pre-cooked shrimp so they stay tender during the short final cook.",
+      "If the rice is still firm, add 2 tablespoons of hot stock and cook covered for another 2 minutes before adding the shrimp."
+    ],
+    "substitutions": [
+      "Use frozen green beans cut into short pieces instead of peas.",
+      "Use vegetable stock to keep the dish pescatarian."
+    ],
+    "storage": "Refrigerate leftovers promptly in a shallow sealed container for up to 2 days. Reheat once until steaming hot; shrimp can become firm if overheated.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Garlic Butter Shrimp Rice Skillet | SolePick Recipes",
+    "seo_description": "A quick one-pan shrimp and rice dinner with garlic butter, lemon and peas. The rice warms in a savoury stock while the shrimp cook until tender."
+  },
+  {
+    "slug": "greek-chicken-pita-salad",
+    "title": "Greek Chicken Pita Salad",
+    "description": "A generous chopped salad with warm oregano chicken, cucumber, tomatoes, olives, feta and toasted pita, finished with a lemon dressing.",
+    "tags": [
+      "lunch",
+      "chicken",
+      "salad",
+      "mediterranean",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "450 g boneless skinless chicken thighs",
+      "1 tablespoon olive oil",
+      "1 teaspoon dried oregano",
+      "1/2 teaspoon garlic powder",
+      "1/2 teaspoon fine salt",
+      "2 wholemeal pitas",
+      "1 cucumber, diced",
+      "250 g cherry tomatoes, halved",
+      "1/4 red onion, thinly sliced",
+      "60 g pitted Kalamata olives",
+      "75 g feta, crumbled",
+      "2 tablespoons extra-virgin olive oil",
+      "1 tablespoon red wine vinegar",
+      "1 tablespoon lemon juice"
+    ],
+    "instructions": [
+      "Heat the oven to 190°C (375°F). Brush the pitas lightly with olive oil and bake for 6–8 minutes until crisp, then cool and break into pieces.",
+      "Toss the chicken with olive oil, oregano, garlic powder and salt. Heat a skillet over medium heat and cook the thighs for 5–7 minutes per side, until the centre reaches 74°C (165°F). Rest for 5 minutes, then slice.",
+      "Whisk the extra-virgin olive oil, red wine vinegar and lemon juice in a small bowl.",
+      "Combine cucumber, tomatoes, red onion and olives in a large serving bowl. Add the sliced chicken and crumble over the feta.",
+      "Pour over the dressing and toss gently. Add the crisp pita pieces just before serving so they keep their crunch."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 15,
+    "servings": 4,
+    "cook_notes": [
+      "Resting the chicken before slicing helps keep it moist.",
+      "Add the pita at the table if preparing the salad ahead."
+    ],
+    "substitutions": [
+      "Use chickpeas in place of chicken for a vegetarian salad.",
+      "Replace feta with a dairy-free alternative if needed."
+    ],
+    "storage": "Keep the dressing, pita and salad components separate in the refrigerator for up to 2 days. Combine just before serving.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Greek Chicken Pita Salad | SolePick Recipes",
+    "seo_description": "A generous chopped salad with warm oregano chicken, cucumber, tomatoes, olives, feta and toasted pita, finished with a lemon dressing."
+  },
+  {
+    "slug": "turkey-meatballs-tomato-orzo",
+    "title": "Turkey Meatballs with Tomato Orzo",
+    "description": "Tender oven-baked turkey meatballs simmer briefly in a tomato and herb sauce with orzo for a comforting one-pan-style family dinner.",
+    "tags": [
+      "dinner",
+      "turkey",
+      "meatballs",
+      "orzo",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "450 g lean ground turkey",
+      "1/3 cup fine breadcrumbs",
+      "1 large egg",
+      "2 garlic cloves, minced",
+      "2 tablespoons chopped parsley",
+      "1/2 teaspoon dried oregano",
+      "1/2 teaspoon fine salt",
+      "1 tablespoon olive oil",
+      "1 small onion, finely diced",
+      "400 g passata",
+      "2 cups low-sodium chicken stock",
+      "180 g dry orzo",
+      "30 g finely grated parmesan"
+    ],
+    "instructions": [
+      "Heat the oven to 200°C (400°F). Mix the turkey, breadcrumbs, egg, half the garlic, parsley, oregano and salt until just combined. Shape into 16 small meatballs and arrange on a lined tray.",
+      "Bake the meatballs for 12–15 minutes, until browned and the centre of the largest meatball reaches 74°C (165°F).",
+      "Meanwhile, heat the olive oil in a deep oven-safe skillet over medium heat. Cook the onion for 4–5 minutes until softened, then stir in the remaining garlic for 30 seconds.",
+      "Add the passata, stock and orzo. Bring to a gentle simmer, stirring, then cover and cook for 8–10 minutes, stirring once or twice, until the orzo is nearly tender.",
+      "Nestle the cooked meatballs into the orzo and simmer uncovered for 2–3 minutes until the pasta is tender and the sauce has thickened. Finish with parmesan and parsley."
+    ],
+    "prep_minutes": 20,
+    "cook_minutes": 25,
+    "servings": 4,
+    "cook_notes": [
+      "Avoid compacting the meatball mixture; mix only until the ingredients come together.",
+      "Stir the orzo regularly as it simmers to prevent it sticking to the base of the pan."
+    ],
+    "substitutions": [
+      "Use lean ground chicken instead of turkey, cooking to 74°C (165°F).",
+      "Use gluten-free breadcrumbs and small gluten-free pasta if suitable."
+    ],
+    "storage": "Cool promptly and refrigerate in a sealed container for up to 3 days. Add a splash of stock when reheating because orzo absorbs sauce as it sits.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Turkey Meatballs with Tomato Orzo | SolePick Recipes",
+    "seo_description": "Tender oven-baked turkey meatballs simmer briefly in a tomato and herb sauce with orzo for a comforting one-pan-style family dinner."
+  },
+  {
+    "slug": "roasted-vegetable-chickpea-couscous",
+    "title": "Roasted Vegetable Chickpea Couscous",
+    "description": "Roasted courgette, peppers and red onion are tossed with chickpeas and fluffy lemon couscous for a colourful vegetarian meal-prep bowl.",
+    "tags": [
+      "lunch",
+      "vegetarian",
+      "chickpeas",
+      "couscous",
+      "fresh-and-green",
+      "meal-prep"
+    ],
+    "ingredients": [
+      "1 courgette, cut into chunks",
+      "1 red bell pepper, cut into chunks",
+      "1 red onion, cut into wedges",
+      "1 can (400 g) chickpeas, drained and rinsed",
+      "2 tablespoons olive oil, divided",
+      "1 teaspoon ground cumin",
+      "1/2 teaspoon smoked paprika",
+      "1 cup dry couscous",
+      "1 cup boiling vegetable stock",
+      "1 lemon, zest and juice",
+      "2 tablespoons chopped fresh parsley",
+      "2 tablespoons toasted pumpkin seeds"
+    ],
+    "instructions": [
+      "Heat the oven to 220°C (425°F). Place the courgette, pepper, onion and chickpeas on a large baking tray.",
+      "Toss with 1 tablespoon olive oil, cumin and smoked paprika. Spread into one layer and roast for 22–28 minutes, turning once, until the vegetables are tender and browned at the edges.",
+      "Place the couscous in a heatproof bowl. Pour over the boiling stock, cover for 5 minutes, then fluff with a fork.",
+      "Stir the remaining olive oil, lemon zest, half the lemon juice and parsley through the couscous. Taste and add more lemon juice if needed.",
+      "Divide the couscous between bowls and top with the roasted vegetables and chickpeas. Finish with pumpkin seeds and serve warm or at room temperature."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 28,
+    "servings": 4,
+    "cook_notes": [
+      "Use a large tray and leave space between the vegetables so they roast rather than steam.",
+      "Rinse and drain the chickpeas well before roasting for better browning."
+    ],
+    "substitutions": [
+      "Use quinoa instead of couscous for a gluten-free option.",
+      "Swap pumpkin seeds for toasted sunflower seeds."
+    ],
+    "storage": "Refrigerate the couscous and roasted vegetables in separate sealed containers for up to 4 days. Add the seeds after reheating.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Roasted Vegetable Chickpea Couscous | SolePick Recipes",
+    "seo_description": "Roasted courgette, peppers and red onion are tossed with chickpeas and fluffy lemon couscous for a colourful vegetarian meal-prep bowl."
+  },
+  {
+    "slug": "blueberry-banana-overnight-oats",
+    "title": "Blueberry Banana Overnight Oats",
+    "description": "Creamy overnight oats layered with mashed banana, blueberries, chia and yoghurt for an easy breakfast that is ready straight from the fridge.",
+    "tags": [
+      "breakfast",
+      "oats",
+      "blueberry",
+      "vegetarian",
+      "meal-prep",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "1 cup rolled oats",
+      "1 tablespoon chia seeds",
+      "1 ripe banana",
+      "3/4 cup milk or unsweetened plant milk",
+      "1/3 cup plain Greek yoghurt",
+      "1/2 teaspoon vanilla extract",
+      "1/2 cup fresh or frozen blueberries",
+      "1 teaspoon honey, optional"
+    ],
+    "instructions": [
+      "Divide the rolled oats and chia seeds between two lidded jars or containers.",
+      "Mash the banana in a bowl. Whisk in the milk, Greek yoghurt and vanilla until smooth.",
+      "Pour the banana mixture evenly over the oats and chia. Stir each jar so no dry oats remain.",
+      "Fold half the blueberries through the jars and scatter the remaining berries on top. Cover and refrigerate for at least 6 hours or overnight.",
+      "Stir before serving. Add a splash of milk to loosen the oats and drizzle with honey if desired."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 0,
+    "servings": 2,
+    "cook_notes": [
+      "Use ripe banana for natural sweetness and a smoother texture.",
+      "Add crunchy toppings just before eating so they do not soften overnight."
+    ],
+    "substitutions": [
+      "Use a dairy-free yoghurt and plant milk to make the oats dairy-free.",
+      "Swap blueberries for raspberries or chopped strawberries."
+    ],
+    "storage": "Keep covered and refrigerated for up to 2 days. Stir well before eating and discard if left at room temperature for more than 2 hours.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Blueberry Banana Overnight Oats | SolePick Recipes",
+    "seo_description": "Creamy overnight oats layered with mashed banana, blueberries, chia and yoghurt for an easy breakfast that is ready straight from the fridge."
+  },
+  {
+    "slug": "sheet-pan-sausage-peppers-potatoes",
+    "title": "Sheet Pan Sausage, Peppers and Potatoes",
+    "description": "Smoky paprika-seasoned potatoes roast with peppers and red onion, then finish with browned chicken sausages for a simple tray-bake dinner.",
+    "tags": [
+      "dinner",
+      "chicken sausage",
+      "potatoes",
+      "one-pan",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "500 g baby potatoes, halved",
+      "1 red bell pepper, cut into strips",
+      "1 yellow bell pepper, cut into strips",
+      "1 red onion, cut into wedges",
+      "2 tablespoons olive oil",
+      "1 teaspoon smoked paprika",
+      "1/2 teaspoon dried thyme",
+      "1/2 teaspoon fine salt",
+      "400 g raw chicken sausages",
+      "1 tablespoon chopped fresh parsley"
+    ],
+    "instructions": [
+      "Heat the oven to 220°C (425°F). Line a large rimmed baking tray with baking paper.",
+      "Toss the potatoes with olive oil, smoked paprika, thyme and salt. Spread cut-side down and roast for 15 minutes.",
+      "Add the peppers and red onion to the tray, toss with the potatoes and roast for another 10 minutes.",
+      "Nestle the chicken sausages among the vegetables. Roast for 15–20 minutes, turning the sausages once, until browned and the centre of each sausage reaches 74°C (165°F) or the package's safe cooking temperature if higher.",
+      "Scatter with parsley and serve hot, making sure the potatoes are tender and the vegetables lightly caramelised."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 45,
+    "servings": 4,
+    "cook_notes": [
+      "Cut the potatoes into similar-sized pieces so they cook evenly.",
+      "Use a thermometer to check the centre of the thickest sausage."
+    ],
+    "substitutions": [
+      "Use raw pork or turkey sausages and follow the package's safe internal temperature.",
+      "Add courgette during the final 15 minutes of roasting."
+    ],
+    "storage": "Refrigerate leftovers in a sealed container for up to 3 days. Reheat in a hot oven or air fryer to restore crisp edges.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Sheet Pan Sausage, Peppers and Potatoes | SolePick Recipes",
+    "seo_description": "Smoky paprika-seasoned potatoes roast with peppers and red onion, then finish with browned chicken sausages for a simple tray-bake dinner."
+  },
+  {
+    "slug": "creamy-mushroom-spinach-risotto",
+    "title": "Creamy Mushroom and Spinach Risotto",
+    "description": "A comforting mushroom risotto made with arborio rice, warm stock, garlic and baby spinach, finished with parmesan for a creamy texture without heavy cream.",
+    "tags": [
+      "dinner",
+      "vegetarian",
+      "mushrooms",
+      "rice",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "250 g chestnut mushrooms, sliced",
+      "1 tablespoon olive oil",
+      "1 tablespoon unsalted butter",
+      "1 small onion, finely diced",
+      "2 garlic cloves, minced",
+      "200 g arborio rice",
+      "900 ml hot low-sodium vegetable stock",
+      "60 ml dry white wine or extra stock",
+      "2 cups baby spinach",
+      "40 g finely grated parmesan",
+      "Black pepper, to taste"
+    ],
+    "instructions": [
+      "Warm the vegetable stock in a saucepan and keep it hot over low heat. Heat the olive oil and butter in a wide heavy-based pan over medium heat.",
+      "Add the mushrooms and cook for 5–7 minutes until their moisture evaporates and the edges turn golden. Transfer half to a plate for topping.",
+      "Add the onion to the pan and cook for 3–4 minutes until soft. Stir in the garlic for 30 seconds, then add the arborio rice and stir for 1 minute to coat the grains.",
+      "Pour in the wine or extra stock and stir until mostly absorbed. Add the hot stock one ladle at a time, stirring often and allowing each addition to be mostly absorbed before adding the next. Continue for 18–22 minutes until the rice is creamy and tender with a slight bite.",
+      "Fold in the spinach until wilted, then stir through the parmesan and black pepper. Top with the reserved mushrooms and serve immediately."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 30,
+    "servings": 4,
+    "cook_notes": [
+      "Keep the stock hot so each addition does not interrupt the rice's cooking.",
+      "Risotto thickens as it stands; loosen with a splash of hot stock just before serving."
+    ],
+    "substitutions": [
+      "Use a vegetarian parmesan-style hard cheese if needed.",
+      "Replace spinach with chopped kale, adding it a few minutes earlier so it softens."
+    ],
+    "storage": "Refrigerate leftovers promptly for up to 2 days. Reheat gently with a splash of stock, stirring until steaming hot.",
+    "editorial_status": "original-recipe-written-awaiting-media-verification",
+    "seo_title": "Creamy Mushroom and Spinach Risotto | SolePick Recipes",
+    "seo_description": "A comforting mushroom risotto made with arborio rice, warm stock, garlic and baby spinach, finished with parmesan for a creamy texture without heavy cream."
   }
 ]
