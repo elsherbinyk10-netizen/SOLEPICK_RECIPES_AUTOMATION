@@ -72,3 +72,6 @@ A targeted recovery can be triggered with a reviewed `[publish-recipes:recipe-sl
 
 
 <!-- Retry after image provenance diagnostics. -->
+
+
+<!-- Retry after allowing Wikimedia thumbnail CDN. -->
