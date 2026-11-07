@@ -62,3 +62,7 @@ The SolePick Daily Recipe Publishing workflow supports a guarded video audit. Ru
 
 
 <!-- Embedded-video audit trigger: 2026-11-07 -->
+
+
+## One-recipe guarded recovery
+A targeted recovery can be triggered with a reviewed `[publish-recipes:recipe-slug]` commit marker alongside `[publish-daily-recipe]`. The workflow still runs the full test suite, published-video audit, recipe-specific instruction checks, live creator/video embeddability verification, dish-photo quality and duplicate-image checks, Shopify duplicate protection, and read-after-write publication verification. A failed media or quality gate holds the recipe; no gate is bypassed.
