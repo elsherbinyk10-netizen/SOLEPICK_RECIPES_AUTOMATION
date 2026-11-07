@@ -143,7 +143,7 @@ def fetch_native_tracks(vid, directory):
     """Prefer genuine YouTube subtitle tracks in every available language."""
     import shutil
     import tempfile
-    from generate_captions import clean_youtube_vtt, youtube_cookie_args
+    from generate_captions import clean_youtube_vtt, validate_vtt_file, youtube_cookie_args
     temp = Path(tempfile.mkdtemp(prefix="solepick-subs-" + vid + "-"))
     template = str(temp / "source.%(language)s.%(ext)s")
     cmd = [sys.executable, "-m", "yt_dlp", "--no-warnings", "--no-progress",
@@ -167,6 +167,7 @@ def fetch_native_tracks(vid, directory):
             try:
                 cues = clean_youtube_vtt(source, target)
                 if cues:
+                    validate_vtt_file(target)
                     count += 1
                     print("Saved existing YouTube caption track " + raw_code + " -> " + str(target))
             except Exception as exc:
