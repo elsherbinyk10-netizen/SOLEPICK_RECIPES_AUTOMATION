@@ -131,10 +131,17 @@ jobs:
             REPAIR_HANDLE="${BASH_REMATCH[1]}"
           fi
           # An explicit commit marker can request a reviewed batch of recipe slugs.
+          # Read the push commit message from the event payload as a reliable
+          # fallback; this also makes the one-recipe marker work if the step
+          # environment did not receive the expression value.
+          if [[ -z "$COMMIT_MESSAGE" && -n "${GITHUB_EVENT_PATH:-}" ]]; then
+            COMMIT_MESSAGE="$(python -c 'import json,os; print((json.load(open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8")).get("head_commit") or {}).get("message", ""))')"
+          fi
           if [[ -z "$TARGET_RECIPE_SLUGS" && "$COMMIT_MESSAGE" =~ \[publish-recipes:([a-z0-9,-]+)\] ]]; then
             TARGET_RECIPE_SLUGS="${BASH_REMATCH[1]}"
             export TARGET_RECIPE_SLUGS
           fi
+          echo "Resolved targeted recipe slugs: ${TARGET_RECIPE_SLUGS:-<none>}"
           # Seasonal primary triggers plus a daily recovery trigger protect
           # against GitHub dropping a scheduled run. Cairo-day idempotency
           # prevents duplicate recipe publication.
@@ -145,9 +152,12 @@ jobs:
             command=(python recipe_worker.py --repair-handle "$REPAIR_HANDLE")
           elif [[ "$ONE_TIME_TEST" == "true" ]]; then
             command=(python recipe_worker.py --one-time-test)
-          elif [[ "$AUDIT_MISSING_VIDEOS" == "true" || "$COMMIT_MESSAGE" == *"[audit-repair-videos]"* ]]; then
-            command=(python recipe_worker.py --audit-missing-videos)
           else
+            # Audit existing published embeds first, then continue into the
+            # guarded daily/targeted publisher instead of exiting after audit.
+            if [[ "$AUDIT_MISSING_VIDEOS" == "true" || "$COMMIT_MESSAGE" == *"[audit-repair-videos]"* ]]; then
+              python recipe_worker.py --audit-missing-videos
+            fi
             command=(python recipe_worker.py)
           fi
 
