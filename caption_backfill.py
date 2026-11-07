@@ -50,12 +50,48 @@ def get_token(domain, client_id, client_secret):
         raise RuntimeError("Shopify credential exchange returned no access_token.")
     return token
 
+def resolve_recipe_blog_id(domain, token, api_version):
+    """Resolve the same dedicated Recipes blog used by recipe_worker.py; never guess an ID."""
+    import urllib.request
+    query = """query SolePickCaptionBlogs {
+      blogs(first: 50) { nodes { id title handle } }
+    }"""
+    req = urllib.request.Request(
+        f"https://{domain}/admin/api/{api_version}/graphql.json",
+        data=json.dumps({"query": query, "variables": {}}).encode(),
+        headers={"Content-Type": "application/json", "X-Shopify-Access-Token": token},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=45) as response:
+        data = json.loads(response.read().decode())
+    if data.get("errors"):
+        raise RuntimeError("Shopify blog discovery failed: " + json.dumps(data["errors"]))
+    blogs = (data.get("data", {}).get("blogs") or {}).get("nodes") or []
+    recipes_blog = next((blog for blog in blogs if blog.get("handle") == "recipes" and blog.get("id")), None)
+    if not recipes_blog:
+        available = ", ".join(
+            f'{blog.get("title", "(untitled)")} [{blog.get("handle", "no handle")}]'
+            for blog in blogs
+        ) or "none returned"
+        raise RuntimeError(
+            "The dedicated SolePick blog with handle 'recipes' was not found. "
+            f"Available blogs: {available}. The backfill will not scan another blog."
+        )
+    print(
+        "SHOPIFY BLOG VERIFIED: "
+        + recipes_blog.get("title", "Recipes")
+        + " | handle=recipes | id="
+        + recipes_blog["id"]
+    )
+    return recipes_blog["id"]
+
+
 def shopify_articles():
     import urllib.request
     domain = os.environ["SHOPIFY_STORE_DOMAIN"].replace("https://", "").replace("http://", "").strip("/")
     token = get_token(domain, os.environ["SHOPIFY_CLIENT_ID"], os.environ["SHOPIFY_CLIENT_SECRET"])
-    blog_id = os.environ["SHOPIFY_BLOG_ID"]
-    api_version = os.environ.get("SHOPIFY_API_VERSION", "2026-10").strip()
+    api_version = os.environ.get("SHOPIFY_API_VERSION", "2026-07").strip()
+    blog_id = resolve_recipe_blog_id(domain, token, api_version)
     query = """query RecipeCaptionBackfill($id: ID!, $after: String) {
       blog(id: $id) { articles(first: 100, after: $after) {
         nodes { title handle body publishedAt }
@@ -73,7 +109,7 @@ def shopify_articles():
             raise RuntimeError(json.dumps(data["errors"]))
         blog = data.get("data", {}).get("blog")
         if not blog:
-            raise RuntimeError("Shopify blog not found; verify SHOPIFY_BLOG_ID.")
+            raise RuntimeError("The verified Recipes blog disappeared during article retrieval; stopping safely.")
         conn = blog["articles"]
         # The Admin API can return drafts in the blog connection; only process live articles.
         articles.extend(article for article in conn["nodes"] if article.get("publishedAt"))
