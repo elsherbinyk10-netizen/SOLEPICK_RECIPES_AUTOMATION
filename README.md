@@ -78,3 +78,6 @@ A targeted recovery can be triggered with a reviewed `[publish-recipes:recipe-sl
 
 
 <!-- Test-only trigger for the newly replenished recipe library. -->
+
+
+<!-- Run a non-publishing media verification pass for the eight replenished recipes. -->
