@@ -58,7 +58,7 @@ concurrency:
 
 jobs:
   publish-recipe:
-    if: github.event_name != 'pull_request' && (github.event_name != 'push' || contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[audit-repair-videos]') || contains(github.event.head_commit.message, '[publish-daily-recipe]') || contains(github.event.head_commit.message, '[validate-recipe-library]'))
+    if: github.event_name != 'pull_request' && (github.event_name != 'push' || contains(github.event.head_commit.message, '[repair-video:') || contains(github.event.head_commit.message, '[audit-repair-videos]') || contains(github.event.head_commit.message, '[publish-daily-recipe]') || contains(github.event.head_commit.message, '[validate-recipe-library]') || contains(github.event.head_commit.message, '[check-recipe-media]'))
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -88,6 +88,12 @@ jobs:
       # before any scheduled or manual Shopify publishing step can run.
       - name: Validate recipe library and media safety (required before publishing)
         run: python -m unittest discover -s tests -v
+
+      - name: Check media for replenished recipes without publishing
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[check-recipe-media]')
+        env:
+          MEDIA_CHECK_SLUGS: lemon-herb-chicken-couscous-bowls,garlic-butter-shrimp-rice-skillet,greek-chicken-pita-salad,turkey-meatballs-tomato-orzo,roasted-vegetable-chickpea-couscous,blueberry-banana-overnight-oats,sheet-pan-sausage-peppers-potatoes,creamy-mushroom-spinach-risotto
+        run: python recipe_worker.py --check-media-only
 
       - name: Install open-source caption tools
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
