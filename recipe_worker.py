@@ -1513,6 +1513,7 @@ def main():
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
     parser.add_argument("--audit-missing-videos", action="store_true", help="Audit published recipe articles, repair missing embedded players in place, then publish only if today has no successful recipe post.")
     parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
+    parser.add_argument("--check-media-only", action="store_true", help="Check licensed dish-relevant images and matching embeddable videos for selected recipes without publishing or changing the catalogue.")
     args = parser.parse_args()
     max_publish = 1 if args.one_time_test else configured_max_recipes_per_run()
     if args.one_time_test and args.repair_handle:
@@ -1535,6 +1536,46 @@ def main():
     # posts when both seasonal cron triggers run. Video verification still gates publish.
     recipes = load_recipes()
     day_number = (now.date() - datetime.date(2025, 1, 1)).days
+
+    if args.check_media_only:
+        raw_slugs = os.environ.get("MEDIA_CHECK_SLUGS", "").strip()
+        requested = [slug.strip() for slug in raw_slugs.split(",") if slug.strip()]
+        if not requested:
+            parser.error("--check-media-only requires MEDIA_CHECK_SLUGS with one or more exact recipe slugs.")
+        by_slug = {recipe["slug"]: recipe for recipe in recipes}
+        missing = [slug for slug in requested if slug not in by_slug]
+        if missing:
+            raise RuntimeError("Unknown media-check recipe slugs: " + ", ".join(missing))
+        failures = 0
+        print(f"MEDIA-ONLY CHECK: {len(requested)} recipes; no Shopify writes and no catalogue changes.")
+        for slug in requested:
+            recipe = make_recipe_specific(by_slug[slug])
+            print(f"\\nMEDIA CHECK: {recipe['title']} [{slug}]")
+            try:
+                photo = generate_recipe_image(recipe, published_articles=[])
+                print("IMAGE PASS: " + json.dumps({
+                    "title": photo.get("title"), "author": photo.get("author"),
+                    "license": photo.get("license"), "license_url": photo.get("license_url"),
+                    "source_url": photo.get("source_url"), "url": photo.get("url")
+                }, ensure_ascii=False))
+            except Exception as error:
+                failures += 1
+                print(f"IMAGE HOLD: {type(error).__name__}: {error}")
+            try:
+                video = find_verified_recipe_video(recipe)
+                print("VIDEO PASS: " + json.dumps({
+                    "title": video.get("title"), "publisher": video.get("publisher"),
+                    "url": video.get("url"), "embed_url": video.get("embed_url"),
+                    "match_score": video.get("match_score")
+                }, ensure_ascii=False))
+            except Exception as error:
+                failures += 1
+                print(f"VIDEO HOLD: {type(error).__name__}: {error}")
+        if failures:
+            print(f"MEDIA-ONLY RESULT: HOLD - {failures} media checks failed; no recipe is publish-approved by this run.")
+            raise SystemExit(1)
+        print("MEDIA-ONLY RESULT: all requested image and video checks passed. This run did not publish.")
+        return
 
     # Dry-run is deliberately offline: it does not call Shopify.
     if args.dry_run:
