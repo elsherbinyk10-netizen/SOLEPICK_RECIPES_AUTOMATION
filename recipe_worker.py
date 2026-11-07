@@ -620,11 +620,17 @@ def _photo_title_relevance(recipe_title, image_title):
         normalized_wanted.add("waffles")
     if "risoni" in normalized_wanted:
         normalized_wanted.add("orzo")
+    # Orzo (also called risoni) is rice-shaped pasta. A clearly identified
+    # chicken-pasta photograph can therefore be a relevant visual fallback
+    # when Commons has no exact orzo file title; protein relevance remains
+    # mandatory and all licence, uniqueness and image-quality checks still run.
+    if "orzo" in normalized_wanted or "risoni" in normalized_wanted:
+        normalized_wanted.add("pasta")
     overlap = len(normalized_wanted & normalized_found) / max(1, len(normalized_wanted))
     has_main = bool(main_food and main_food in normalized_found)
     normalized_formats = set(wanted_formats)
-    if "risoni" in normalized_formats:
-        normalized_formats.add("orzo")
+    if normalized_formats & {"orzo", "risoni"}:
+        normalized_formats.add("pasta")
     has_format = bool(normalized_formats & normalized_found)
     return overlap, has_main, has_format
 
@@ -678,7 +684,15 @@ def generate_recipe_image(recipe, published_articles=None):
     if "pancakes" in wanted or "pancake" in wanted:
         searches.extend(["banana pancakes", "oat banana pancakes"])
     if "orzo" in wanted or "risoni" in wanted:
-        searches.extend(["chicken orzo pasta", "chicken risoni"])
+        # Commons often labels orzo as pasta rather than by its specific shape.
+        # Search broader food-photo terms, but accept them only when the image
+        # title still identifies chicken plus pasta under _photo_title_relevance.
+        searches.extend([
+            "chicken orzo pasta",
+            "chicken risoni",
+            "chicken pasta food photograph",
+            "lemon chicken pasta food photograph",
+        ])
     # Add restrained culinary aliases to improve discovery without weakening
     # the strict title relevance, licensing, uniqueness or image-quality gates.
     title_words = set(query_terms)
