@@ -1269,6 +1269,35 @@ def get_existing_article_for_repair(blog_id, handle):
         after = conn["pageInfo"]["endCursor"]
 
 
+def article_needs_video_repair(body):
+    """Return true unless the saved recipe body contains the expected embedded player."""
+    body = str(body or "")
+    return not (
+        "<iframe" in body.lower()
+        and "youtube-nocookie.com/embed/" in body
+        and bool(re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE))
+    )
+
+
+def audit_and_repair_missing_recipe_videos(blog_id, articles, recipes):
+    """Repair missing players in-place on already-published Recipes blog articles."""
+    checked = repaired = failed = 0
+    for handle, article in list(articles.items()):
+        if not article.get("isPublished"):
+            continue
+        checked += 1
+        if not article_needs_video_repair(article.get("body")):
+            continue
+        try:
+            repair_existing_article_video(blog_id, handle, recipes)
+            repaired += 1
+        except Exception as error:
+            failed += 1
+            print(f"VIDEO AUDIT REPAIR FAILED | handle={handle} | {type(error).__name__}: {error}")
+    print(f"EXISTING RECIPE VIDEO AUDIT COMPLETE | published_articles_checked={checked} | repaired={repaired} | unresolved={failed}")
+    return {"checked": checked, "repaired": repaired, "failed": failed}
+
+
 def repair_existing_article_video(blog_id, handle, recipes):
     existing = get_existing_article_for_repair(blog_id, handle)
     if not existing:
@@ -1458,6 +1487,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--repair-handle", help="Update the video section on an existing published Shopify article without creating a new article.")
+    parser.add_argument("--audit-missing-videos", action="store_true", help="Audit published recipe articles, repair missing embedded players in place, then publish only if today has no successful recipe post.")
     parser.add_argument("--one-time-test", action="store_true", help="Manual one-time test: bypass the same-day guard for one eligible new recipe only.")
     args = parser.parse_args()
     max_publish = 1 if args.one_time_test else configured_max_recipes_per_run()
@@ -1498,6 +1528,10 @@ def main():
         return
 
     articles = existing_articles(blog_id)
+    if args.audit_missing_videos:
+        audit_and_repair_missing_recipe_videos(blog_id, articles, recipes)
+        # Read after write so duplicate protection uses Shopify's saved state.
+        articles = existing_articles(blog_id)
     sync_published_recipe_categories(articles, recipes)
     published_today = already_published_today(articles, now, recipe_slugs={recipe['slug'] for recipe in recipes})
     if published_today and not args.one_time_test:
