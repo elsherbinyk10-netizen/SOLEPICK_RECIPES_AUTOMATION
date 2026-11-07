@@ -109,6 +109,10 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertTrue(recipe_worker.article_needs_video_repair("<p>Watch on YouTube</p>"))
         self.assertTrue(recipe_worker.article_needs_video_repair('<iframe src="https://www.youtube.com/embed/abcdefghijk"></iframe>'))
         self.assertTrue(recipe_worker.article_needs_video_repair('<iframe src="https://www.youtube-nocookie.com/embed/abcdefghijk"></iframe>'))
+        duplicate = valid + '<h2>Watch the Recipe Video</h2><iframe src="https://www.youtube-nocookie.com/embed/lmnopqrstuv"></iframe>'
+        self.assertTrue(recipe_worker.article_needs_video_repair(duplicate))
+        cleaned = recipe_worker.upsert_recipe_video_section(duplicate, {"title": "Example"}, {"id": "abcdefghijk", "embed_url": "https://www.youtube-nocookie.com/embed/abcdefghijk", "url": "https://www.youtube.com/watch?v=abcdefghijk", "publisher": "Food Network"})
+        self.assertEqual(len(__import__("re").findall(r"<iframe\b", cleaned, flags=__import__("re").IGNORECASE)), 1)
 
     def test_daily_guard_blocks_second_publication(self):
         cairo = ZoneInfo("Africa/Cairo")
