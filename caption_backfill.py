@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import urllib.error
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
