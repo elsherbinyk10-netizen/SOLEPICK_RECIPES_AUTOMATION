@@ -1,5 +1,7 @@
 import io
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 from urllib.parse import parse_qs
 
@@ -58,6 +60,17 @@ class CaptionShopifyAuthTests(unittest.TestCase):
                     "solepick-test.myshopify.com", "caption-test-token", "2026-07"
                 )
 
+
+    def test_vtt_validation_requires_header_timing_and_caption_text(self):
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "valid.vtt"
+            path.write_text("WEBVTT\\n\\n1\\n00:00:01.000 --> 00:00:02.000\\nHello recipe\\n", encoding="utf-8")
+            self.assertEqual(caption_backfill.validate_vtt_file(path), 1)
+            path.write_text("not a vtt", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "WEBVTT"):
+                caption_backfill.validate_vtt_file(path)
 
 if __name__ == "__main__":
     unittest.main()
