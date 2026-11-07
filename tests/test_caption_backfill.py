@@ -66,7 +66,7 @@ class CaptionShopifyAuthTests(unittest.TestCase):
         from pathlib import Path
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "valid.vtt"
-            path.write_text("WEBVTT\\n\\n1\\n00:00:01.000 --> 00:00:02.000\\nHello recipe\\n", encoding="utf-8")
+            path.write_text("WEBVTT\n\n1\n00:00:01.000 --> 00:00:02.000\nHello recipe\n", encoding="utf-8")
             self.assertEqual(caption_backfill.validate_vtt_file(path), 1)
             path.write_text("not a vtt", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "WEBVTT"):
