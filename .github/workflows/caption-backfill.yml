@@ -55,11 +55,11 @@ jobs:
 
       - name: Discover existing recipe videos and generate available captions
         env:
-          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STORE_DOMAIN: 0mxbjk-cz.myshopify.com # Match the verified SolePick domain used by the main publisher.
           SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
           SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
           SHOPIFY_BLOG_ID: ${{ secrets.SHOPIFY_BLOG_ID }}
-          SHOPIFY_API_VERSION: "2026-10"
+          SHOPIFY_API_VERSION: "2026-07"
         run: python caption_backfill.py
 
       - name: Commit generated and validated caption files
