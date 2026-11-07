@@ -919,8 +919,12 @@ def featured_image_for(recipe, generated_image):
         raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"])
     if _is_retail_product_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
         raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"])
-    if image.get("source_type") != "wikimedia_commons" or not url.startswith("https://upload.wikimedia.org/"):
-        raise RuntimeError("Featured image must be a verified Wikimedia Commons food photograph.")
+    image_host = (urllib.parse.urlparse(url).hostname or "").lower()
+    if image.get("source_type") != "wikimedia_commons" or image_host not in {"upload.wikimedia.org"}:
+        raise RuntimeError(
+            "Featured image must be a verified Wikimedia Commons food photograph "
+            + f"(source_type={image.get('source_type')!r}, host={image_host or 'missing'})."
+        )
     license_name = str(image.get("license") or "").strip().lower()
     allowed = ("public domain" in license_name or "cc0" in license_name
                or bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_name)))
