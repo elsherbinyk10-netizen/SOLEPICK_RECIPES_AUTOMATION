@@ -69,3 +69,6 @@ A targeted recovery can be triggered with a reviewed `[publish-recipes:recipe-sl
 
 
 <!-- One-recipe guarded recovery trigger: image-source and workflow-selection fixes are now in place. -->
+
+
+<!-- Retry after image provenance diagnostics. -->
