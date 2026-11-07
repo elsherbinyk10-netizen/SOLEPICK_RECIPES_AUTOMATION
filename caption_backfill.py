@@ -143,13 +143,13 @@ def fetch_native_tracks(vid, directory):
     """Prefer genuine YouTube subtitle tracks in every available language."""
     import shutil
     import tempfile
-    from generate_captions import clean_youtube_vtt
+    from generate_captions import clean_youtube_vtt, validate_vtt_file, youtube_cookie_args
     temp = Path(tempfile.mkdtemp(prefix="solepick-subs-" + vid + "-"))
     template = str(temp / "source.%(language)s.%(ext)s")
     cmd = [sys.executable, "-m", "yt_dlp", "--no-warnings", "--no-progress",
            "--skip-download", "--write-subs", "--write-auto-subs",
-           "--sub-langs", "all", "--sub-format", "vtt", "--output", template,
-           "https://www.youtube.com/watch?v=" + vid]
+           "--sub-langs", "all", "--sub-format", "vtt", *youtube_cookie_args(),
+           "--output", template, "https://www.youtube.com/watch?v=" + vid]
     try:
         result = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=240)
         count = 0
@@ -167,11 +167,16 @@ def fetch_native_tracks(vid, directory):
             try:
                 cues = clean_youtube_vtt(source, target)
                 if cues:
+                    validate_vtt_file(target)
                     count += 1
                     print("Saved existing YouTube caption track " + raw_code + " -> " + str(target))
             except Exception as exc:
                 print("Could not validate " + source.name + ": " + type(exc).__name__ + ": " + str(exc))
-        return {"tracks_saved": count, "returncode": result.returncode, "log": result.stdout[-1500:]}
+        log = result.stdout[-1500:]
+        blocked = "Sign in to confirm" in log or "not a bot" in log.lower()
+        return {"tracks_saved": count, "returncode": result.returncode,
+                "access_status": "bot_verification_required" if blocked else ("available" if count else "no_tracks"),
+                "log": log}
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
         return {"tracks_saved": 0, "error": type(exc).__name__ + ": " + str(exc)}
     finally:
@@ -201,7 +206,8 @@ def main():
             if result.returncode == 0 and english.is_file():
                 item["english_status"] = "generated"
             else:
-                item["english_status"] = "blocked_or_failed"
+                native_status = item["native_caption_tracks"].get("access_status")
+                item["english_status"] = "blocked_by_youtube_bot_verification" if native_status == "bot_verification_required" else "blocked_or_failed"
                 report["videos"][vid] = item
                 print(f"SKIP {vid}: could not generate genuine English captions; will not fabricate.")
                 continue

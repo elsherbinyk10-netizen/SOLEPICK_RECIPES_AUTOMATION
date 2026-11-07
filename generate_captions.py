@@ -7,15 +7,71 @@ runners can be blocked from downloading YouTube media; in that case provide a
 permitted direct media URL or a local media file.
 """
 import argparse
+import atexit
+import base64
+import os
 import re
 import subprocess
 import sys
+import tempfile
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 CAPTIONS = ROOT / "captions"
 AUDIO_SUFFIXES = {".m4a", ".mp3", ".webm", ".opus", ".wav", ".mp4", ".mkv", ".mov", ".aac", ".ogg"}
+_COOKIE_FILE = None
+
+
+def youtube_cookie_args():
+    """Use an optional base64 Netscape cookie jar supplied through GitHub Secrets."""
+    global _COOKIE_FILE
+    encoded = os.environ.get("YOUTUBE_COOKIES_BASE64", "").strip()
+    if not encoded:
+        return []
+    if _COOKIE_FILE and _COOKIE_FILE.is_file():
+        return ["--cookies", str(_COOKIE_FILE)]
+    try:
+        raw = base64.b64decode(encoded, validate=True)
+        if not raw.lstrip().startswith((b"# Netscape HTTP Cookie File", b"# HTTP Cookie File")):
+            raise ValueError("not a Netscape-format cookie jar")
+    except Exception as exc:
+        raise RuntimeError("YOUTUBE_COOKIES_BASE64 must contain a base64-encoded Netscape cookie file.") from exc
+    handle = tempfile.NamedTemporaryFile(prefix="solepick-youtube-", suffix=".cookies", delete=False)
+    try:
+        handle.write(raw)
+        handle.close()
+        os.chmod(handle.name, 0o600)
+        _COOKIE_FILE = Path(handle.name)
+    except Exception:
+        handle.close()
+        Path(handle.name).unlink(missing_ok=True)
+        raise
+    atexit.register(lambda: _COOKIE_FILE and _COOKIE_FILE.unlink(missing_ok=True))
+    print("YouTube access: optional authenticated cookie jar loaded from repository secret.")
+    return ["--cookies", str(_COOKIE_FILE)]
+
+
+def validate_vtt_file(path):
+    """Require a WEBVTT header and at least one valid, non-empty timed cue."""
+    raw = Path(path).read_text(encoding="utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
+    if not raw.lstrip().startswith("WEBVTT"):
+        raise ValueError(f"{path} is missing the WEBVTT header")
+    cue_count = 0
+    for block in re.split(r"\n\s*\n", raw.strip()):
+        lines = [line.strip() for line in block.splitlines() if line.strip()]
+        timing = next((line for line in lines if "-->" in line), None)
+        if not timing:
+            continue
+        if not re.match(r"^\d{2}:\d{2}:\d{2}\.\d{3}\s+-->\s+\d{2}:\d{2}:\d{2}\.\d{3}", timing):
+            raise ValueError(f"Invalid WebVTT timing: {timing}")
+        index = lines.index(timing)
+        if not any(line and not line.startswith(("NOTE", "STYLE", "REGION")) for line in lines[index + 1:]):
+            raise ValueError("WebVTT cue has no caption text")
+        cue_count += 1
+    if cue_count == 0:
+        raise ValueError(f"{path} contains no valid timed caption cues")
+    return cue_count
 
 
 def video_id(value):
@@ -83,7 +139,7 @@ def try_youtube_subtitles(vid, out_dir):
         sys.executable, "-m", "yt_dlp", "--no-warnings", "--no-progress",
         "--skip-download", "--write-subs", "--write-auto-subs",
         "--sub-langs", "en,en-US,en-GB", "--sub-format", "vtt",
-        "--output", template, f"https://www.youtube.com/watch?v={vid}",
+        *youtube_cookie_args(), "--output", template, f"https://www.youtube.com/watch?v={vid}",
     ]
     print("Trying existing YouTube English captions first (no video download).")
     try:
@@ -160,7 +216,7 @@ def main():
             subprocess.run([
                 sys.executable, "-m", "yt_dlp", "--no-warnings", "--no-progress",
                 "-f", "bestaudio[ext=m4a]/bestaudio", "-x", "--audio-format", "m4a",
-                "--output", str(out_dir / "audio.%(ext)s"),
+                *youtube_cookie_args(), "--output", str(out_dir / "audio.%(ext)s"),
                 f"https://www.youtube.com/watch?v={vid}",
             ], check=True, timeout=300)
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
@@ -189,6 +245,13 @@ def main():
     if count == 0:
         raise RuntimeError("No speech segments were detected; refusing to publish an empty caption file.")
     target.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    try:
+        validated_count = validate_vtt_file(target)
+        if validated_count != count:
+            raise ValueError(f"Expected {count} cues but validated {validated_count}")
+    except Exception:
+        target.unlink(missing_ok=True)
+        raise
     (out_dir / "metadata.txt").write_text(
         f"video_id={vid}\nsource={args.video_url or args.media_file}\n"
         f"language={getattr(info, 'language', 'unknown')}\n"
