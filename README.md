@@ -54,3 +54,8 @@ The worker rotates through `recipes.json`, skips recipes already published by ha
 - Outputs are uploaded as the `solepick-dubbed-videos` workflow artifact for 7 days. Download and review each video before use.
 - This does not scrape or download YouTube/social embeds, publish anything to Shopify, or alter the live theme. The normal daily recipe publisher remains a separate workflow.
 - A source video URL is required to run the dubbing API. Saving the API key and installing the workflow does not itself generate dubbed media. Do not use third-party videos without permission.
+
+
+## Published recipe video audit
+
+The SolePick Daily Recipe Publishing workflow supports a guarded video audit. Run it manually with the `Audit missing videos` option, or use a reviewed push commit containing `[audit-repair-videos]`. The worker checks every published article in the Recipes blog, repairs missing embedded players in place using the verified video-source and embeddability checks, then re-reads Shopify before applying the normal Cairo-day duplicate guard. If today's recipe has not already been published, the same run may publish one eligible recipe; otherwise it does not create a duplicate. Articles whose video or image fails validation remain unchanged and are reported as unresolved.
