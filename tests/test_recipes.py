@@ -192,6 +192,29 @@ class RecipeLibraryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
             recipe_worker.make_recipe_specific(recipe)
 
+    def test_generic_choice_placeholders_are_blocked(self):
+        recipe = {
+            "title": "Lemon Garlic Chicken Rice Bowls",
+            "ingredients": ["500 g chicken breast", "2 cups cooked rice"],
+            "instructions": [
+                "Season the chicken with seasonings of choice.",
+                "Cook the chicken until it reaches 74°C (165°F).",
+                "Divide the rice between bowls.",
+                "Serve with your choice of vegetables."
+            ],
+            "prep_minutes": 10, "cook_minutes": 15, "servings": 2,
+        }
+        with self.assertRaisesRegex(ValueError, "manual recipe-specific review"):
+            recipe_worker.make_recipe_specific(recipe)
+
+    def test_curated_recipe_fallback_returns_complete_unique_patterns(self):
+        from trend_recipe_builder import generate_curated_recipe_candidates
+        candidates = generate_curated_recipe_candidates(existing_slugs={"crispy-smash-burger-tacos"}, limit=3)
+        self.assertEqual(len(candidates), 3)
+        self.assertTrue(all(len(item["instructions"]) >= 4 for item in candidates))
+        self.assertNotIn("crispy-smash-burger-tacos", {item["slug"] for item in candidates})
+        self.assertEqual(len({item["slug"] for item in candidates}), len(candidates))
+
     def test_white_bean_loaded_salad_has_specific_no_cook_steps(self):
         recipes = json.loads((ROOT / "recipes.json").read_text(encoding="utf-8"))
         recipe = next(item for item in recipes if item["slug"] == "mediterranean-white-bean-loaded-salad")
