@@ -1275,7 +1275,7 @@ def article_needs_video_repair(body):
     return not (
         "<iframe" in body.lower()
         and "youtube-nocookie.com/embed/" in body
-        and bool(re.search(r"<h2\\b[^>]*>\\s*Watch the Recipe Video Here\\s*</h2>", body, flags=re.IGNORECASE))
+        and bool(re.search(r"<h2\b[^>]*>\s*Watch the Recipe Video Here\s*</h2>", body, flags=re.IGNORECASE))
     )
 
 
