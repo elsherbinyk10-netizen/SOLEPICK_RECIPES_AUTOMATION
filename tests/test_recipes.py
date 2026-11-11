@@ -139,6 +139,15 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertTrue(has_format)
         self.assertGreaterEqual(overlap, 0.40)
 
+    def test_overnight_oats_photo_relevance_accepts_oatmeal_alias(self):
+        overlap, has_main, has_format = recipe_worker._photo_title_relevance(
+            "Blueberry Banana Overnight Oats",
+            "Banana blueberry oatmeal"
+        )
+        self.assertTrue(has_main)
+        self.assertTrue(has_format)
+        self.assertEqual(overlap, 1.0)
+
     def test_orzo_photo_relevance_rejects_wrong_protein(self):
         overlap, has_main, has_format = recipe_worker._photo_title_relevance(
             "Creamy Lemon Garlic Chicken Orzo",
