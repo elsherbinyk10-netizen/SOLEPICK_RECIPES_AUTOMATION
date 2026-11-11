@@ -600,13 +600,15 @@ def _is_document_like_image(title_text, image_url, metadata):
 
 def _photo_title_relevance(recipe_title, image_title):
     """Score dish-title overlap while recognizing common food-name synonyms."""
-    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe"}
+    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe", "overnight"}
     wanted = {word for word in re.findall(r"[a-z0-9]+", str(recipe_title).lower()) if word not in stop and len(word) > 2}
     main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
-    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
+    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal"}
     wanted_formats = wanted & formats
     found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
     normalized_found = set(found)
+    if "oatmeal" in normalized_found:
+        normalized_found.add("oats")
     if "risoni" in normalized_found:
         normalized_found.add("orzo")
     if "pancake" in normalized_found:
@@ -629,6 +631,8 @@ def _photo_title_relevance(recipe_title, image_title):
     overlap = len(normalized_wanted & normalized_found) / max(1, len(normalized_wanted))
     has_main = bool(main_food and main_food in normalized_found)
     normalized_formats = set(wanted_formats)
+    if normalized_formats & {"oats", "oatmeal"}:
+        normalized_formats.add("oatmeal")
     if normalized_formats & {"orzo", "risoni"}:
         normalized_formats.add("pasta")
     has_format = bool(normalized_formats & normalized_found)
@@ -654,10 +658,10 @@ def generate_recipe_image(recipe, published_articles=None):
     if not title:
         raise RuntimeError("Cannot search for a food photo without a recipe title.")
     query_terms = re.findall(r"[a-z0-9]+", title.lower())
-    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe"}
+    stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe", "overnight"}
     wanted = {word for word in query_terms if word not in stop and len(word) > 2}
     main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
-    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal"}
+    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal"}
     wanted_formats = wanted & formats
     # Expand search coverage while retaining strict metadata relevance checks below.
     # The old three-query / ten-result search often missed perfectly usable photos.
