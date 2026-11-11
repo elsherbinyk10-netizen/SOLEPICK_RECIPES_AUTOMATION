@@ -1,0 +1,6 @@
+video_id=gOkQvMoXCs0
+source=https://www.youtube.com/watch?v=gOkQvMoXCs0
+language=en
+method=youtube-subtitle-track
+segments=162
+caption_file=en.vtt

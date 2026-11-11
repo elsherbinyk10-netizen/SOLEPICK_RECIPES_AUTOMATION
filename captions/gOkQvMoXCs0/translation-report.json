@@ -1,0 +1,610 @@
+{
+  "source": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/en.vtt",
+  "source_cues": 162,
+  "results": {
+    "en": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/en.vtt",
+      "cues": 162,
+      "method": "source-copy"
+    },
+    "ar": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ar.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "es": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/es.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "fr": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/fr.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "de": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/de.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "it": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/it.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "pt": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/pt.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ja": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ja.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ko": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ko.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "tr": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/tr.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ru": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ru.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "zh-cn": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/zh.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "zh-tw": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/zh.vtt",
+      "cues": 162,
+      "method": "existing-youtube-track"
+    },
+    "af": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sq": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/sq.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "am": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "hy": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "az": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/az.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "eu": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/eu.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "be": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "bn": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/bn.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "bs": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "bg": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/bg.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "my": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ca": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ca.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ceb": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ny": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "co": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "hr": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "cs": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/cs.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "da": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/da.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "nl": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/nl.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "eo": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/eo.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "et": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/et.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "tl": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/tl.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "fi": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/fi.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "fy": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "gl": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/gl.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ka": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "el": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/el.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "gu": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ht": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ha": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "haw": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "he": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/he.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "hi": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/hi.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "hmn": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "hu": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/hu.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "is": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ig": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "id": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/id.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ga": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ga.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "jv": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "kn": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "kk": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "km": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "rw": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ky": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ky.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "lo": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "la": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "lv": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/lv.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "lt": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/lt.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "lb": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mk": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mg": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ms": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ms.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ml": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mt": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mi": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mr": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mn": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ne": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "no": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "or": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ps": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "fa": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/fa.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "pl": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/pl.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "pa": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ro": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ro.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "sm": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "gd": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sr": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "st": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sn": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sd": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "si": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sk": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/sk.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "sl": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/sl.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "so": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "su": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sw": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/sw.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "sv": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/sv.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "tg": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ta": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "tt": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "te": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "th": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/th.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ti": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "uk": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/uk.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "ur": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/ur.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "uz": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "vi": {
+      "status": "ok",
+      "file": "/home/runner/work/SOLEPICK_RECIPES_AUTOMATION/SOLEPICK_RECIPES_AUTOMATION/captions/gOkQvMoXCs0/vi.vtt",
+      "cues": 162,
+      "method": "argos-local"
+    },
+    "cy": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "xh": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "yi": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "yo": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "zu": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "as": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "br": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "dv": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ee": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "fo": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ilo": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "kok": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mai": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mni": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "om": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sa": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "sat": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "ak": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "bho": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "doi": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "gom": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "kri": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "lus": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "mwr": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    },
+    "nso": {
+      "status": "unavailable",
+      "reason": "No installed English-to-target Argos model"
+    }
+  }
+}
