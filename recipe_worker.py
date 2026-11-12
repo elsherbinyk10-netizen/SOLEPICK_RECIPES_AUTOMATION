@@ -898,32 +898,73 @@ def catalogue_image_fallback(recipe, published_articles=None):
     return {"url": url, "altText": alt}
 
 
-def youtube_thumbnail_for(recipe, video):
-    """Use only the verified publisher video's own high-resolution thumbnail."""
+def youtube_thumbnail_for(recipe, video, published_articles=None):
+    """Use a unique, high-resolution thumbnail from the already-verified recipe video."""
     video_id = str(video.get("id") or "").strip()
     if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
         raise RuntimeError("Cannot select a thumbnail without a verified publisher video ID.")
+    catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
+    used_urls = {
+        str(item.get("image_url") or "").strip()
+        for item in catalogue
+        if item.get("slug") != recipe.get("slug") and item.get("image_url")
+    }
+    for article in (published_articles or []):
+        image = article.get("image") or {}
+        if image.get("url"):
+            used_urls.add(str(image["url"]).strip())
+    used_identities = {_image_identity(item) for item in used_urls if _image_identity(item)}
     for url in (
         f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg",
         f"https://img.youtube.com/vi/{video_id}/sddefault.jpg",
     ):
+        if url in used_urls or _image_identity(url) in used_identities:
+            print(f"REJECTED DUPLICATE PUBLISHER THUMBNAIL: {url}")
+            continue
         quality = inspect_image_url(url)
         if is_high_quality_image(quality):
-            publisher = str(video.get("publisher") or "Verified publisher")
-            return {"url": url, "altText": f"{publisher} cooking video thumbnail for {recipe['title']}", "source_type": "official_youtube_thumbnail", "publisher": publisher}
+            publisher = str(video.get("publisher") or "").strip()
+            video_url = str(video.get("url") or f"https://www.youtube.com/watch?v={video_id}")
+            if not publisher:
+                raise RuntimeError("Verified publisher thumbnail is missing its creator attribution.")
+            return {
+                "url": url,
+                "altText": f"{publisher} cooking video thumbnail for {recipe['title']}",
+                "source_type": "official_youtube_thumbnail",
+                "publisher": publisher,
+                "source_url": video_url,
+                "video_id": video_id,
+            }
         print(f"REJECTED PUBLISHER THUMBNAIL: {url} | {quality}")
-    raise RuntimeError("No high-resolution verified creator thumbnail passed image checks; refusing to publish.")
+    raise RuntimeError("No unique high-resolution verified creator thumbnail passed image checks; refusing to publish.")
 
 
 def featured_image_for(recipe, generated_image):
-    """Accept only verified Commons photos with commercial-use licences."""
+    """Accept verified Commons photos or a unique thumbnail from the verified recipe video."""
     image = generated_image or {}
     url = str(image.get("url") or "").strip()
     if _is_document_like_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
         raise RuntimeError("Rejected document/PDF-style image for " + recipe["title"])
     if _is_retail_product_image(str(image.get("title") or ""), url, {"ImageDescription":{"value":image.get("altText","")}}):
         raise RuntimeError("Rejected grocery-store, retail-shelf or packaged-product image for " + recipe["title"])
-    image_host = (urllib.parse.urlparse(url).hostname or "").lower()
+    parsed_image_url = urllib.parse.urlparse(url)
+    image_host = (parsed_image_url.hostname or "").lower()
+    if image.get("source_type") == "official_youtube_thumbnail":
+        video_id = str(image.get("video_id") or "").strip()
+        expected_path = f"/vi/{video_id}/"
+        if (
+            image_host != "img.youtube.com"
+            or not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id)
+            or not parsed_image_url.path.startswith(expected_path)
+            or parsed_image_url.path.rsplit("/", 1)[-1] not in {"maxresdefault.jpg", "sddefault.jpg"}
+            or not str(image.get("publisher") or "").strip()
+            or not str(image.get("source_url") or "").startswith("https://www.youtube.com/watch?v=" + video_id)
+        ):
+            raise RuntimeError("Publisher thumbnail must belong to the verified, attributed recipe video.")
+        quality = inspect_image_url(url)
+        if not is_high_quality_image(quality):
+            raise RuntimeError("Rejected low-resolution publisher thumbnail for " + recipe["title"] + ": " + str(quality))
+        return image
     if image.get("source_type") != "wikimedia_commons" or image_host not in {"upload.wikimedia.org", "thumb.wikimedia.org"}:
         raise RuntimeError(
             "Featured image must be a verified Wikimedia Commons food photograph "
@@ -1052,6 +1093,11 @@ def article_html(recipe, video=None, published_handles=None, featured_image=None
         license_url = featured_image.get("license_url") or ""
         if source_url.startswith("https://") and license_url.startswith("https://"):
             image_credit = (f'<p class="solepick-image-credit"><small>Food photo: <a href="{esc(source_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("title") or "Food photograph")}</a> by {esc(featured_image.get("author") or "Author not stated")} · <a href="{esc(license_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("license") or "")}</a> · via Wikimedia Commons</small></p>')
+    elif featured_image and featured_image.get("source_type") == "official_youtube_thumbnail":
+        source_url = featured_image.get("source_url") or ""
+        publisher = featured_image.get("publisher") or "Verified video publisher"
+        if source_url.startswith("https://www.youtube.com/watch?v="):
+            image_credit = (f'<p class="solepick-image-credit"><small>Recipe video thumbnail: <a href="{esc(source_url)}" target="_blank" rel="noopener noreferrer">{esc(publisher)}</a> on YouTube</small></p>')
     return (
         f"<p>{esc(metadata['description'])}</p>"
         f"{image_credit}"
@@ -1811,7 +1857,11 @@ def main():
             continue
         print(f"Verified recipe video: {video['title']} | id={video['id']} | match={video['match_score']} | embeddable=yes")
         try:
-            generated_image = generate_recipe_image(recipe, list(articles.values()))
+            try:
+                generated_image = generate_recipe_image(recipe, list(articles.values()))
+            except RuntimeError as commons_error:
+                print(f"COMMONS PHOTO FALLBACK: {recipe['title']} | {commons_error}")
+                generated_image = youtube_thumbnail_for(recipe, video, list(articles.values()))
             generated_image = featured_image_for(recipe, generated_image)
             recipe["published_image_url"] = generated_image["url"]
         except RuntimeError as error:
