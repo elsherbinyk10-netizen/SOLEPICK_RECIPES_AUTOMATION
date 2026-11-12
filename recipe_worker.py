@@ -1708,6 +1708,38 @@ def main():
         else:
             print("FOOD TREND DISCOVERY: no fresh signals; only existing reviewed catalogue recipes are eligible.")
     if target_recipes is None:
+        # Trend ranking can return only the trend-matched subset. Preserve that
+        # priority, but always add the rest of the reviewed catalogue as a fallback.
+        # Filter before counting so legacy template entries cannot crowd out authored
+        # recipes or make a run appear exhausted when good recipes remain available.
+        ranked_candidates = list(candidates)
+        seen_candidate_slugs = {item.get("slug") for item in ranked_candidates}
+        ranked_candidates.extend(
+            item for item in recipes
+            if item.get("slug") not in seen_candidate_slugs
+        )
+        quality_ready_candidates = []
+        seen_ready_slugs = set()
+        rejected_template_count = 0
+        for item in ranked_candidates:
+            slug = item.get("slug")
+            if not slug or slug in seen_ready_slugs:
+                continue
+            try:
+                make_recipe_specific(item)
+            except ValueError:
+                rejected_template_count += 1
+                continue
+            quality_ready_candidates.append(item)
+            seen_ready_slugs.add(slug)
+        candidates = quality_ready_candidates
+        print(
+            "QUALITY-FIRST CANDIDATE POOL: "
+            f"{len(candidates)} instruction-ready recipe(s); "
+            f"{rejected_template_count} legacy/template recipe(s) held back."
+        )
+
+    if target_recipes is None:
         # If the current rotation is mostly legacy/template material, add a small
         # reserve of fully authored evergreen recipes. They still pass every normal
         # instruction, video, image and Shopify publication check below.
