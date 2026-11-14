@@ -33,6 +33,18 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertNotIn("size", params)
         self.assertNotIn("extension", params)
 
+    def test_openverse_search_uses_all_prepared_aliases_up_to_fourteen(self):
+        import io
+        responses = [io.BytesIO(b'{"results": []}') for _ in range(10)]
+        searches = [f"lentil curry food alias {index}" for index in range(10)]
+        with patch("recipe_worker.urllib.request.urlopen", side_effect=responses) as mocked:
+            result = recipe_worker.search_openverse_recipe_image(
+                {"title": "Creamy Lentil Curry"}, set(), set(), searches,
+                "lentil", {"curry"}, set()
+            )
+        self.assertIsNone(result)
+        self.assertEqual(mocked.call_count, 10)
+
     def test_shopify_client_credentials_exchange_returns_access_token(self):
         import io
         import urllib.parse
