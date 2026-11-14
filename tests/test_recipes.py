@@ -15,26 +15,23 @@ class RecipeLibraryTests(unittest.TestCase):
     def test_openverse_anonymous_search_uses_supported_page_size(self):
         import io
         import urllib.parse
-        responses = [io.BytesIO(b'{"results": []}'), io.BytesIO(b'{"results": []}')]
+        responses = [io.BytesIO(b'{"results": []}')]
         with patch("recipe_worker.urllib.request.urlopen", side_effect=responses) as mocked:
             result = recipe_worker.search_openverse_recipe_image(
                 {"title": "Creamy Lentil Curry"}, set(), set(),
                 ["Creamy Lentil Curry food"], "lentil", {"curry"}, set()
             )
         self.assertIsNone(result)
-        self.assertEqual(mocked.call_count, 2)
-        strict_request = mocked.call_args_list[0].args[0]
-        broad_request = mocked.call_args_list[1].args[0]
-        strict_params = urllib.parse.parse_qs(urllib.parse.urlparse(strict_request.full_url).query)
-        broad_params = urllib.parse.parse_qs(urllib.parse.urlparse(broad_request.full_url).query)
-        self.assertEqual(strict_params["page_size"], ["20"])
-        self.assertEqual(strict_params["license_type"], ["commercial"])
-        self.assertEqual(strict_params["category"], ["photograph"])
-        self.assertEqual(broad_params["page_size"], ["20"])
-        self.assertEqual(broad_params["license_type"], ["commercial"])
-        self.assertNotIn("category", broad_params)
-        self.assertNotIn("aspect_ratio", broad_params)
-        self.assertEqual(broad_params["mature"], ["false"])
+        self.assertEqual(mocked.call_count, 1)
+        request = mocked.call_args.args[0]
+        params = urllib.parse.parse_qs(urllib.parse.urlparse(request.full_url).query)
+        self.assertEqual(params["page_size"], ["20"])
+        self.assertEqual(params["license_type"], ["commercial"])
+        self.assertEqual(params["mature"], ["false"])
+        self.assertNotIn("category", params)
+        self.assertNotIn("aspect_ratio", params)
+        self.assertNotIn("size", params)
+        self.assertNotIn("extension", params)
 
     def test_shopify_client_credentials_exchange_returns_access_token(self):
         import io
