@@ -653,11 +653,15 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
         # photos, preventing the old fallback from ever running. Local checks
         # below remain authoritative for licence, relevance, dimensions, ratio,
         # file type, uniqueness and decoded-image quality.
-        request_filters = [{}]
+        # First ask Openverse for its commercial-use classification. Some
+        # otherwise reusable CC0/CC BY records are missing that indexed flag,
+        # so retry the same phrase without the server-side licence filter.
+        # The local allow-list below remains mandatory and rejects NC/ND works.
+        request_filters = [{"license_type": "commercial"}, {}]
         payload = None
         for filter_index, extra_filters in enumerate(request_filters, start=1):
             params_dict = {
-                "q": search_text[:200], "license_type": "commercial",
+                "q": search_text[:200],
                 "mature": "false", "page_size": 20, "page": 1,
             }
             params_dict.update(extra_filters)
@@ -673,13 +677,13 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
                     if isinstance(candidate_payload, dict):
                         payload = candidate_payload
                         count = len(payload.get("results") or [])
-                        print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/1 query={search_text!r} results={count}")
+                        print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 query={search_text!r} results={count}")
                         if count:
                             break
                     break
                 except urllib.error.HTTPError as error:
                     retryable = error.code == 429 or 500 <= error.code < 600
-                    print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/1 attempt {attempt + 1}/2: HTTP {error.code} for query {search_text!r}")
+                    print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 attempt {attempt + 1}/2: HTTP {error.code} for query {search_text!r}")
                     if not retryable or attempt == 1:
                         break
                     retry_after = error.headers.get("Retry-After", "")
@@ -689,7 +693,7 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
                         delay = 3 * (attempt + 1)
                     time.sleep(delay)
                 except (urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
-                    print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/1 attempt {attempt + 1}/2: {type(error).__name__} for query {search_text!r}")
+                    print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 attempt {attempt + 1}/2: {type(error).__name__} for query {search_text!r}")
                     if attempt == 1:
                         break
             if payload and payload.get("results"):
