@@ -447,6 +447,24 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(image["source_type"], "wikimedia_commons")
         self.assertEqual(image["license"], "CC BY 4.0")
 
+    def test_featured_image_accepts_verified_openverse_cc_by_photo(self):
+        recipe = {"title": "Sample Salmon Pasta"}
+        generated_image = {
+            "url": "https://images.example.org/salmon-pasta.jpg",
+            "altText": "Salmon pasta served on a plate",
+            "source_type": "openverse",
+            "title": "Salmon pasta",
+            "author": "Example Photographer",
+            "provider": "example-provider",
+            "source_url": "https://example.org/photos/salmon-pasta",
+            "license": "CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        }
+        with patch.object(recipe_worker, "inspect_image_url", return_value={"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}):
+            image = recipe_worker.featured_image_for(recipe, generated_image)
+        self.assertEqual(image["source_type"], "openverse")
+        self.assertEqual(image["provider"], "example-provider")
+
     def test_featured_image_accepts_verified_creator_video_thumbnail(self):
         image = {
             "url": "https://img.youtube.com/vi/abcdefghijk/maxresdefault.jpg",
