@@ -12,6 +12,22 @@ import recipe_worker
 
 
 class RecipeLibraryTests(unittest.TestCase):
+    def test_openverse_anonymous_search_uses_supported_page_size(self):
+        import io
+        import urllib.parse
+        response = io.BytesIO(b'{"results": []}')
+        with patch("recipe_worker.urllib.request.urlopen", return_value=response) as mocked:
+            result = recipe_worker.search_openverse_recipe_image(
+                {"title": "Creamy Lentil Curry"}, set(), set(),
+                ["Creamy Lentil Curry food"], "lentil", {"curry"}, set()
+            )
+        self.assertIsNone(result)
+        request = mocked.call_args.args[0]
+        params = urllib.parse.parse_qs(urllib.parse.urlparse(request.full_url).query)
+        self.assertEqual(params["page_size"], ["20"])
+        self.assertEqual(params["license_type"], ["commercial"])
+        self.assertEqual(params["category"], ["photograph"])
+
     def test_shopify_client_credentials_exchange_returns_access_token(self):
         import io
         import urllib.parse
