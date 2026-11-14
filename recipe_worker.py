@@ -707,7 +707,7 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
                 print("OPENVERSE REJECTED LOW-QUALITY IMAGE: " + title_text + " | " + str(quality))
                 continue
             seen.add(image_url)
-            alt = re.sub(r"\\s+", " ", (title_text or recipe["title"]) + " food photograph").strip()[:240]
+            alt = re.sub(r"\s+", " ", (title_text or recipe["title"]) + " food photograph").strip()[:240]
             license_label = {
                 "cc0": "CC0", "pdm": "Public Domain Mark",
                 "by": "CC BY " + str(item.get("license_version") or ""),
@@ -1071,7 +1071,7 @@ def featured_image_for(recipe, generated_image):
         )
     license_name = str(image.get("license") or "").strip().lower()
     allowed = ("public domain" in license_name or "cc0" in license_name
-               or bool(re.search(r"cc by(?:-sa)?(?:\\s|$)", license_name)))
+               or bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_name)))
     if not allowed or "noncommercial" in license_name or "no derivatives" in license_name or license_name.endswith(" nd"):
         raise RuntimeError("Featured image licence is not approved for commercial reuse.")
     if not image.get("author") or not image.get("source_url") or not image.get("license_url"):
