@@ -28,6 +28,7 @@ class RecipeLibraryTests(unittest.TestCase):
         fallback_request = mocked.call_args_list[1].args[0]
         fallback_params = urllib.parse.parse_qs(urllib.parse.urlparse(fallback_request.full_url).query)
         self.assertNotIn("license_type", fallback_params)
+        # Keep both the strict discovery pass and local-licence fallback covered.
         self.assertEqual(params["page_size"], ["20"])
         self.assertEqual(params["license_type"], ["commercial"])
         self.assertEqual(params["mature"], ["false"])
