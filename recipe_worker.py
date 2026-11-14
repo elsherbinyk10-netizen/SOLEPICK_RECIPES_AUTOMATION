@@ -840,6 +840,10 @@ def generate_recipe_image(recipe, published_articles=None):
     searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
     # Increase candidate coverage while keeping a bounded number of image downloads.
     searches = searches[:14]
+    # Reject unrelated imagery consistently in both Openverse and Wikimedia results.
+    # Define this before either source is queried so the Openverse-first path can
+    # safely apply the same local screening as the Commons fallback.
+    reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
     # Try Openverse first: it is purpose-built for openly licensed images and
     # avoids spending several minutes exhausting broad Wikimedia Commons searches
     # before reaching the same commercial-use photo catalogue. All local licence,
@@ -853,8 +857,6 @@ def generate_recipe_image(recipe, published_articles=None):
     seen = set()
     image_quality_checks = 0
     max_image_quality_checks = 40
-    # Reject non-food scans and document thumbnails, including PDF previews Shopify can show as .pdf.jpg.
-    reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
     for search_text in searches:
         if image_quality_checks >= max_image_quality_checks:
             break
