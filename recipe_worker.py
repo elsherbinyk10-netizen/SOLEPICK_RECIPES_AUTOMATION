@@ -647,37 +647,56 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
         # Openverse anonymous pagination is capped at 20 results per page.
         # A larger page_size is rejected by the live API (HTTP 400), which
         # previously made every search phrase fail before image screening.
-        params = urllib.parse.urlencode({
-            "q": search_text[:200], "license_type": "commercial",
-            "category": "photograph", "aspect_ratio": "wide", "size": "large",
-            "extension": "jpg,jpeg,png,webp", "filter_dead": "true",
-            "mature": "false", "page_size": 20, "page": 1,
-        })
-        request = urllib.request.Request(
-            "https://api.openverse.org/v1/images/?" + params,
-            headers={"Accept": "application/json", "User-Agent": "SolePickRecipesBot/1.3 (+https://solepick.site; recipe image selection)"},
-        )
+        # First ask Openverse for ideal landscape photographs. If its indexed
+        # metadata filters return no hits, retry the same phrase with only the
+        # commercial-use and mature-content filters. Resolution, aspect ratio,
+        # file type, licence, relevance and decoded-image quality are all checked
+        # locally below, so this broadens discovery without relaxing acceptance.
+        request_filters = [
+            {"category": "photograph", "aspect_ratio": "wide", "size": "large",
+             "extension": "jpg,jpeg,png,webp", "filter_dead": "true"},
+            {},
+        ]
         payload = None
-        for attempt in range(2):
-            try:
-                with urllib.request.urlopen(request, timeout=20) as response:
-                    payload = json.loads(response.read().decode("utf-8"))
-                break
-            except urllib.error.HTTPError as error:
-                retryable = error.code == 429 or 500 <= error.code < 600
-                print(f"OPENVERSE PHOTO SEARCH attempt {attempt + 1}/2: HTTP {error.code} for query {search_text!r}")
-                if not retryable or attempt == 1:
-                    break
-                retry_after = error.headers.get("Retry-After", "")
+        for filter_index, extra_filters in enumerate(request_filters, start=1):
+            params_dict = {
+                "q": search_text[:200], "license_type": "commercial",
+                "mature": "false", "page_size": 20, "page": 1,
+            }
+            params_dict.update(extra_filters)
+            params = urllib.parse.urlencode(params_dict)
+            request = urllib.request.Request(
+                "https://api.openverse.org/v1/images/?" + params,
+                headers={"Accept": "application/json", "User-Agent": "SolePickRecipesBot/1.4 (+https://solepick.site; recipe image selection)"},
+            )
+            for attempt in range(2):
                 try:
-                    delay = min(15, max(2, int(retry_after)))
-                except (TypeError, ValueError):
-                    delay = 3 * (attempt + 1)
-                time.sleep(delay)
-            except (urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
-                print(f"OPENVERSE PHOTO SEARCH attempt {attempt + 1}/2: {type(error).__name__} for query {search_text!r}")
-                if attempt == 1:
+                    with urllib.request.urlopen(request, timeout=20) as response:
+                        candidate_payload = json.loads(response.read().decode("utf-8"))
+                    if isinstance(candidate_payload, dict):
+                        payload = candidate_payload
+                        count = len(payload.get("results") or [])
+                        print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 query={search_text!r} results={count}")
+                        if count:
+                            break
                     break
+                except urllib.error.HTTPError as error:
+                    retryable = error.code == 429 or 500 <= error.code < 600
+                    print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 attempt {attempt + 1}/2: HTTP {error.code} for query {search_text!r}")
+                    if not retryable or attempt == 1:
+                        break
+                    retry_after = error.headers.get("Retry-After", "")
+                    try:
+                        delay = min(15, max(2, int(retry_after)))
+                    except (TypeError, ValueError):
+                        delay = 3 * (attempt + 1)
+                    time.sleep(delay)
+                except (urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
+                    print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 attempt {attempt + 1}/2: {type(error).__name__} for query {search_text!r}")
+                    if attempt == 1:
+                        break
+            if payload and payload.get("results"):
+                break
         if not isinstance(payload, dict):
             continue
         for item in payload.get("results") or []:
