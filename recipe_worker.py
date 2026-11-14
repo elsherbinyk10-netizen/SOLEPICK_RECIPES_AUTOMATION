@@ -607,6 +607,12 @@ def _photo_title_relevance(recipe_title, image_title):
     wanted_formats = wanted & formats
     found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
     normalized_found = set(found)
+    # Singular/plural dish-name variants are common in Commons/Openverse titles.
+    for singular, plural in (("chickpea", "chickpeas"), ("lentil", "lentils"),
+                             ("bean", "beans"), ("noodle", "noodles"),
+                             ("potato", "potatoes"), ("prawn", "prawns")):
+        if singular in normalized_found or plural in normalized_found:
+            normalized_found.update((singular, plural))
     if "oatmeal" in normalized_found:
         normalized_found.add("oats")
     if "risoni" in normalized_found:
