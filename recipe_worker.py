@@ -603,7 +603,7 @@ def _photo_title_relevance(recipe_title, image_title):
     stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe", "overnight"}
     wanted = {word for word in re.findall(r"[a-z0-9]+", str(recipe_title).lower()) if word not in stop and len(word) > 2}
     main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
-    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","parfait","parfaits","pita","pitas","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal"}
+    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","parfait","parfaits","pita","pitas","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal","couscous","grain","grains","quinoa","bulgur","farro","barley","polenta"}
     wanted_formats = wanted & formats
     found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
     normalized_found = set(found)
@@ -643,7 +643,7 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
     """Search Openverse for commercially reusable food photography with full attribution."""
     checked = 0
     seen = set()
-    for search_text in searches[:14]:
+    for search_text in searches[:18]:
         # Openverse anonymous pagination is capped at 20 results per page.
         # A larger page_size is rejected by the live API (HTTP 400), which
         # previously made every search phrase fail before image screening.
@@ -658,7 +658,10 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
         # so retry the same phrase without the server-side licence filter.
         # The local allow-list below remains mandatory and rejects NC/ND works.
         request_filters = [{"license_type": "commercial"}, {}]
-        payload = None
+        # Always inspect both result sets. Previously, any non-empty strict-filter
+        # response stopped discovery before the unfiltered fallback could surface
+        # CC0/CC BY records whose Openverse commercial-use index was incomplete.
+        candidate_items = []
         for filter_index, extra_filters in enumerate(request_filters, start=1):
             params_dict = {
                 "q": search_text[:200],
@@ -668,18 +671,16 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
             params = urllib.parse.urlencode(params_dict)
             request = urllib.request.Request(
                 "https://api.openverse.org/v1/images/?" + params,
-                headers={"Accept": "application/json", "User-Agent": "SolePickRecipesBot/1.4 (+https://solepick.site; recipe image selection)"},
+                headers={"Accept": "application/json", "User-Agent": "SolePickRecipesBot/1.5 (+https://solepick.site; recipe image selection)"},
             )
             for attempt in range(2):
                 try:
                     with urllib.request.urlopen(request, timeout=20) as response:
                         candidate_payload = json.loads(response.read().decode("utf-8"))
                     if isinstance(candidate_payload, dict):
-                        payload = candidate_payload
-                        count = len(payload.get("results") or [])
-                        print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 query={search_text!r} results={count}")
-                        if count:
-                            break
+                        results = candidate_payload.get("results") or []
+                        candidate_items.extend(results)
+                        print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 query={search_text!r} results={len(results)}")
                     break
                 except urllib.error.HTTPError as error:
                     retryable = error.code == 429 or 500 <= error.code < 600
@@ -696,11 +697,9 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
                     print(f"OPENVERSE PHOTO SEARCH filter={filter_index}/2 attempt {attempt + 1}/2: {type(error).__name__} for query {search_text!r}")
                     if attempt == 1:
                         break
-            if payload and payload.get("results"):
-                break
-        if not isinstance(payload, dict):
+        if not candidate_items:
             continue
-        for item in payload.get("results") or []:
+        for item in candidate_items:
             if checked >= 36:
                 break
             if not isinstance(item, dict) or item.get("mature") is True:
@@ -812,18 +811,30 @@ def generate_recipe_image(recipe, published_articles=None):
         searches.append(" ".join(ingredient_terms[:4]) + " " + (main_food or "meal") + " dish")
     if main_food and wanted_formats:
         searches.append(main_food + " " + " ".join(sorted(wanted_formats)) + " food photograph")
+    # Add focused ingredient/format combinations. Search engines often index a
+    # finished dish under its central grain or protein rather than the full SEO
+    # title; the same strict title relevance and licence checks still decide use.
+    if main_food:
+        searches.extend([
+            main_food + " cooked meal food photography",
+            main_food + " plated dinner food photograph",
+        ])
+    for format_term in sorted(wanted_formats):
+        if format_term in {"couscous", "orzo", "risoni", "quinoa", "bulgur", "farro", "barley"}:
+            searches.append(format_term + " prepared dish food photography")
+            if main_food:
+                searches.append(main_food + " " + format_term + " food")
+        elif format_term in {"bowl", "bowls"} and main_food:
+            searches.append(main_food + " grain bowl food photography")
     # Common dish-name variants improve retrieval without relaxing verification.
     if "pancakes" in wanted or "pancake" in wanted:
         searches.extend(["banana pancakes", "oat banana pancakes"])
     if "orzo" in wanted or "risoni" in wanted:
-        # Commons often labels orzo as pasta rather than by its specific shape.
-        # Search broader food-photo terms, but accept them only when the image
-        # title still identifies chicken plus pasta under _photo_title_relevance.
+        # Orzo is often indexed as rice-shaped pasta, not by its recipe title.
         searches.extend([
-            "chicken orzo pasta",
-            "chicken risoni",
-            "chicken pasta food photograph",
-            "lemon chicken pasta food photograph",
+            "orzo pasta food photograph",
+            "risoni pasta plated food",
+            "lemon orzo pasta dish",
         ])
     # Add restrained culinary aliases to improve discovery without weakening
     # the strict title relevance, licensing, uniqueness or image-quality gates.
@@ -843,7 +854,7 @@ def generate_recipe_image(recipe, published_articles=None):
     # Normalize and deduplicate without changing priority.
     searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
     # Increase candidate coverage while keeping a bounded number of image downloads.
-    searches = searches[:14]
+    searches = searches[:18]
     # Reject unrelated imagery consistently in both Openverse and Wikimedia results.
     # Define this before either source is queried so the Openverse-first path can
     # safely apply the same local screening as the Commons fallback.
