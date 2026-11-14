@@ -665,7 +665,7 @@ def generate_recipe_image(recipe, published_articles=None):
     wanted_formats = wanted & formats
     # Expand search coverage while retaining strict metadata relevance checks below.
     # The old three-query / ten-result search often missed perfectly usable photos.
-    # Keep queries distinct to reduce Wikimedia rate-limit pressure.
+    # Keep queries distinct to reduce Wikimedia rate-limit pressure. Search more descriptive dish-photo phrases before rejecting a candidate.
     ingredient_terms = []
     for ingredient in recipe.get("ingredients", [])[:8]:
         cleaned = re.sub(r"^\s*(?:[\d./]+\s*)?(?:g|kg|ml|l|tbsp|tsp|cup|cups|oz|lb|clove|cloves|can|cans|piece|pieces)?\s*", "", str(ingredient), flags=re.I)
@@ -715,10 +715,10 @@ def generate_recipe_image(recipe, published_articles=None):
     # Normalize and deduplicate without changing priority.
     searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
     # Increase candidate coverage while keeping a bounded number of image downloads.
-    searches = searches[:8]
+    searches = searches[:14]
     seen = set()
     image_quality_checks = 0
-    max_image_quality_checks = 16
+    max_image_quality_checks = 40
     # Reject non-food scans and document thumbnails, including PDF previews Shopify can show as .pdf.jpg.
     reject_terms = {"seed", "seeds", "catalogue", "catalog", "flower", "flowers", "illustration", "poster", "advertisement", "advert", "logo", "clipart", "drawing", "painting", "poultry", "supplies", "document", "archived", "archive", "historic", "historical", "scientific", "policy", "policies", "practice", "practices", "pdf", "scan", "scanned", "manuscript", "page"}
     for search_text in searches:
@@ -726,8 +726,8 @@ def generate_recipe_image(recipe, published_articles=None):
             break
         params = urllib.parse.urlencode({
             "action": "query", "generator": "search", "gsrsearch": search_text,
-            "gsrnamespace": 6, "gsrlimit": 50, "prop": "imageinfo",
-            "iiprop": "url|extmetadata", "iiurlwidth": 1600, "format": "json",
+            "gsrnamespace": 6, "gsrlimit": 100, "prop": "imageinfo",
+            "iiprop": "url|extmetadata", "iiurlwidth": 2000, "format": "json",
         })
         request = urllib.request.Request(
             "https://commons.wikimedia.org/w/api.php?" + params,
