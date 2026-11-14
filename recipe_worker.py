@@ -643,7 +643,7 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
     """Search Openverse for commercially reusable food photography with full attribution."""
     checked = 0
     seen = set()
-    for search_text in searches[:8]:
+    for search_text in searches[:14]:
         # Openverse anonymous pagination is capped at 20 results per page.
         # A larger page_size is rejected by the live API (HTTP 400), which
         # previously made every search phrase fail before image screening.
@@ -840,6 +840,16 @@ def generate_recipe_image(recipe, published_articles=None):
     searches = list(dict.fromkeys(query.strip() for query in searches if query.strip()))
     # Increase candidate coverage while keeping a bounded number of image downloads.
     searches = searches[:14]
+    # Try Openverse first: it is purpose-built for openly licensed images and
+    # avoids spending several minutes exhausting broad Wikimedia Commons searches
+    # before reaching the same commercial-use photo catalogue. All local licence,
+    # attribution, relevance, uniqueness, resolution and decoded-quality checks
+    # remain mandatory. Search every prepared alias (up to the 14-query bound).
+    openverse_image = search_openverse_recipe_image(
+        recipe, used_urls, used_identities, searches, main_food, wanted_formats, reject_terms
+    )
+    if openverse_image:
+        return openverse_image
     seen = set()
     image_quality_checks = 0
     max_image_quality_checks = 40
@@ -959,11 +969,6 @@ def generate_recipe_image(recipe, published_articles=None):
             return {"url": image_url, "altText": alt, "source_type": "wikimedia_commons",
                     "title": work_title, "author": author, "source_url": source_page,
                     "license": license_name, "license_url": license_url}
-    openverse_image = search_openverse_recipe_image(
-        recipe, used_urls, used_identities, searches, main_food, wanted_formats, reject_terms
-    )
-    if openverse_image:
-        return openverse_image
     raise RuntimeError(
         "No unique, relevant, commercially reusable, high-quality dish photo passed "
         "Wikimedia Commons or Openverse checks for '" + title
