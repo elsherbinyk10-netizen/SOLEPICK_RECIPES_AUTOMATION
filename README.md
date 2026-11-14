@@ -81,3 +81,6 @@ A targeted recovery can be triggered with a reviewed `[publish-recipes:recipe-sl
 
 
 <!-- Run a non-publishing media verification pass for the eight replenished recipes. -->
+
+## Missed-schedule guarded recovery
+- The production publisher is scheduled at 09:00, 10:00, 11:00, and 12:00 Africa/Cairo (07:00–10:00 UTC under the current UTC+2 offset). A reviewed push commit marked `[publish-daily-recipe]` may be used as a same-day recovery trigger when scheduled Actions runs are missing; it does not bypass tests, media verification, duplicate protection, or Shopify read-back.
