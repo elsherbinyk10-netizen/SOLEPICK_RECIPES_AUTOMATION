@@ -15,16 +15,19 @@ class RecipeLibraryTests(unittest.TestCase):
     def test_openverse_anonymous_search_uses_supported_page_size(self):
         import io
         import urllib.parse
-        responses = [io.BytesIO(b'{"results": []}')]
+        responses = [io.BytesIO(b'{"results": []}'), io.BytesIO(b'{"results": []}')]
         with patch("recipe_worker.urllib.request.urlopen", side_effect=responses) as mocked:
             result = recipe_worker.search_openverse_recipe_image(
                 {"title": "Creamy Lentil Curry"}, set(), set(),
                 ["Creamy Lentil Curry food"], "lentil", {"curry"}, set()
             )
         self.assertIsNone(result)
-        self.assertEqual(mocked.call_count, 1)
-        request = mocked.call_args.args[0]
+        self.assertEqual(mocked.call_count, 2)
+        request = mocked.call_args_list[0].args[0]
         params = urllib.parse.parse_qs(urllib.parse.urlparse(request.full_url).query)
+        fallback_request = mocked.call_args_list[1].args[0]
+        fallback_params = urllib.parse.parse_qs(urllib.parse.urlparse(fallback_request.full_url).query)
+        self.assertNotIn("license_type", fallback_params)
         self.assertEqual(params["page_size"], ["20"])
         self.assertEqual(params["license_type"], ["commercial"])
         self.assertEqual(params["mature"], ["false"])
@@ -35,7 +38,7 @@ class RecipeLibraryTests(unittest.TestCase):
 
     def test_openverse_search_uses_all_prepared_aliases_up_to_fourteen(self):
         import io
-        responses = [io.BytesIO(b'{"results": []}') for _ in range(10)]
+        responses = [io.BytesIO(b'{"results": []}') for _ in range(20)]
         searches = [f"lentil curry food alias {index}" for index in range(10)]
         with patch("recipe_worker.urllib.request.urlopen", side_effect=responses) as mocked:
             result = recipe_worker.search_openverse_recipe_image(
@@ -43,7 +46,7 @@ class RecipeLibraryTests(unittest.TestCase):
                 "lentil", {"curry"}, set()
             )
         self.assertIsNone(result)
-        self.assertEqual(mocked.call_count, 10)
+        self.assertEqual(mocked.call_count, 20)
 
     def test_shopify_client_credentials_exchange_returns_access_token(self):
         import io
