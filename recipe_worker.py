@@ -603,7 +603,7 @@ def _photo_title_relevance(recipe_title, image_title):
     stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe", "overnight"}
     wanted = {word for word in re.findall(r"[a-z0-9]+", str(recipe_title).lower()) if word not in stop and len(word) > 2}
     main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
-    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal"}
+    formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","parfait","parfaits","pita","pitas","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal"}
     wanted_formats = wanted & formats
     found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
     normalized_found = set(found)
@@ -1066,7 +1066,7 @@ def featured_image_for(recipe, generated_image):
             raise RuntimeError("Openverse photo is missing provider or original-source attribution.")
     else:
         raise RuntimeError(
-            "Featured image must come from verified Wikimedia Commons or Openverse photography "
+            "Featured image must be a verified Wikimedia Commons food photograph or Openverse food photograph "
             + f"(source_type={source_type!r}, host={image_host or 'missing'})."
         )
     license_name = str(image.get("license") or "").strip().lower()
