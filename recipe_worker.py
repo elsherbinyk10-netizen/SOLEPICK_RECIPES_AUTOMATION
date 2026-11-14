@@ -639,6 +639,94 @@ def _photo_title_relevance(recipe_title, image_title):
     return overlap, has_main, has_format
 
 
+def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, main_food, wanted_formats, reject_terms):
+    """Search Openverse for commercially reusable food photography with full attribution."""
+    checked = 0
+    seen = set()
+    for search_text in searches[:8]:
+        params = urllib.parse.urlencode({
+            "q": search_text[:200], "license_type": "commercial",
+            "category": "photograph", "aspect_ratio": "wide", "size": "large",
+            "extension": "jpg,jpeg,png,webp", "filter_dead": "true",
+            "mature": "false", "page_size": 50, "page": 1,
+        })
+        request = urllib.request.Request(
+            "https://api.openverse.org/v1/images/?" + params,
+            headers={"Accept": "application/json", "User-Agent": "SolePickRecipesBot/1.3 (+https://solepick.site; recipe image selection)"},
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=20) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
+            print(f"OPENVERSE PHOTO SEARCH: {type(error).__name__} for query {search_text!r}; trying next query.")
+            continue
+        for item in payload.get("results") or []:
+            if checked >= 36:
+                break
+            if not isinstance(item, dict) or item.get("mature") is True:
+                continue
+            license_code = str(item.get("license") or "").strip().lower()
+            if license_code not in {"cc0", "pdm", "by", "by-sa"}:
+                continue
+            image_url = str(item.get("url") or "").strip()
+            title_text = str(item.get("title") or "").strip()
+            creator = str(item.get("creator") or "").strip()
+            source_page = str(item.get("foreign_landing_url") or "").strip()
+            license_url = str(item.get("license_url") or "").strip()
+            if not image_url.startswith("https://") or not source_page.startswith("https://"):
+                continue
+            if license_code not in {"cc0", "pdm"} and (not creator or not license_url.startswith("https://")):
+                continue
+            identity = _image_identity(image_url)
+            seen_identities = {_image_identity(x) for x in seen}
+            if image_url in used_urls or identity in used_identities or image_url in seen or (identity and identity in seen_identities):
+                print("OPENVERSE REJECTED DUPLICATE PHOTO: " + title_text)
+                continue
+            if _is_document_like_image(title_text, image_url, {}) or _is_retail_product_image(title_text, image_url, {}):
+                continue
+            tags = item.get("tags") or []
+            tag_text = " ".join(str(tag.get("name") or "") for tag in tags if isinstance(tag, dict))
+            relevance_text = " ".join((title_text, tag_text))
+            found = set(re.findall(r"[a-z0-9]+", relevance_text.lower()))
+            if found & reject_terms:
+                continue
+            overlap, has_main, has_format = _photo_title_relevance(recipe.get("title", ""), relevance_text)
+            if overlap < 0.40 and not (has_main and (has_format or len(wanted_formats) == 0)):
+                continue
+            if main_food and not has_main:
+                continue
+            if wanted_formats and not has_format:
+                continue
+            width, height = int(item.get("width") or 0), int(item.get("height") or 0)
+            ratio = width / max(1, height)
+            if width < 1200 or height < 675 or ratio < 1.2 or ratio > 2.4:
+                continue
+            checked += 1
+            quality = inspect_image_url(image_url)
+            if not is_high_quality_image(quality):
+                print("OPENVERSE REJECTED LOW-QUALITY IMAGE: " + title_text + " | " + str(quality))
+                continue
+            seen.add(image_url)
+            alt = re.sub(r"\\s+", " ", (title_text or recipe["title"]) + " food photograph").strip()[:240]
+            license_label = {
+                "cc0": "CC0", "pdm": "Public Domain Mark",
+                "by": "CC BY " + str(item.get("license_version") or ""),
+                "by-sa": "CC BY-SA " + str(item.get("license_version") or ""),
+            }[license_code].strip()
+            print("AUTO-SELECTED OPENVERSE FOOD PHOTO: " + title_text + " | license=" + license_label + " | provider=" + str(item.get("provider") or ""))
+            return {
+                "url": image_url, "altText": alt, "source_type": "openverse",
+                "title": title_text or recipe["title"],
+                "author": creator or ("Public domain" if license_code in {"cc0", "pdm"} else ""),
+                "source_url": source_page, "license": license_label,
+                "license_url": license_url or ("https://creativecommons.org/publicdomain/zero/1.0/" if license_code == "cc0" else "https://creativecommons.org/publicdomain/mark/1.0/"),
+                "provider": str(item.get("provider") or "Openverse"),
+            }
+        if checked >= 36:
+            break
+    return None
+
+
 def generate_recipe_image(recipe, published_articles=None):
     """Find a dish-relevant Commons photo with verified commercial-use licence and attribution metadata."""
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
@@ -835,11 +923,15 @@ def generate_recipe_image(recipe, published_articles=None):
             return {"url": image_url, "altText": alt, "source_type": "wikimedia_commons",
                     "title": work_title, "author": author, "source_url": source_page,
                     "license": license_name, "license_url": license_url}
-    # No unreviewed catalogue fallback: that was the cause of repeated/mismatched photos.
+    openverse_image = search_openverse_recipe_image(
+        recipe, used_urls, used_identities, searches, main_food, wanted_formats, reject_terms
+    )
+    if openverse_image:
+        return openverse_image
     raise RuntimeError(
-        "No unique, relevant commercially reusable Wikimedia photo (Public Domain, CC0, CC BY or CC BY-SA) "
-        "passed the image and relevance checks for '" + title
-        + "'. Recipe was not published with a repeated or unverified image; the next scheduled run will retry."
+        "No unique, relevant, commercially reusable, high-quality dish photo passed "
+        "Wikimedia Commons or Openverse checks for '" + title
+        + "'. Recipe was held; no repeated, unlicensed or unverified image was used."
     )
 
 def catalogue_image_fallback(recipe, published_articles=None):
@@ -965,14 +1057,21 @@ def featured_image_for(recipe, generated_image):
         if not is_high_quality_image(quality):
             raise RuntimeError("Rejected low-resolution publisher thumbnail for " + recipe["title"] + ": " + str(quality))
         return image
-    if image.get("source_type") != "wikimedia_commons" or image_host not in {"upload.wikimedia.org", "thumb.wikimedia.org"}:
+    source_type = image.get("source_type")
+    if source_type == "wikimedia_commons":
+        if image_host not in {"upload.wikimedia.org", "thumb.wikimedia.org"}:
+            raise RuntimeError("Wikimedia photo URL host is not an approved Commons host.")
+    elif source_type == "openverse":
+        if not image.get("provider") or not str(image.get("source_url") or "").startswith("https://"):
+            raise RuntimeError("Openverse photo is missing provider or original-source attribution.")
+    else:
         raise RuntimeError(
-            "Featured image must be a verified Wikimedia Commons food photograph "
-            + f"(source_type={image.get('source_type')!r}, host={image_host or 'missing'})."
+            "Featured image must come from verified Wikimedia Commons or Openverse photography "
+            + f"(source_type={source_type!r}, host={image_host or 'missing'})."
         )
     license_name = str(image.get("license") or "").strip().lower()
     allowed = ("public domain" in license_name or "cc0" in license_name
-               or bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_name)))
+               or bool(re.search(r"cc by(?:-sa)?(?:\\s|$)", license_name)))
     if not allowed or "noncommercial" in license_name or "no derivatives" in license_name or license_name.endswith(" nd"):
         raise RuntimeError("Featured image licence is not approved for commercial reuse.")
     if not image.get("author") or not image.get("source_url") or not image.get("license_url"):
@@ -1088,11 +1187,12 @@ def article_html(recipe, video=None, published_handles=None, featured_image=None
     metadata = seo_metadata(recipe)
     related = related_recipe_links(recipe, published_handles)
     image_credit = ""
-    if featured_image and featured_image.get("source_type") == "wikimedia_commons":
+    if featured_image and featured_image.get("source_type") in {"wikimedia_commons", "openverse"}:
         source_url = featured_image.get("source_url") or ""
         license_url = featured_image.get("license_url") or ""
         if source_url.startswith("https://") and license_url.startswith("https://"):
-            image_credit = (f'<p class="solepick-image-credit"><small>Food photo: <a href="{esc(source_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("title") or "Food photograph")}</a> by {esc(featured_image.get("author") or "Author not stated")} · <a href="{esc(license_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("license") or "")}</a> · via Wikimedia Commons</small></p>')
+            provider = "Openverse" if featured_image.get("source_type") == "openverse" else "Wikimedia Commons"
+            image_credit = (f'<p class="solepick-image-credit"><small>Food photo: <a href="{esc(source_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("title") or "Food photograph")}</a> by {esc(featured_image.get("author") or "Author not stated")} · <a href="{esc(license_url)}" target="_blank" rel="noopener noreferrer">{esc(featured_image.get("license") or "")}</a> · via {provider}</small></p>')
     elif featured_image and featured_image.get("source_type") == "official_youtube_thumbnail":
         source_url = featured_image.get("source_url") or ""
         publisher = featured_image.get("publisher") or "Verified video publisher"
