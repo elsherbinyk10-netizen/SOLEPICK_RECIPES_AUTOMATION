@@ -41,8 +41,11 @@ on:
     - cron: "0 7 * * *"
     - cron: "0 8 * * *"
     - cron: "0 9 * * *"
-    # Additional same-day catch-up if GitHub drops or delays all earlier triggers.
+    # Same-day catch-up after the four approved Cairo windows if GitHub drops scheduled events.
     - cron: "0 10 * * *"
+    # Final watchdog: rerun the same guarded, idempotent publisher at 13:00 Cairo.
+    # This is recovery only; it does not create a fifth publishing target or bypass quality checks.
+    - cron: "0 11 * * *"
 
 permissions:
   contents: write
