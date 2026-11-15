@@ -602,7 +602,7 @@ def _photo_title_relevance(recipe_title, image_title):
     """Score dish-title overlap while recognizing common food-name synonyms."""
     stop = {"with", "and", "the", "a", "an", "of", "in", "on", "easy", "quick", "recipe", "overnight"}
     wanted = {word for word in re.findall(r"[a-z0-9]+", str(recipe_title).lower()) if word not in stop and len(word) > 2}
-    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
+    main_food = next((word for word in ("salmon","chicken","shrimp","prawn","tofu","beef","tuna","turkey","banana","oat","oats","lentil","lentils","chickpea","chickpeas","bean","beans","yogurt","yoghurt","pasta","noodle","noodles","rice","egg","eggs","potato","potatoes","mushroom","mushrooms") if word in wanted), None)
     formats = {"salad","pasta","noodle","noodles","orzo","risoni","pancake","pancakes","waffle","waffles","parfait","parfaits","pita","pitas","bowl","bowls","taco","tacos","soup","curry","wrap","wraps","sandwich","sandwiches","rice","tray","hash","potato","potatoes","stuffed","pizza","stew","dal","oats","oatmeal","couscous","grain","grains","quinoa","bulgur","farro","barley","polenta"}
     wanted_formats = wanted & formats
     found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
@@ -610,9 +610,15 @@ def _photo_title_relevance(recipe_title, image_title):
     # Singular/plural dish-name variants are common in Commons/Openverse titles.
     for singular, plural in (("chickpea", "chickpeas"), ("lentil", "lentils"),
                              ("bean", "beans"), ("noodle", "noodles"),
-                             ("potato", "potatoes"), ("prawn", "prawns")):
+                             ("potato", "potatoes"), ("prawn", "prawns"),
+                             ("yogurt", "yoghurt")):
         if singular in normalized_found or plural in normalized_found:
             normalized_found.update((singular, plural))
+    # Archive metadata often uses these equivalent ingredient names.
+    if normalized_found & {"garbanzo", "garbanzos"}:
+        normalized_found.update({"chickpea", "chickpeas", "bean", "beans"})
+    if normalized_found & {"yoghurt", "yogurt"}:
+        normalized_found.update({"yoghurt", "yogurt"})
     if "oatmeal" in normalized_found:
         normalized_found.add("oats")
     if "risoni" in normalized_found:
@@ -825,6 +831,17 @@ def generate_recipe_image(recipe, published_articles=None):
             main_food + " cooked meal food photography",
             main_food + " plated dinner food photograph",
         ])
+        # Search common archive vocabulary without relaxing any validation gate.
+        food_aliases = {
+            "chickpea": ["garbanzo beans", "chickpea dish"],
+            "chickpeas": ["garbanzo beans", "chickpea dish"],
+            "yogurt": ["greek yogurt food", "yoghurt parfait"],
+            "yoghurt": ["greek yogurt food", "yoghurt parfait"],
+            "prawn": ["shrimp dish"], "prawns": ["shrimp dish"],
+            "shrimp": ["prawn dish"],
+            "oat": ["oatmeal food"], "oats": ["oatmeal food"],
+        }
+        searches.extend(food_aliases.get(main_food, []))
     for format_term in sorted(wanted_formats):
         if format_term in {"couscous", "orzo", "risoni", "quinoa", "bulgur", "farro", "barley"}:
             searches.append(format_term + " prepared dish food photography")
