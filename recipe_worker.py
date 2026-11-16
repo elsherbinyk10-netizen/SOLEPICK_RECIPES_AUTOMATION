@@ -1087,8 +1087,13 @@ def youtube_thumbnail_for(recipe, video, published_articles=None):
         if image.get("url"):
             used_urls.add(str(image["url"]).strip())
     used_identities = {_image_identity(item) for item in used_urls if _image_identity(item)}
+    # YouTube's hq720 variant is commonly available at 1280x720 even when
+    # maxresdefault is absent and sddefault falls back to 640x480. It is still
+    # accepted only after the same full download, decode, sharpness, size,
+    # uniqueness and verified-video attribution checks as every other image.
     for url in (
         f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg",
+        f"https://img.youtube.com/vi/{video_id}/hq720.jpg",
         f"https://img.youtube.com/vi/{video_id}/sddefault.jpg",
     ):
         if url in used_urls or _image_identity(url) in used_identities:
@@ -1129,7 +1134,7 @@ def featured_image_for(recipe, generated_image):
             image_host != "img.youtube.com"
             or not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id)
             or not parsed_image_url.path.startswith(expected_path)
-            or parsed_image_url.path.rsplit("/", 1)[-1] not in {"maxresdefault.jpg", "sddefault.jpg"}
+            or parsed_image_url.path.rsplit("/", 1)[-1] not in {"maxresdefault.jpg", "hq720.jpg", "sddefault.jpg"}
             or not str(image.get("publisher") or "").strip()
             or not str(image.get("source_url") or "").startswith("https://www.youtube.com/watch?v=" + video_id)
         ):
