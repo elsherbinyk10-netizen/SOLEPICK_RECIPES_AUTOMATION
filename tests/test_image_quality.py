@@ -1,12 +1,27 @@
 import unittest
 from unittest.mock import patch
 from image_quality import is_high_quality_image
-from recipe_worker import _photo_title_relevance
+from recipe_worker import _photo_title_relevance, featured_image_for
 
 
 class ImageQualityTests(unittest.TestCase):
     def test_accepts_verified_large_sharp_photo(self):
         self.assertTrue(is_high_quality_image({"ok": True, "width": 1600, "height": 1067, "edge_variance": 42}))
+
+    def test_featured_image_accepts_verified_hq720_creator_thumbnail(self):
+        recipe = {"title": "Quick Greek Yogurt Parfaits"}
+        image = {
+            "url": "https://img.youtube.com/vi/AbCdEfGhI12/hq720.jpg",
+            "altText": "Verified creator cooking video thumbnail for Quick Greek Yogurt Parfaits",
+            "source_type": "official_youtube_thumbnail",
+            "publisher": "Verified Recipe Creator",
+            "source_url": "https://www.youtube.com/watch?v=AbCdEfGhI12",
+            "video_id": "AbCdEfGhI12",
+        }
+        with patch("recipe_worker.inspect_image_url", return_value={
+            "ok": True, "width": 1280, "height": 720, "edge_variance": 42
+        }):
+            self.assertEqual(featured_image_for(recipe, image), image)
 
     def test_rejects_small_photo(self):
         self.assertFalse(is_high_quality_image({"ok": True, "width": 900, "height": 600, "edge_variance": 42}))
