@@ -201,3 +201,4 @@ jobs:
             echo "No new trend recipes to persist."
           fi
 # 2026-11-15 recovery trigger: comment-only commit to retry today's guarded publisher after missing scheduled ticks.
+# Manual recovery trigger: rerun the existing guarded daily publisher after missed Cairo schedule windows.
