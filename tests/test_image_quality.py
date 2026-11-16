@@ -11,6 +11,11 @@ class ImageQualityTests(unittest.TestCase):
     def test_rejects_small_photo(self):
         self.assertFalse(is_high_quality_image({"ok": True, "width": 900, "height": 600, "edge_variance": 42}))
 
+    def test_accepts_sharp_1280_by_720_creator_thumbnail(self):
+        # Standard 16:9 YouTube hq720 thumbnails meet the configured 1200x675
+        # minimum and are accepted only after inspect_image_url verifies bytes.
+        self.assertTrue(is_high_quality_image({"ok": True, "width": 1280, "height": 720, "edge_variance": 42}))
+
     def test_rejects_soft_photo(self):
         self.assertFalse(is_high_quality_image({"ok": True, "width": 1600, "height": 1067, "edge_variance": 5}))
 
