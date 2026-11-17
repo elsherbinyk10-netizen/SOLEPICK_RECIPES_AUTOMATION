@@ -151,8 +151,8 @@ class RecipeLibraryTests(unittest.TestCase):
         cairo = ZoneInfo("Africa/Cairo")
         summer = datetime(2026, 7, 1, 10, 0, tzinfo=cairo)
         winter = datetime(2026, 1, 15, 10, 0, tzinfo=cairo)
-        self.assertEqual(recipe_worker.expected_schedule_cron(summer), "7 7 * * *")
-        self.assertEqual(recipe_worker.expected_schedule_cron(winter), "7 8 * * *")
+        self.assertEqual(recipe_worker.expected_schedule_cron(summer), "0 7 * * *")
+        self.assertEqual(recipe_worker.expected_schedule_cron(winter), "0 8 * * *")
 
     def test_schedule_accepts_seasonal_primary_and_same_day_recovery(self):
         cairo = ZoneInfo("Africa/Cairo")
@@ -169,14 +169,15 @@ class RecipeLibraryTests(unittest.TestCase):
 
     def test_schedule_accepts_all_approved_cairo_windows(self):
         cairo = ZoneInfo("Africa/Cairo")
-        summer_hours = [(9, "7 6 * * *"), (10, "7 7 * * *"), (11, "7 8 * * *"), (12, "7 9 * * *"), (13, "7 10 * * *")]
-        winter_hours = [(9, "7 7 * * *"), (10, "7 8 * * *"), (11, "7 9 * * *"), (12, "7 10 * * *"), (13, "7 11 * * *")]
+        summer_hours = [(9, "0 6 * * *"), (10, "0 7 * * *"), (11, "0 8 * * *"), (12, "0 9 * * *")]
+        winter_hours = [(9, "0 7 * * *"), (10, "0 8 * * *"), (11, "0 9 * * *"), (12, "0 10 * * *")]
         for hour, cron in summer_hours:
-            self.assertTrue(recipe_worker.should_run_scheduled_event(cron, datetime(2026, 7, 1, hour, 7, tzinfo=cairo)))
+            self.assertTrue(recipe_worker.should_run_scheduled_event(cron, datetime(2026, 7, 1, hour, 0, tzinfo=cairo)))
         for hour, cron in winter_hours:
-            self.assertTrue(recipe_worker.should_run_scheduled_event(cron, datetime(2026, 1, 15, hour, 7, tzinfo=cairo)))
-        self.assertFalse(recipe_worker.should_run_scheduled_event("7 6 * * *", datetime(2026, 1, 15, 9, 7, tzinfo=cairo)))
-        self.assertFalse(recipe_worker.should_run_scheduled_event("7 11 * * *", datetime(2026, 7, 1, 14, 7, tzinfo=cairo)))
+            self.assertTrue(recipe_worker.should_run_scheduled_event(cron, datetime(2026, 1, 15, hour, 0, tzinfo=cairo)))
+        self.assertFalse(recipe_worker.should_run_scheduled_event("0 6 * * *", datetime(2026, 1, 15, 8, 0, tzinfo=cairo)))
+        self.assertFalse(recipe_worker.should_run_scheduled_event("0 10 * * *", datetime(2026, 7, 1, 13, 0, tzinfo=cairo)))
+        self.assertFalse(recipe_worker.should_run_scheduled_event("7 7 * * *", datetime(2026, 1, 15, 9, 0, tzinfo=cairo)))
 
     def test_orzo_photo_relevance_accepts_chicken_pasta_alias(self):
         overlap, has_main, has_format = recipe_worker._photo_title_relevance(
