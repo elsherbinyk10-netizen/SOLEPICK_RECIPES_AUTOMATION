@@ -35,16 +35,14 @@ on:
         type: boolean
         default: false
   schedule:
-    # Seven-minute offset avoids the busiest top-of-hour queue.
-    # Cairo summer (UTC+3): 06:07–10:07 UTC = 09:07–13:07 Cairo.
-    # Cairo winter (UTC+2): 07:07–11:07 UTC = 09:07–13:07 Cairo.
-    # The worker accepts only the five events matching the current Cairo offset.
-    - cron: "7 6 * * *"
-    - cron: "7 7 * * *"
-    - cron: "7 8 * * *"
-    - cron: "7 9 * * *"
-    - cron: "7 10 * * *"
-    - cron: "7 11 * * *"
+    # Exactly four approved windows in Africa/Cairo: 09:00, 10:00, 11:00 and 12:00.
+    # Cairo summer (UTC+3): 06:00–09:00 UTC; winter (UTC+2): 07:00–10:00 UTC.
+    # The union below covers both offsets; the worker ignores the one off-season extra cron.
+    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 9 * * *"
+    - cron: "0 10 * * *"
 
 permissions:
   contents: write
