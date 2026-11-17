@@ -28,7 +28,7 @@ def requested_image_handles():
             try:
                 event = json.loads(Path(event_path).read_text(encoding="utf-8"))
                 message = str((event.get("head_commit") or {}).get("message") or "")
-                match = re.search(r"\\[repair-image:([a-z0-9,-]+)\\]", message)
+                match = re.search(r"\[repair-image:([a-z0-9,-]+)\]", message)
                 if match:
                     raw = match.group(1)
             except (OSError, ValueError, TypeError):
