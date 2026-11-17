@@ -3,11 +3,11 @@
 Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube recipe-video check before an article is published.
 
 ## Daily schedule and duplicate protection
-- To reduce GitHub top-of-hour queue delays, scheduled checks run seven minutes past the hour. The approved publishing windows are 09:07, 10:07, 11:07 and 12:07 Africa/Cairo, with a 13:07 same-day recovery watchdog. Summer (UTC+3) uses 06:07–10:07 UTC; winter (UTC+2) uses 07:07–11:07 UTC. The worker accepts only the five Cairo-aligned events and Shopify's Cairo-day guard prevents duplicate posts.
+- The four approved publishing windows are exactly 09:00, 10:00, 11:00 and 12:00 Africa/Cairo. Summer (UTC+3) uses 06:00–09:00 UTC; winter (UTC+2) uses 07:00–10:00 UTC. The workflow includes the union of both seasonal UTC schedules, and the worker ignores the one off-season cron. Shopify's Cairo-day guard prevents duplicate posts.
 - Before publishing, the worker checks Shopify article publication dates in `Africa/Cairo`. If today's article already has a saved embedded player, it skips the run to prevent a duplicate.
 - If today's article exists but its saved body is missing the embedded player, the worker repairs that existing article instead of creating another recipe.
 - The publishing command retries up to three times after failures. Shopify is re-checked on each attempt, and the Cairo-day guard prevents duplicate posts after an uncertain API response.
-- GitHub can still delay scheduled runs, but the seven-minute offset avoids the busiest top-of-hour queue. The worker accepts all four approved Cairo publishing windows and the recovery watchdog.
+- GitHub can still delay scheduled runs. Each scheduled event is accepted only when its UTC cron maps to one of the four approved Cairo windows; no fifth publishing window is configured.
 
 ## Recipe video checks
 - No YouTube API key is required. The worker searches public YouTube results with `yt-dlp`, rejects titles that do not match the recipe's named protein and dish format, and checks each candidate with YouTube oEmbed before accepting an embeddable video. Public search can be rate-limited; when no safe match can be verified, the recipe is skipped and no mismatched video is published.
