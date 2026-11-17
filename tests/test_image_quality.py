@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 from image_quality import is_high_quality_image
-from recipe_worker import _photo_title_relevance, featured_image_for
+from recipe_worker import _photo_title_relevance, _is_retail_product_image, featured_image_for
 
 
 class ImageQualityTests(unittest.TestCase):
@@ -22,6 +22,13 @@ class ImageQualityTests(unittest.TestCase):
             "ok": True, "width": 1280, "height": 720, "edge_variance": 42
         }):
             self.assertEqual(featured_image_for(recipe, image), image)
+
+    def test_rejects_branded_frozen_meal_tray_photo(self):
+        title = (
+            "file:2020 serving of Healthy Choice Cafe Steamers Grilled Chicken "
+            "Marinara with Parmesan penne pasta and broccoli"
+        )
+        self.assertTrue(_is_retail_product_image(title))
 
     def test_rejects_small_photo(self):
         self.assertFalse(is_high_quality_image({"ok": True, "width": 900, "height": 600, "edge_variance": 42}))
