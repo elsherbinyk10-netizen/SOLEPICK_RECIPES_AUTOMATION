@@ -1303,19 +1303,21 @@ def article_html(recipe, video=None, published_handles=None, featured_image=None
 
 
 def expected_schedule_cron(now=None):
+    """Return the staggered UTC cron for the 10:07 Cairo primary window."""
     now = now or datetime.datetime.now(CAIRO)
-    return "0 7 * * *" if now.utcoffset() == datetime.timedelta(hours=3) else "0 8 * * *"
+    utc_offset_hours = int(now.utcoffset().total_seconds() // 3600)
+    return f"7 {10 - utc_offset_hours} * * *"
 
 
 def should_run_scheduled_event(event_schedule, now=None):
-    """Accept the seasonal 10:00 Cairo trigger and a later same-day recovery run."""
+    """Accept the four approved Cairo publishing windows and the 13:07 recovery watchdog."""
     now = now or datetime.datetime.now(CAIRO)
-    if event_schedule == expected_schedule_cron(now):
-        return True
-    # The non-primary seasonal trigger or the 09:00 UTC recovery trigger may
-    # be the only run GitHub delivers. Never publish before 10:00 Cairo;
-    # after 10:00, the daily Shopify idempotency guard makes retries safe.
-    return now.hour >= 10
+    utc_offset_hours = int(now.utcoffset().total_seconds() // 3600)
+    approved_hours = (9, 10, 11, 12, 13)
+    current_crons = {f"7 {hour - utc_offset_hours} * * *" for hour in approved_hours}
+    # Honour already-queued top-of-hour events while the staggered schedule rolls out.
+    legacy_crons = {f"0 {hour - utc_offset_hours} * * *" for hour in approved_hours}
+    return event_schedule in current_crons or event_schedule in legacy_crons
 
 
 def already_published_today(articles, now=None, recipe_slugs=None):
@@ -1762,8 +1764,8 @@ def main():
     event_schedule = os.environ.get("GITHUB_EVENT_SCHEDULE", "").strip()
     if event_name == "schedule" and event_schedule and not should_run_scheduled_event(event_schedule, now):
         print(
-            f"Schedule guard: ignoring cron {event_schedule} before 10:00 Cairo; "
-            f"primary trigger today is {expected_schedule_cron(now)}."
+            f"Schedule guard: ignoring unapproved cron {event_schedule}; "
+            f"approved Cairo windows are 09:07, 10:07, 11:07, 12:07 and 13:07."
         )
         return
     # GitHub may delay scheduled workflows well beyond their cron time.
