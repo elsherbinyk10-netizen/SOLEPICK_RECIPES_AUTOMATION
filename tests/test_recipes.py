@@ -353,6 +353,58 @@ class RecipeLibraryTests(unittest.TestCase):
         self.assertEqual(result["source_article_url"], "")
         self.assertEqual(result["embed_url"], "https://www.youtube-nocookie.com/embed/abcdefghijk")
 
+    def test_video_search_skips_excluded_candidate_and_uses_next_verified_match(self):
+        import types
+
+        entries = [
+            {
+                "id": "abcdefghijk",
+                "title": "Creamy Lentil Coconut Curry Recipe",
+                "channel_id": recipe_worker.FOOD_NETWORK_CHANNEL_ID,
+                "channel": "Food Network",
+            },
+            {
+                "id": "lmnopqrstuv",
+                "title": "Creamy Lentil Coconut Curry Recipe",
+                "channel_id": recipe_worker.FOOD_NETWORK_CHANNEL_ID,
+                "channel": "Food Network",
+            },
+        ]
+
+        class FakeYoutubeDL:
+            def __init__(self, options):
+                self.options = options
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc_value, traceback):
+                return False
+
+            def extract_info(self, query, download=False):
+                return {"entries": entries}
+
+        verified = {
+            "id": "lmnopqrstuv",
+            "title": "Creamy Lentil Coconut Curry Recipe",
+            "match_score": 1.0,
+            "url": "https://www.youtube.com/watch?v=lmnopqrstuv",
+            "embed_url": "https://www.youtube-nocookie.com/embed/lmnopqrstuv",
+            "publisher": "Food Network",
+        }
+        fake_ytdlp = types.SimpleNamespace(YoutubeDL=FakeYoutubeDL)
+        with patch.dict(sys.modules, {"yt_dlp": fake_ytdlp}), patch.object(
+            recipe_worker, "_check_video_candidate", return_value=verified
+        ) as check:
+            result = recipe_worker.find_verified_recipe_video(
+                {"title": "Creamy Lentil Coconut Curry"},
+                excluded_video_ids={"abcdefghijk"},
+            )
+
+        self.assertEqual(result["id"], "lmnopqrstuv")
+        check.assert_called_once()
+        self.assertEqual(check.call_args.args[1], "lmnopqrstuv")
+
     def test_second_approved_publisher_video_is_verified_by_exact_channel_and_author(self):
         recipe = {"title": "Crispy Salmon Rice Bowls"}
         metadata = {"title": "Crispy Salmon Rice Bowl Recipe", "author_name": "Tasty"}
