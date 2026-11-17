@@ -65,10 +65,7 @@ def main():
         current_alt = str(image.get("altText") or "")
         quality = inspect_image_url(current_url)
         retail = worker._is_retail_product_image(current_alt, current_url)
-        # A targeted [repair-image:slug] request is an explicit replacement
-        # request even if an earlier partial attempt saved a merely generic photo.
-        force_targeted_replacement = bool(targets)
-        if is_high_quality_image(quality) and not retail and not force_targeted_replacement:
+        if is_high_quality_image(quality) and not retail:
             print(f"PASS {handle} | {quality['width']}x{quality['height']} | edge={quality['edge_variance']}")
             continue
 
@@ -85,10 +82,13 @@ def main():
 
         try:
             video = worker.find_verified_recipe_video(recipe)
-            if force_targeted_replacement:
-                # For a manually targeted correction, use the thumbnail from the
-                # exact verified dish video instead of a merely similar Commons dish.
-                candidate = worker.youtube_thumbnail_for(recipe, video, published)
+            if targets:
+                try:
+                    # Prefer the exact verified dish-video thumbnail for a targeted correction.
+                    candidate = worker.youtube_thumbnail_for(recipe, video, published)
+                except RuntimeError as thumbnail_error:
+                    print(f"EXACT VIDEO THUMBNAIL UNAVAILABLE {handle} | {thumbnail_error}; trying licensed dish photo.")
+                    candidate = worker.generate_recipe_image(recipe, published)
             else:
                 try:
                     candidate = worker.generate_recipe_image(recipe, published)
