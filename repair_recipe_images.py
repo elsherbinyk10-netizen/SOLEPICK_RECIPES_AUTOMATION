@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Repair low-resolution/soft featured images on existing published SolePick recipes."""
+"""Repair low-quality or disallowed packaged-product images on published SolePick recipes."""
 import json
 import os
+import re
 import sys
+from pathlib import Path
 
 import recipe_worker as worker
 from image_quality import inspect_image_url, is_high_quality_image
@@ -18,54 +20,121 @@ def is_recipe_article(article):
     return has_recipe_sections or recipe_tags
 
 
+def requested_image_handles():
+    raw = os.environ.get("TARGET_IMAGE_HANDLES", "").strip()
+    if not raw:
+        event_path = os.environ.get("GITHUB_EVENT_PATH", "").strip()
+        if event_path and Path(event_path).is_file():
+            try:
+                event = json.loads(Path(event_path).read_text(encoding="utf-8"))
+                message = str((event.get("head_commit") or {}).get("message") or "")
+                match = re.search(r"\\[repair-image:([a-z0-9,-]+)\\]", message)
+                if match:
+                    raw = match.group(1)
+            except (OSError, ValueError, TypeError):
+                raw = ""
+    if not raw:
+        return None
+    handles = [item.strip() for item in raw.split(",") if item.strip()]
+    if len(handles) != len(set(handles)):
+        raise RuntimeError("TARGET_IMAGE_HANDLES contains duplicate handles.")
+    return handles
+
+
 def main():
     blog_id = worker.resolve_recipe_blog()
     articles = worker.existing_articles(blog_id)
     published = [a for a in articles.values() if a.get("isPublished")]
     recipe_articles = [a for a in published if is_recipe_article(a)]
-    print(f"Published articles scanned: {len(published)}; recipe articles identified: {len(recipe_articles)}")
+    targets = requested_image_handles()
+    if targets:
+        by_handle = {str(a.get("handle") or ""): a for a in recipe_articles}
+        missing = [handle for handle in targets if handle not in by_handle]
+        if missing:
+            raise RuntimeError("Requested published recipe article(s) not found: " + ", ".join(missing))
+        recipe_articles = [by_handle[handle] for handle in targets]
+        print("TARGETED IMAGE REPAIR: " + ", ".join(targets))
+    print(f"Published articles scanned: {len(published)}; recipe articles selected: {len(recipe_articles)}")
+
+    catalogue = {item["slug"]: item for item in worker.load_recipes()}
     repaired = 0
-    skipped = 0
     for article in recipe_articles:
+        handle = str(article.get("handle") or "")
         image = article.get("image") or {}
         current_url = str(image.get("url") or "")
+        current_alt = str(image.get("altText") or "")
         quality = inspect_image_url(current_url)
-        if is_high_quality_image(quality):
-            print(f"PASS {article['handle']} | {quality['width']}x{quality['height']} | edge={quality['edge_variance']}")
+        retail = worker._is_retail_product_image(current_alt, current_url)
+        if is_high_quality_image(quality) and not retail:
+            print(f"PASS {handle} | {quality['width']}x{quality['height']} | edge={quality['edge_variance']}")
             continue
-        print(f"REPAIR NEEDED {article['handle']} | {quality}")
+
+        reason = "disallowed packaged/retail image" if retail else str(quality)
+        print(f"REPAIR NEEDED {handle} | {reason}")
         if repaired >= MAX_REPAIRS:
             print("Batch repair limit reached; remaining low-quality images will be handled by the next scheduled batch.")
             break
+
+        recipe_source = catalogue.get(handle)
+        if not recipe_source:
+            raise RuntimeError("No source recipe found in recipes.json for targeted handle: " + handle)
+        recipe = worker.add_recipe_category_tags(worker.make_recipe_specific(recipe_source))
+
         try:
-            candidate = worker.generate_recipe_image({"title": article["title"], "slug": article["handle"]}, published)
+            try:
+                candidate = worker.generate_recipe_image(recipe, published)
+            except RuntimeError as commons_error:
+                print(f"COMMONS REPLACEMENT UNAVAILABLE {handle} | {commons_error}")
+                video = worker.find_verified_recipe_video(recipe)
+                candidate = worker.youtube_thumbnail_for(recipe, video, published)
+            candidate = worker.featured_image_for(recipe, candidate)
             candidate_quality = inspect_image_url(candidate.get("url"))
             if not is_high_quality_image(candidate_quality):
-                raise RuntimeError(f"Replacement photo did not pass image quality validation: {candidate_quality}")
+                raise RuntimeError(f"Replacement photo failed image validation: {candidate_quality}")
+            if worker._is_retail_product_image(
+                candidate.get("title"), candidate.get("url"),
+                {"ImageDescription": {"value": candidate.get("altText", "")}}
+            ):
+                raise RuntimeError("Replacement image matched the packaged/retail product filter.")
+            video = worker.find_verified_recipe_video(recipe)
         except RuntimeError as error:
-            print(f"DEFERRED {article['handle']} | no verified replacement yet | {error}")
+            print(f"DEFERRED {handle} | no verified replacement image/video pair yet | {error}")
             continue
+
+        published_handles = {
+            str(item.get("handle") or "") for item in published if item.get("isPublished")
+        }
+        article_payload = worker.recipe_article_update_input(
+            recipe, video, published_handles, candidate
+        )
         mutation = """mutation UpdateRecipeImage($id: ID!, $article: ArticleUpdateInput!) {
           articleUpdate(id: $id, article: $article) {
-            article { id title handle isPublished image { url altText } }
+            article { id title handle isPublished body image { url altText } }
             userErrors { field message }
           }
         }"""
-        result = worker.graphql(mutation, {"id": article["id"], "article": {"image": candidate}})
+        result = worker.graphql(mutation, {"id": article["id"], "article": article_payload})
         update = result.get("articleUpdate") or {}
         if update.get("userErrors"):
-            raise RuntimeError("Shopify rejected image update for " + article["handle"] + ": " + json.dumps(update["userErrors"]))
+            raise RuntimeError("Shopify rejected image/body update for " + handle + ": " + json.dumps(update["userErrors"]))
         saved = update.get("article") or {}
         if not saved.get("isPublished") or not (saved.get("image") or {}).get("url"):
-            raise RuntimeError("Shopify did not confirm the image update for " + article["handle"])
+            raise RuntimeError("Shopify did not confirm the image update for " + handle)
+        worker.verify_published_article(saved, recipe, video)
         verified = inspect_image_url(saved["image"]["url"])
         if not is_high_quality_image(verified):
-            raise RuntimeError(f"Shopify saved image failed final validation for {article['handle']}: {verified}")
-        print(f"REPAIRED {article['handle']} | {verified['width']}x{verified['height']} | {saved['image']['url']}")
+            raise RuntimeError(f"Shopify saved image failed final validation for {handle}: {verified}")
+        if worker._is_retail_product_image(saved["image"].get("altText"), saved["image"]["url"]):
+            raise RuntimeError("Shopify saved a disallowed packaged/retail image for " + handle)
+        if saved["image"]["url"] not in str(saved.get("body") or ""):
+            raise RuntimeError("Updated article JSON-LD/body does not reference the saved featured image for " + handle)
+
+        print(f"REPAIRED {handle} | {verified['width']}x{verified['height']} | {saved['image']['url']}")
         repaired += 1
-        published = [a for a in published if a["id"] != article["id"]]
+        published = [item for item in published if item.get("id") != article.get("id")]
         published.append(saved)
-    print(f"IMAGE REPAIR SUMMARY: repaired={repaired}; already_good_or_skipped={skipped}; recipe_articles={len(recipe_articles)}")
+
+    print(f"IMAGE REPAIR SUMMARY: repaired={repaired}; recipe_articles={len(recipe_articles)}")
 
 
 if __name__ == "__main__":
