@@ -5188,5 +5188,52 @@
     "editorial_status": "original-recipe-written-awaiting-media-verification",
     "seo_title": "Creamy Mushroom and Spinach Risotto | SolePick Recipes",
     "seo_description": "A comforting mushroom risotto made with arborio rice, warm stock, garlic and baby spinach, finished with parmesan for a creamy texture without heavy cream."
+  },
+  {
+    "slug": "marry-me-chicken-pasta",
+    "title": "Marry Me Chicken Pasta",
+    "description": "Ground chicken, sun-dried tomatoes and a creamy Parmesan-style sauce coat ribbon pasta in this rich one-skillet dinner.",
+    "tags": [
+      "dinner",
+      "chicken",
+      "pasta",
+      "comfort-food",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "1 lb (450 g) ground chicken",
+      "4 tablespoons extra-virgin olive oil, divided",
+      "2 teaspoons kosher salt, divided, plus more to taste",
+      "1 teaspoon freshly ground black pepper, divided",
+      "3 garlic cloves, minced",
+      "1 cup sun-dried tomatoes packed in oil, drained and chopped",
+      "2 teaspoons Italian seasoning",
+      "1 can (4 oz / 113 g) tomato paste",
+      "1 1/2 cups chicken stock",
+      "1 lb (450 g) mafaldine, fettuccine, or other ribbon pasta",
+      "1 tablespoon unsalted butter",
+      "1/2 cup heavy cream",
+      "1/2 cup finely grated Pecorino Romano, plus extra to finish",
+      "Fresh basil leaves, for garnish"
+    ],
+    "instructions": [
+      "Bring a large pot of salted water to a boil for the pasta.",
+      "Heat 2 tablespoons of olive oil in a wide skillet over medium-high heat. Add the ground chicken, break it into small crumbles, and cook for 7–9 minutes until browned and cooked through. Season with half the salt and pepper; ground chicken should reach 165°F (74°C).",
+      "Transfer the chicken to a plate. Add the remaining olive oil to the skillet, then cook the garlic, sun-dried tomatoes, and Italian seasoning for about 30 seconds.",
+      "Stir in the tomato paste and cook for 2–3 minutes until it darkens slightly. Pour in the chicken stock, scraping up the browned bits from the pan.",
+      "Return the chicken to the skillet and simmer the sauce for 8–10 minutes so it reduces slightly. Meanwhile, cook the pasta until al dente, reserve 1/2 cup of pasta water, and drain.",
+      "Stir the butter and cream into the sauce. Add the pasta and about 1/4 cup of reserved pasta water, tossing until the noodles are coated. Add a little more pasta water if needed.",
+      "Turn off the heat and fold in the Pecorino Romano. Taste and adjust the seasoning, then finish with fresh basil and extra cheese."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 30,
+    "servings": 4,
+    "image_alt": "Food Network creator video thumbnail for Marry Me Chicken Pasta",
+    "video_url": "https://www.youtube.com/watch?v=e7cn-k_WqA0",
+    "video_title": "Katie Lee Biegel's Marry Me Chicken Pasta | The Kitchen | Food Network",
+    "video_channel_id": "UC8Y-jrV8oR3s2Ix4viDkZtA",
+    "source_article_url": "https://www.foodnetwork.com/recipes/katie-lee/marry-me-chicken-pasta-20796273",
+    "video_verified": false,
+    "image_verified": false
   }
 ]
