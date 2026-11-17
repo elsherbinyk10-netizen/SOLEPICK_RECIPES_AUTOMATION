@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16",
+  "generated_at": "2026-11-17",
   "purpose": "Human review queue for matching each scheduled recipe with its own food photo and genuinely matching cooking video. Do not set approval flags until the actual media has been visually reviewed.",
   "rules": [
     "Photo must visibly depict the named dish, not merely a related cuisine or ingredient.",
@@ -1217,6 +1217,138 @@
       "video_url": "",
       "video_verified": false,
       "review_status": "needs_review"
+    },
+    {
+      "slug": "chicken-shawarma-rice-bowls",
+      "title": "Chicken Shawarma Rice Bowls",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "shrimp-tacos-mango-slaw",
+      "title": "Shrimp Tacos with Mango Slaw",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "beef-broccoli-stir-fry",
+      "title": "Beef and Broccoli Stir-Fry",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "lemon-garlic-cod-tray-bake",
+      "title": "Lemon Garlic Cod Tray Bake",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "tofu-peanut-noodle-bowls",
+      "title": "Tofu Peanut Noodle Bowls",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "lentil-bolognese-pasta",
+      "title": "Lentil Bolognese Pasta",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "chickpea-coconut-curry",
+      "title": "Chickpea Coconut Curry",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "turkey-meatball-pasta",
+      "title": "Turkey Meatball Pasta",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "chicken-enchilada-skillet",
+      "title": "Chicken Enchilada Skillet",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "mediterranean-tuna-pasta-salad",
+      "title": "Mediterranean Tuna Pasta Salad",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "garlic-butter-shrimp-pasta",
+      "title": "Garlic Butter Shrimp Pasta",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
+    },
+    {
+      "slug": "honey-soy-salmon-tray-bake",
+      "title": "Honey Soy Salmon Tray Bake",
+      "image_url": "",
+      "image_alt": "",
+      "image_verified": false,
+      "video_url": "",
+      "video_verified": false,
+      "review_status": "needs_review",
+      "preflight_status": "running"
     }
   ]
 }
