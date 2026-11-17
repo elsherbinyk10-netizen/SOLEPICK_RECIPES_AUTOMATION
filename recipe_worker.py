@@ -561,7 +561,16 @@ def _is_retail_product_image(title_text, image_url="", metadata=None):
         if isinstance(value, list):
             value = " ".join(map(str, value))
         parts.append(re.sub(r"<[^>]+>", " ", str(value or "")))
-    tokens = set(re.findall(r"[a-z0-9]+", " ".join(parts).lower()))
+    combined_text = " ".join(parts).lower()
+    tokens = set(re.findall(r"[a-z0-9]+", combined_text))
+    # Some retail meal photos show the food inside a branded plastic tray rather
+    # than a shelf or outer package. Treat these as packaged-product imagery too.
+    packaged_meal_phrases = (
+        "healthy choice cafe steamers", "cafe steamers", "frozen meal",
+        "microwave meal", "ready meal", "tv dinner", "frozen dinner",
+    )
+    if any(phrase in combined_text for phrase in packaged_meal_phrases):
+        return True
     retail_terms = {
         "supermarket", "grocery", "groceries", "market", "store", "shelf", "shelves",
         "aisle", "aisles", "retail", "checkout", "cashier", "shopping", "shop",
