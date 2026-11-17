@@ -65,7 +65,10 @@ def main():
         current_alt = str(image.get("altText") or "")
         quality = inspect_image_url(current_url)
         retail = worker._is_retail_product_image(current_alt, current_url)
-        if is_high_quality_image(quality) and not retail:
+        # A targeted [repair-image:slug] request is an explicit replacement
+        # request even if an earlier partial attempt saved a merely generic photo.
+        force_targeted_replacement = bool(targets)
+        if is_high_quality_image(quality) and not retail and not force_targeted_replacement:
             print(f"PASS {handle} | {quality['width']}x{quality['height']} | edge={quality['edge_variance']}")
             continue
 
@@ -81,12 +84,17 @@ def main():
         recipe = worker.add_recipe_category_tags(worker.make_recipe_specific(recipe_source))
 
         try:
-            try:
-                candidate = worker.generate_recipe_image(recipe, published)
-            except RuntimeError as commons_error:
-                print(f"COMMONS REPLACEMENT UNAVAILABLE {handle} | {commons_error}")
-                video = worker.find_verified_recipe_video(recipe)
+            video = worker.find_verified_recipe_video(recipe)
+            if force_targeted_replacement:
+                # For a manually targeted correction, use the thumbnail from the
+                # exact verified dish video instead of a merely similar Commons dish.
                 candidate = worker.youtube_thumbnail_for(recipe, video, published)
+            else:
+                try:
+                    candidate = worker.generate_recipe_image(recipe, published)
+                except RuntimeError as commons_error:
+                    print(f"COMMONS REPLACEMENT UNAVAILABLE {handle} | {commons_error}")
+                    candidate = worker.youtube_thumbnail_for(recipe, video, published)
             candidate = worker.featured_image_for(recipe, candidate)
             candidate_quality = inspect_image_url(candidate.get("url"))
             if not is_high_quality_image(candidate_quality):
@@ -96,7 +104,6 @@ def main():
                 {"ImageDescription": {"value": candidate.get("altText", "")}}
             ):
                 raise RuntimeError("Replacement image matched the packaged/retail product filter.")
-            video = worker.find_verified_recipe_video(recipe)
         except RuntimeError as error:
             print(f"DEFERRED {handle} | no verified replacement image/video pair yet | {error}")
             continue
@@ -126,10 +133,15 @@ def main():
             raise RuntimeError(f"Shopify saved image failed final validation for {handle}: {verified}")
         if worker._is_retail_product_image(saved["image"].get("altText"), saved["image"]["url"]):
             raise RuntimeError("Shopify saved a disallowed packaged/retail image for " + handle)
-        if saved["image"]["url"] not in str(saved.get("body") or ""):
-            raise RuntimeError("Updated article JSON-LD/body does not reference the saved featured image for " + handle)
+        # Shopify may normalize the featured-image URL to its CDN in the
+        # article response; JSON-LD retains the verified source URL we supplied.
+        if candidate["url"] not in str(saved.get("body") or ""):
+            raise RuntimeError("Updated article JSON-LD/body does not reference the verified source image for " + handle)
 
-        print(f"REPAIRED {handle} | {verified['width']}x{verified['height']} | {saved['image']['url']}")
+        print(
+            f"REPAIRED {handle} | {verified['width']}x{verified['height']} | "
+            f"source={candidate.get('source_type')} | featured={saved['image']['url']}"
+        )
         repaired += 1
         published = [item for item in published if item.get("id") != article.get("id")]
         published.append(saved)
