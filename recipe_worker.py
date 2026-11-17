@@ -383,16 +383,23 @@ def search_verified_recipe_videos(query):
     return []
 
 
-def find_verified_recipe_video(recipe):
-    """Automatically discover and validate a matching, currently embeddable YouTube video."""
+def find_verified_recipe_video(recipe, excluded_video_ids=None):
+    """Discover another matching, currently embeddable YouTube video when an earlier thumbnail fails."""
+    seen = {
+        str(video_id).strip()
+        for video_id in (excluded_video_ids or set())
+        if re.fullmatch(r"[A-Za-z0-9_-]{11}", str(video_id).strip())
+    }
     # Re-check a configured video first, but do not make manual catalogue flags a blocker.
     configured = str(recipe.get("video_url") or "").strip()
     match = re.fullmatch(
         r"https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{11})(?:[&?].*)?",
         configured
     )
-    if match:
-        candidate = _check_video_candidate(recipe, match.group(1), recipe.get("video_title", ""), recipe.get("video_channel_id", ""), recipe.get("source_article_url", ""))
+    if match and match.group(1) not in seen:
+        configured_id = match.group(1)
+        seen.add(configured_id)
+        candidate = _check_video_candidate(recipe, configured_id, recipe.get("video_title", ""), recipe.get("video_channel_id", ""), recipe.get("source_article_url", ""))
         if candidate:
             return candidate
 
@@ -413,7 +420,6 @@ def find_verified_recipe_video(recipe):
         f"ytsearch30:{title} recipe",
         f"ytsearch20:{title} cooking",
     ]
-    seen = set()
     failures = 0
     max_video_candidates = 24
     for search_query in queries:
@@ -2047,13 +2053,37 @@ def main():
         try:
             try:
                 generated_image = generate_recipe_image(recipe, list(articles.values()))
+                generated_image = featured_image_for(recipe, generated_image)
             except RuntimeError as commons_error:
                 print(f"COMMONS PHOTO FALLBACK: {recipe['title']} | {commons_error}")
-                generated_image = youtube_thumbnail_for(recipe, video, list(articles.values()))
-            generated_image = featured_image_for(recipe, generated_image)
+                excluded_video_ids = set()
+                last_thumbnail_error = commons_error
+                # A matching video may have a duplicate or undersized thumbnail.
+                # Try up to three independently verified video/thumbnail pairs;
+                # every candidate still has to pass channel, title, oEmbed,
+                # resolution, sharpness and duplicate-image checks.
+                for thumbnail_attempt in range(3):
+                    try:
+                        generated_image = youtube_thumbnail_for(recipe, video, list(articles.values()))
+                        generated_image = featured_image_for(recipe, generated_image)
+                        break
+                    except RuntimeError as thumbnail_error:
+                        last_thumbnail_error = thumbnail_error
+                        excluded_video_ids.add(str(video.get("id") or ""))
+                        if thumbnail_attempt == 2:
+                            raise last_thumbnail_error
+                        print(
+                            f"VIDEO THUMBNAIL REJECTED: {recipe['title']} | "
+                            f"video={video.get('id')} | {thumbnail_error} | trying another verified video."
+                        )
+                        video = find_verified_recipe_video(recipe, excluded_video_ids=excluded_video_ids)
+                        print(
+                            f"ALTERNATE VERIFIED VIDEO: {video['title']} | "
+                            f"id={video['id']} | match={video['match_score']} | embeddable=yes"
+                        )
             recipe["published_image_url"] = generated_image["url"]
         except RuntimeError as error:
-            print(f"SKIPPING recipe without a verified dish-relevant photo: {recipe['title']}. {error}")
+            print(f"SKIPPING recipe without a verified dish-relevant photo/video pair: {recipe['title']}. {error}")
             continue
         if existing:
             mutation = """mutation UpdateRecipeArticle($id: ID!, $article: ArticleUpdateInput!) {
