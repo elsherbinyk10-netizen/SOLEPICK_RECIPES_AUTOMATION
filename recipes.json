@@ -5235,5 +5235,628 @@
     "source_article_url": "https://www.foodnetwork.com/recipes/katie-lee/marry-me-chicken-pasta-20796273",
     "video_verified": false,
     "image_verified": false
+  },
+  {
+    "slug": "chicken-shawarma-rice-bowls",
+    "title": "Chicken Shawarma Rice Bowls",
+    "description": "Warm spiced chicken, fluffy rice, crunchy cucumber and tomato, and a quick lemon-tahini yogurt sauce make these shawarma bowls a practical, satisfying weeknight meal.",
+    "tags": [
+      "dinner",
+      "chicken",
+      "rice bowl",
+      "middle eastern",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "600 g boneless, skinless chicken thighs, cut into bite-size strips",
+      "2 tablespoons plain Greek yogurt",
+      "1 tablespoon olive oil",
+      "1 tablespoon lemon juice",
+      "2 garlic cloves, finely grated",
+      "1 teaspoon ground cumin",
+      "1 teaspoon ground coriander",
+      "1 teaspoon sweet paprika",
+      "1/2 teaspoon ground turmeric",
+      "1/2 teaspoon fine salt",
+      "2 cups cooked basmati rice",
+      "1 cucumber, diced",
+      "2 medium tomatoes, diced",
+      "3 tablespoons tahini",
+      "2 tablespoons water, plus more to thin",
+      "1 tablespoon chopped parsley"
+    ],
+    "instructions": [
+      "Heat the oven to 220°C (425°F). Line a rimmed baking tray with baking paper.",
+      "Mix the yogurt, olive oil, lemon juice, garlic, cumin, coriander, paprika, turmeric and salt in a bowl. Add the chicken and turn until every piece is coated.",
+      "Spread the chicken in a single layer on the tray. Roast for 18–22 minutes, turning once halfway, until browned and the thickest pieces reach 74°C (165°F) on a food thermometer.",
+      "Whisk the tahini with the water and a squeeze of lemon until smooth and pourable. Add another teaspoon of water if needed.",
+      "Divide the warm rice between bowls. Add cucumber and tomato, top with the hot chicken, and drizzle with the tahini sauce.",
+      "Finish with parsley and serve with extra lemon wedges."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 22,
+    "servings": 4,
+    "cook_notes": [
+      "Leave space between the chicken pieces so they roast instead of steaming.",
+      "Cut the thighs into similar-sized strips to help them cook evenly."
+    ],
+    "substitutions": [
+      "Use boneless chicken breast, checking that every piece reaches 74°C (165°F).",
+      "Replace rice with bulgur or cooked quinoa; use dairy-free yogurt in the marinade if needed."
+    ],
+    "storage": "Refrigerate chicken and rice separately in sealed containers for up to 3 days. Keep the cucumber and tomato uncooked and add them after reheating.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "shrimp-tacos-mango-slaw",
+    "title": "Shrimp Tacos with Mango Slaw",
+    "description": "Quick chili-lime shrimp tucked into warm tortillas with juicy mango, crisp cabbage and a cooling yogurt-lime drizzle. These colourful tacos make a fresh dinner in about 25 minutes.",
+    "tags": [
+      "dinner",
+      "seafood",
+      "shrimp",
+      "tacos",
+      "fresh-and-green",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "500 g peeled and deveined medium shrimp, patted dry",
+      "1 tablespoon olive oil",
+      "1 teaspoon ground cumin",
+      "1 teaspoon sweet paprika",
+      "1/2 teaspoon garlic powder",
+      "1/4 teaspoon fine salt",
+      "1 tablespoon fresh lime juice",
+      "8 small corn or flour tortillas",
+      "1 ripe mango, peeled and cut into thin strips",
+      "2 cups finely shredded red cabbage",
+      "2 spring onions, thinly sliced",
+      "2 tablespoons chopped fresh coriander",
+      "1/3 cup plain Greek yogurt",
+      "1 tablespoon lime juice, for the drizzle"
+    ],
+    "instructions": [
+      "Toss the mango, cabbage, spring onions, coriander and lime juice together in a bowl. Set aside while you cook the shrimp.",
+      "Stir the cumin, paprika, garlic powder and salt together. Toss the dry shrimp with olive oil and the spice mixture.",
+      "Heat a large skillet over medium-high heat. Cook the shrimp in one layer for about 2 minutes per side, turning once, until opaque, firm and cooked through; cook in batches if needed.",
+      "Mix the Greek yogurt with the remaining lime juice and one teaspoon of water until it is easy to drizzle.",
+      "Warm the tortillas in a dry skillet for 20–30 seconds per side and keep them covered in a clean towel.",
+      "Fill each tortilla with slaw and shrimp. Finish with the yogurt-lime drizzle and serve immediately."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "cook_notes": [
+      "Pat shrimp dry before seasoning so they sear instead of releasing excess water.",
+      "Keep the mango slaw undressed until close to serving if you want the cabbage to stay crisp."
+    ],
+    "substitutions": [
+      "Use shredded pineapple instead of mango for a sharper sweet note.",
+      "Swap Greek yogurt for a plain dairy-free yogurt, and use extra lime instead of coriander if preferred."
+    ],
+    "storage": "Refrigerate cooked shrimp and mango slaw separately for up to 2 days. Reheat shrimp gently in a skillet and assemble fresh tacos just before serving.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "beef-broccoli-stir-fry",
+    "title": "Beef and Broccoli Stir-Fry",
+    "description": "Tender strips of beef and crisp broccoli are coated in a glossy ginger-garlic sauce. This homemade stir-fry uses everyday pantry ingredients and cooks quickly for an easy rice-bowl dinner.",
+    "tags": [
+      "dinner",
+      "beef",
+      "stir-fry",
+      "asian-inspired",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "450 g lean beef sirloin or flank steak, thinly sliced across the grain",
+      "3 cups broccoli florets",
+      "1 tablespoon neutral oil",
+      "2 garlic cloves, minced",
+      "1 tablespoon finely grated fresh ginger",
+      "3 tablespoons low-sodium soy sauce",
+      "1 tablespoon oyster sauce",
+      "1 tablespoon honey",
+      "1 teaspoon cornflour",
+      "3 tablespoons water",
+      "1 teaspoon toasted sesame oil",
+      "2 spring onions, sliced",
+      "2 cups cooked rice"
+    ],
+    "instructions": [
+      "Whisk the soy sauce, oyster sauce, honey, cornflour and water in a small bowl until the cornflour dissolves.",
+      "Bring a saucepan of water to a boil. Add the broccoli and blanch for 2 minutes, then drain well.",
+      "Heat half the neutral oil in a large wok or skillet over high heat. Add half the beef in a single layer and sear for 1–2 minutes per side; transfer to a clean plate and repeat with the remaining oil and beef.",
+      "Lower the heat to medium-high. Add the garlic and ginger and stir for 20–30 seconds until fragrant.",
+      "Return the beef and broccoli to the pan. Pour in the sauce and toss for 1–2 minutes until glossy and bubbling and the beef is cooked to your preferred safe doneness.",
+      "Turn off the heat, stir through the sesame oil, and serve over rice with spring onions."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 12,
+    "servings": 4,
+    "cook_notes": [
+      "Slice the beef thinly across the grain for a more tender bite.",
+      "Blanching the broccoli first keeps the stir-fry fast and helps the florets stay bright green."
+    ],
+    "substitutions": [
+      "Use tamari instead of soy sauce and check that the oyster sauce is gluten-free if required.",
+      "Replace beef with thinly sliced chicken; cook chicken to 74°C (165°F) before adding the sauce."
+    ],
+    "storage": "Cool leftovers promptly and refrigerate in a sealed container for up to 3 days. Reheat in a hot skillet with a splash of water until steaming.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "lemon-garlic-cod-tray-bake",
+    "title": "Lemon Garlic Cod Tray Bake",
+    "description": "Flaky cod roasts with baby potatoes, green beans and cherry tomatoes in a bright lemon-garlic dressing. This balanced one-tray dinner keeps prep simple and cleanup minimal.",
+    "tags": [
+      "dinner",
+      "seafood",
+      "cod",
+      "tray bake",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "4 skinless cod fillets, about 150 g each",
+      "500 g baby potatoes, halved",
+      "200 g green beans, trimmed",
+      "200 g cherry tomatoes",
+      "2 tablespoons olive oil, divided",
+      "3 garlic cloves, minced",
+      "1 lemon, half juiced and half cut into wedges",
+      "1 teaspoon dried oregano",
+      "1/2 teaspoon fine salt",
+      "Black pepper, to taste",
+      "2 tablespoons chopped parsley"
+    ],
+    "instructions": [
+      "Heat the oven to 210°C (410°F). Line a large rimmed baking tray with baking paper.",
+      "Toss the halved potatoes with one tablespoon of olive oil, half the garlic, oregano, salt and black pepper. Roast for 18 minutes, turning once.",
+      "Add the green beans and cherry tomatoes to the tray. Drizzle with the remaining oil and toss the vegetables around the potatoes.",
+      "Pat the cod dry. Mix the remaining garlic with lemon juice, then spoon it over the fish. Place the fillets between the vegetables and add lemon wedges.",
+      "Return the tray to the oven for 10–14 minutes, depending on fillet thickness, until the cod flakes easily and reaches 63°C (145°F) at the thickest part.",
+      "Scatter parsley over the tray and serve the fish with the roasted vegetables and pan juices."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 32,
+    "servings": 4,
+    "cook_notes": [
+      "Cut larger potatoes into smaller pieces so they finish at the same time as the fish.",
+      "Add the cod only after the potatoes have had their head start; overcooked cod becomes dry."
+    ],
+    "substitutions": [
+      "Use haddock or pollock fillets of similar thickness and check the centre reaches 63°C (145°F).",
+      "Swap green beans for asparagus or small broccoli florets, adjusting the roasting time until tender."
+    ],
+    "storage": "Refrigerate fish and vegetables in a shallow sealed container for up to 2 days. Reheat gently until steaming; avoid repeated reheating of seafood.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "tofu-peanut-noodle-bowls",
+    "title": "Tofu Peanut Noodle Bowls",
+    "description": "Crisp-edged tofu, chewy noodles and crunchy vegetables come together in a creamy lime-peanut sauce. These satisfying plant-based bowls are easy to customise and work well for meal prep.",
+    "tags": [
+      "dinner",
+      "vegetarian",
+      "vegan option",
+      "tofu",
+      "noodles",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "400 g firm tofu, pressed and cut into 2 cm cubes",
+      "1 tablespoon cornflour",
+      "1 tablespoon neutral oil",
+      "200 g dried noodles",
+      "1 carrot, cut into matchsticks",
+      "2 cups finely shredded red cabbage",
+      "1 cucumber, cut into thin strips",
+      "3 tablespoons smooth peanut butter",
+      "1 tablespoon low-sodium soy sauce",
+      "1 tablespoon lime juice",
+      "1 teaspoon maple syrup",
+      "1 teaspoon finely grated fresh ginger",
+      "2 tablespoons warm water, plus more to thin",
+      "1 tablespoon toasted sesame seeds"
+    ],
+    "instructions": [
+      "Pat the tofu dry and toss the cubes with cornflour until lightly coated.",
+      "Heat the neutral oil in a non-stick skillet over medium-high heat. Add the tofu in one layer and cook for 8–10 minutes, turning until golden on several sides; transfer to a plate.",
+      "Cook the noodles according to the packet directions. Drain and rinse briefly under cool water if serving as a room-temperature bowl.",
+      "Whisk the peanut butter, soy sauce, lime juice, maple syrup, ginger and warm water until smooth. Add more water a teaspoon at a time until the sauce will coat the noodles.",
+      "Divide noodles, carrot, cabbage and cucumber between bowls. Add the warm tofu and spoon over the peanut sauce.",
+      "Finish with sesame seeds and extra lime. Toss just before eating."
+    ],
+    "prep_minutes": 18,
+    "cook_minutes": 15,
+    "servings": 3,
+    "cook_notes": [
+      "Press the tofu for at least 10 minutes and dry the surface well so the cornflour forms a crisp coating.",
+      "Whisk the sauce separately before assembling; peanut butter thickens as it sits, so loosen it with warm water."
+    ],
+    "substitutions": [
+      "Use almond butter or sunflower-seed butter instead of peanut butter, checking for allergies.",
+      "Use rice noodles and tamari for a gluten-free version; confirm the noodle and sauce labels."
+    ],
+    "storage": "Store tofu, noodles, vegetables and sauce separately in sealed containers for up to 3 days. Keep the sauce chilled and loosen it with a little warm water before serving.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "lentil-bolognese-pasta",
+    "title": "Lentil Bolognese Pasta",
+    "description": "A rich tomato sauce with brown lentils, finely diced vegetables and Italian herbs makes a hearty meat-free pasta dinner. The sauce simmers while the pasta cooks and freezes well for busy nights.",
+    "tags": [
+      "dinner",
+      "vegetarian",
+      "vegan",
+      "lentils",
+      "pasta",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "250 g dried spaghetti or tagliatelle",
+      "1 tablespoon olive oil",
+      "1 small onion, finely diced",
+      "1 carrot, finely diced",
+      "1 celery stalk, finely diced",
+      "2 garlic cloves, minced",
+      "1 tablespoon tomato paste",
+      "1 can (400 g) chopped tomatoes",
+      "1 can (400 g) brown lentils, drained and rinsed",
+      "180 ml low-sodium vegetable stock",
+      "1 teaspoon dried oregano",
+      "1/2 teaspoon dried basil",
+      "Black pepper, to taste",
+      "2 tablespoons chopped parsley",
+      "Grated Parmesan or vegetarian hard cheese, to serve"
+    ],
+    "instructions": [
+      "Warm the olive oil in a deep skillet or saucepan over medium heat. Add onion, carrot and celery and cook for 6–8 minutes until softened.",
+      "Stir in the garlic and tomato paste and cook for 1 minute until the paste darkens slightly.",
+      "Add chopped tomatoes, rinsed lentils, vegetable stock, oregano and basil. Bring to a gentle simmer.",
+      "Cook uncovered for 20–25 minutes, stirring occasionally, until the sauce thickens and the vegetables are tender. Add a splash of stock if it becomes too thick.",
+      "Meanwhile, cook the pasta in salted boiling water according to the packet directions. Reserve a small cup of pasta water, then drain.",
+      "Toss the pasta with the lentil sauce, loosening with a little pasta water if needed. Finish with parsley and grated cheese."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 30,
+    "servings": 4,
+    "cook_notes": [
+      "Dice the onion, carrot and celery finely so they soften into the sauce rather than staying chunky.",
+      "Simmer uncovered to reduce the tomato liquid and concentrate the flavour; stir more often near the end."
+    ],
+    "substitutions": [
+      "Use green lentils instead of brown lentils, or cook 200 g dried lentils separately until tender before adding.",
+      "Use gluten-free pasta and omit the cheese or choose a dairy-free alternative for a vegan bowl."
+    ],
+    "storage": "Refrigerate sauce and pasta separately for up to 4 days, or freeze the sauce for up to 3 months. Reheat sauce until bubbling and cook fresh pasta for the best texture.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "chickpea-coconut-curry",
+    "title": "Chickpea Coconut Curry",
+    "description": "Chickpeas simmer in a fragrant tomato-coconut sauce with ginger, garlic and spinach. This budget-friendly curry uses pantry staples, comes together in one pot and is delicious with rice or flatbread.",
+    "tags": [
+      "dinner",
+      "vegetarian",
+      "vegan",
+      "chickpeas",
+      "curry",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "1 tablespoon olive oil",
+      "1 medium onion, finely diced",
+      "3 garlic cloves, minced",
+      "1 tablespoon finely grated fresh ginger",
+      "2 tablespoons mild curry powder",
+      "1/2 teaspoon ground cumin",
+      "1 can (400 g) chopped tomatoes",
+      "1 can (400 ml) coconut milk",
+      "2 cans (400 g each) chickpeas, drained and rinsed",
+      "2 cups baby spinach",
+      "1/2 teaspoon fine salt, plus more to taste",
+      "1 tablespoon lime juice",
+      "2 tablespoons chopped coriander",
+      "Cooked basmati rice, to serve"
+    ],
+    "instructions": [
+      "Heat the olive oil in a large saucepan over medium heat. Add the onion and cook for 5 minutes until soft and translucent.",
+      "Add the garlic and ginger and stir for 30 seconds. Add the curry powder and cumin and cook for another 30 seconds to toast the spices.",
+      "Pour in the chopped tomatoes and scrape the bottom of the pan. Simmer for 5 minutes until slightly thickened.",
+      "Stir in the coconut milk, chickpeas and salt. Bring to a gentle simmer and cook uncovered for 12–15 minutes, stirring occasionally.",
+      "Fold in the spinach and cook for 1–2 minutes until wilted. Stir in lime juice and taste for seasoning.",
+      "Serve over warm rice with chopped coriander and extra lime."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 25,
+    "servings": 4,
+    "cook_notes": [
+      "Toast the curry powder briefly in the oil to deepen its aroma, but do not let the garlic brown.",
+      "Mash a few chickpeas against the side of the pot if you prefer a thicker sauce."
+    ],
+    "substitutions": [
+      "Use light coconut milk for a lighter sauce, or replace half with vegetable stock for a less rich curry.",
+      "Add frozen peas instead of spinach, cooking until piping hot before serving."
+    ],
+    "storage": "Refrigerate cooled curry in a sealed container for up to 4 days or freeze for up to 3 months. Reheat gently until bubbling, adding a splash of water if the sauce has thickened.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "turkey-meatball-pasta",
+    "title": "Turkey Meatball Pasta",
+    "description": "Oven-baked turkey meatballs simmer in a simple garlic-tomato sauce and are served with spaghetti. This lighter comfort-food dinner includes a reliable thermometer check for juicy, safely cooked meatballs.",
+    "tags": [
+      "dinner",
+      "turkey",
+      "meatballs",
+      "pasta",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "500 g lean ground turkey",
+      "1/3 cup fine breadcrumbs",
+      "1 egg",
+      "2 tablespoons finely grated Parmesan",
+      "2 garlic cloves, minced",
+      "1 teaspoon dried oregano",
+      "1/2 teaspoon fine salt",
+      "1 tablespoon olive oil",
+      "1 can (400 g) crushed tomatoes",
+      "1 tablespoon tomato paste",
+      "250 g spaghetti",
+      "2 tablespoons chopped fresh basil",
+      "Black pepper, to taste"
+    ],
+    "instructions": [
+      "Heat the oven to 220°C (425°F). Line a rimmed baking tray with baking paper.",
+      "Combine the ground turkey, breadcrumbs, egg, Parmesan, half the garlic, oregano and salt. Mix gently until just combined.",
+      "Shape the mixture into 16 evenly sized meatballs and arrange them on the tray with space between each. Bake for 14–18 minutes until the centres reach 74°C (165°F) on a food thermometer.",
+      "While the meatballs bake, warm the olive oil in a saucepan. Add the remaining garlic and cook for 30 seconds.",
+      "Stir in the crushed tomatoes, tomato paste and black pepper. Simmer for 10 minutes, then add the cooked meatballs and simmer gently for 3–4 minutes.",
+      "Cook the spaghetti according to the packet directions. Drain, toss with the sauce and meatballs, and finish with basil."
+    ],
+    "prep_minutes": 20,
+    "cook_minutes": 25,
+    "servings": 4,
+    "cook_notes": [
+      "Mix the meatball ingredients only until combined; overworking ground turkey can make the texture firm.",
+      "Keep the meatballs similar in size so they finish cooking together; check the centre of the largest one."
+    ],
+    "substitutions": [
+      "Use ground chicken instead of turkey and keep the same 74°C (165°F) internal-temperature target.",
+      "Use gluten-free breadcrumbs and pasta if needed; check the Parmesan label for vegetarian suitability."
+    ],
+    "storage": "Refrigerate meatballs and sauce separately from pasta for up to 3 days. Reheat until steaming hot; the meatballs can also be frozen in sauce for up to 2 months.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "chicken-enchilada-skillet",
+    "title": "Chicken Enchilada Skillet",
+    "description": "A one-pan take on enchiladas with tender chicken, black beans, sweet corn, tomato-chili sauce and melted cheese. It has the familiar savoury enchilada flavour without the work of rolling individual tortillas.",
+    "tags": [
+      "dinner",
+      "chicken",
+      "skillet",
+      "mexican-inspired",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "500 g boneless, skinless chicken breast, cut into 2 cm pieces",
+      "1 tablespoon olive oil",
+      "1 small red onion, diced",
+      "1 red bell pepper, diced",
+      "2 teaspoons mild chili powder",
+      "1 teaspoon ground cumin",
+      "1 can (400 g) black beans, drained and rinsed",
+      "1 cup sweet corn kernels",
+      "250 ml enchilada sauce",
+      "4 small corn tortillas, cut into strips",
+      "3/4 cup grated cheddar or Monterey Jack",
+      "2 tablespoons chopped coriander",
+      "1 lime, cut into wedges"
+    ],
+    "instructions": [
+      "Heat the olive oil in a large oven-safe skillet over medium-high heat. Add the chicken in a single layer and season with chili powder and cumin.",
+      "Cook the chicken for 5–7 minutes, turning occasionally, until browned and the thickest pieces reach 74°C (165°F) on a food thermometer. Transfer to a clean plate.",
+      "Add the onion and bell pepper to the same skillet and cook for 4 minutes until beginning to soften.",
+      "Stir in the black beans, corn, enchilada sauce and tortilla strips. Return the chicken and any resting juices to the skillet and stir to combine.",
+      "Scatter the grated cheese over the top. Cover the skillet for 2–3 minutes until the cheese melts, or place under a hot grill briefly if the pan is oven-safe.",
+      "Finish with coriander and lime wedges. Serve hot straight from the skillet."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 18,
+    "servings": 4,
+    "cook_notes": [
+      "Cut the chicken evenly and check the largest pieces with a food thermometer before adding them back to the sauce.",
+      "Add tortilla strips shortly before the cheese so they soften slightly but do not disappear into the sauce."
+    ],
+    "substitutions": [
+      "Use cooked shredded chicken and reduce the first cooking step; heat it through in the sauce until steaming hot.",
+      "Replace black beans with pinto beans and use a mild salsa verde for a tangier version."
+    ],
+    "storage": "Refrigerate leftovers in a sealed container for up to 3 days. Reheat covered in a skillet with a splash of water until steaming; add fresh coriander after reheating.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "mediterranean-tuna-pasta-salad",
+    "title": "Mediterranean Tuna Pasta Salad",
+    "description": "A make-ahead pasta salad with flaky tuna, cucumber, cherry tomatoes, olives and chickpeas tossed in a lemon-oregano dressing. It is filling enough for lunch and travels well when kept chilled.",
+    "tags": [
+      "lunch",
+      "tuna",
+      "pasta",
+      "salad",
+      "mediterranean",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "250 g short pasta such as fusilli",
+      "2 cans (about 145 g each) tuna in spring water, drained",
+      "1 can (400 g) chickpeas, drained and rinsed",
+      "1 cucumber, diced",
+      "200 g cherry tomatoes, halved",
+      "1/3 cup pitted Kalamata olives, halved",
+      "1/4 small red onion, finely diced",
+      "2 tablespoons olive oil",
+      "1 tablespoon lemon juice",
+      "1 teaspoon dried oregano",
+      "2 tablespoons chopped parsley",
+      "Black pepper, to taste",
+      "1/3 cup crumbled feta, optional"
+    ],
+    "instructions": [
+      "Cook the pasta in salted boiling water according to the packet directions until just tender. Drain and rinse briefly under cool water, then drain thoroughly.",
+      "Whisk the olive oil, lemon juice, oregano and black pepper in a large bowl.",
+      "Add the cooled pasta, drained tuna, chickpeas, cucumber, tomatoes, olives and red onion to the bowl.",
+      "Toss gently until the dressing coats the pasta and vegetables without breaking up the tuna too much.",
+      "Fold through the parsley and feta, if using. Taste and add more lemon or black pepper as needed.",
+      "Cover and chill for at least 20 minutes before serving so the flavours settle."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 10,
+    "servings": 4,
+    "cook_notes": [
+      "Drain the pasta very well before mixing so the dressing stays flavourful rather than watery.",
+      "Chill the salad before serving, and keep it cold during transport; do not leave tuna salad at room temperature for extended periods."
+    ],
+    "substitutions": [
+      "Use canned salmon or white beans instead of tuna for a different protein option.",
+      "Replace feta with diced avocado just before serving, or omit it for a dairy-free salad."
+    ],
+    "storage": "Keep covered in the refrigerator and eat within 2 days. Do not freeze; the cucumber and tomatoes lose their texture after thawing.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "garlic-butter-shrimp-pasta",
+    "title": "Garlic Butter Shrimp Pasta",
+    "description": "Juicy garlic-butter shrimp are tossed with spaghetti, lemon, parsley and a little pasta water for a glossy sauce. This quick seafood pasta is bright, comforting and ready in about 25 minutes.",
+    "tags": [
+      "dinner",
+      "seafood",
+      "shrimp",
+      "pasta",
+      "quick-and-easy",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "250 g spaghetti or linguine",
+      "400 g peeled and deveined shrimp, patted dry",
+      "2 tablespoons olive oil",
+      "2 tablespoons unsalted butter",
+      "4 garlic cloves, thinly sliced",
+      "1/4 teaspoon chili flakes, optional",
+      "1 lemon, zested and juiced",
+      "1/3 cup reserved pasta water",
+      "2 tablespoons chopped fresh parsley",
+      "2 tablespoons finely grated Parmesan, optional",
+      "Black pepper, to taste"
+    ],
+    "instructions": [
+      "Bring a large pot of salted water to a boil. Cook the spaghetti according to the packet directions until al dente, reserving 1/3 cup of pasta water before draining.",
+      "Pat the shrimp dry and season lightly with black pepper.",
+      "Heat the olive oil in a wide skillet over medium-high heat. Add the shrimp in one layer and cook for about 2 minutes per side until opaque and firm; transfer to a clean plate.",
+      "Reduce the heat to medium. Add the butter, sliced garlic and chili flakes and cook for 30–45 seconds, stirring constantly so the garlic softens without browning.",
+      "Add lemon zest, lemon juice and the reserved pasta water. Simmer for 1 minute, then add the drained spaghetti and toss until glossy.",
+      "Return the shrimp to the skillet and toss for 30 seconds to warm through. Finish with parsley and Parmesan, if using, and serve immediately."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 15,
+    "servings": 3,
+    "cook_notes": [
+      "Dry the shrimp well before they hit the skillet to encourage quick browning.",
+      "Keep the garlic pale; browned garlic can taste bitter and overpower the lemon-butter sauce."
+    ],
+    "substitutions": [
+      "Use linguine or fettuccine instead of spaghetti; cook according to the packet directions.",
+      "For a dairy-free version, replace butter with olive oil and omit Parmesan."
+    ],
+    "storage": "Refrigerate leftovers promptly in a sealed container for up to 2 days. Reheat gently in a skillet with a splash of water; seafood pasta is best freshly cooked.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "slug": "honey-soy-salmon-tray-bake",
+    "title": "Honey Soy Salmon Tray Bake",
+    "description": "Salmon fillets roast with broccoli and carrots under a sticky honey-soy-ginger glaze. This colourful tray-bake dinner pairs easily with rice and keeps the washing-up to one pan.",
+    "tags": [
+      "dinner",
+      "salmon",
+      "seafood",
+      "tray bake",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "4 skinless salmon fillets, about 150 g each",
+      "2 cups broccoli florets",
+      "2 carrots, cut into thin diagonal slices",
+      "1 red bell pepper, sliced",
+      "1 tablespoon neutral oil",
+      "2 tablespoons low-sodium soy sauce",
+      "1 tablespoon honey",
+      "1 teaspoon toasted sesame oil",
+      "1 teaspoon finely grated fresh ginger",
+      "1 garlic clove, finely grated",
+      "1 teaspoon rice vinegar",
+      "1 tablespoon sesame seeds",
+      "2 spring onions, sliced",
+      "Cooked rice, to serve"
+    ],
+    "instructions": [
+      "Heat the oven to 210°C (410°F). Line a large rimmed baking tray with baking paper.",
+      "Toss the broccoli, carrots and bell pepper with the neutral oil. Spread in one layer and roast for 10 minutes.",
+      "Whisk the soy sauce, honey, sesame oil, ginger, garlic and rice vinegar in a small bowl.",
+      "Pat the salmon dry and place the fillets among the vegetables. Spoon the glaze over the top of each fillet.",
+      "Return the tray to the oven for 10–14 minutes, depending on the thickness of the salmon, until the fish flakes easily and reaches 63°C (145°F) at the thickest part.",
+      "Scatter sesame seeds and spring onions over the salmon and vegetables. Serve with warm rice and any glaze left on the tray."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 24,
+    "servings": 4,
+    "cook_notes": [
+      "Cut carrots thinly so they soften in the same time as the broccoli and salmon.",
+      "Brush the glaze over the salmon just before roasting; honey can darken if exposed to high heat for too long."
+    ],
+    "substitutions": [
+      "Use tamari instead of soy sauce for a gluten-free option, checking all condiment labels.",
+      "Swap salmon for trout fillets of similar thickness and check the centre reaches 63°C (145°F)."
+    ],
+    "storage": "Refrigerate cooked salmon and vegetables separately from rice for up to 2 days. Reheat gently until steaming; add fresh spring onions after reheating.",
+    "image_verified": false,
+    "video_verified": false,
+    "video_url": "",
+    "editorial_status": "original-method-written-awaiting-media-verification"
   }
 ]
