@@ -3,11 +3,11 @@
 Daily Shopify recipe publishing for SolePick Recipes, with a verified YouTube recipe-video check before an article is published.
 
 ## Daily schedule and duplicate protection
-- The workflow has seasonal primary triggers plus same-day recovery triggers at `0 7 * * *`, `0 8 * * *`, `0 9 * * *`, and `0 10 * * *` UTC. The worker accepts the 10:00 AM Cairo primary trigger and later recovery attempts; Shopify's Cairo-day guard prevents duplicate posts.
+- To reduce GitHub top-of-hour queue delays, scheduled checks run seven minutes past the hour. The approved publishing windows are 09:07, 10:07, 11:07 and 12:07 Africa/Cairo, with a 13:07 same-day recovery watchdog. Summer (UTC+3) uses 06:07–10:07 UTC; winter (UTC+2) uses 07:07–11:07 UTC. The worker accepts only the five Cairo-aligned events and Shopify's Cairo-day guard prevents duplicate posts.
 - Before publishing, the worker checks Shopify article publication dates in `Africa/Cairo`. If today's article already has a saved embedded player, it skips the run to prevent a duplicate.
 - If today's article exists but its saved body is missing the embedded player, the worker repairs that existing article instead of creating another recipe.
 - The publishing command retries up to three times after failures. Shopify is re-checked on each attempt, and the Cairo-day guard prevents duplicate posts after an uncertain API response.
-- GitHub can delay scheduled runs; the schedule targets 10:00 AM Cairo but cannot guarantee the exact start minute.
+- GitHub can still delay scheduled runs, but the seven-minute offset avoids the busiest top-of-hour queue. The worker accepts all four approved Cairo publishing windows and the recovery watchdog.
 
 ## Recipe video checks
 - No YouTube API key is required. The worker searches public YouTube results with `yt-dlp`, rejects titles that do not match the recipe's named protein and dish format, and checks each candidate with YouTube oEmbed before accepting an embeddable video. Public search can be rate-limited; when no safe match can be verified, the recipe is skipped and no mismatched video is published.
@@ -25,7 +25,7 @@ Never put credentials in repository files.
 The daily publisher is pinned to the verified SolePick Shopify domain `0mxbjk-cz.myshopify.com`; it must never use the Valuted News store domain.
 
 ## Production publishing trigger
-A commit whose message includes `[publish-daily-recipe]` runs the same validated production publisher used by the scheduled workflow. It resolves the Shopify blog by the `recipes` handle, applies the Cairo-day cap of up to three verified recipes, and skips candidates that fail recipe, photo, video, or Shopify verification.
+A commit whose message includes `[publish-daily-recipe]` runs the same validated production publisher used by the scheduled workflow. It resolves the Shopify blog by the `recipes` handle, applies the Cairo-day cap of up to three verified recipes, and skips candidates that fail recipe, photo, video, or Shopify verification. Add `[publish-one-recipe]` to cap a guarded recovery run at one new article.
 
 ## Tests
 Run:
