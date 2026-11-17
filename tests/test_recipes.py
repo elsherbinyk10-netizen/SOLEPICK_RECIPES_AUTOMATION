@@ -160,12 +160,12 @@ class RecipeLibraryTests(unittest.TestCase):
         summer_recovery = datetime(2026, 7, 1, 11, 0, tzinfo=cairo)
         winter_primary = datetime(2026, 1, 15, 10, 0, tzinfo=cairo)
         winter_recovery = datetime(2026, 1, 15, 11, 0, tzinfo=cairo)
-        before_publish_window = datetime(2026, 1, 15, 9, 0, tzinfo=cairo)
+        before_publish_window = datetime(2026, 1, 15, 8, 0, tzinfo=cairo)
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 7 * * *", summer_primary))
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 8 * * *", winter_primary))
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 8 * * *", summer_recovery))
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 9 * * *", winter_recovery))
-        self.assertFalse(recipe_worker.should_run_scheduled_event("0 7 * * *", before_publish_window))
+        self.assertFalse(recipe_worker.should_run_scheduled_event("0 6 * * *", before_publish_window))
 
     def test_schedule_accepts_all_approved_cairo_windows(self):
         cairo = ZoneInfo("Africa/Cairo")
