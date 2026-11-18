@@ -1,0 +1,118 @@
+name: SolePick Missed-Window Recovery
+
+on:
+  schedule:
+    # Fifteen-minute watchdog after the five UTC hours covering Cairo's
+    # four local windows in both UTC+2 and UTC+3 seasons. The script
+    # ignores the one seasonal off-window tick.
+    - cron: "15 6-10 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: solepick-schedule-watchdog
+  cancel-in-progress: false
+
+jobs:
+  recover-missed-window:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Recover only when this Cairo window has no successful scheduled run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import datetime
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.request
+          from zoneinfo import ZoneInfo
+
+          token = os.environ["GH_TOKEN"]
+          repo = os.environ["REPOSITORY"]
+          now = datetime.datetime.now(datetime.timezone.utc)
+          cairo = now.astimezone(ZoneInfo("Africa/Cairo"))
+
+          # The watchdog is only eligible 15+ minutes into one of the
+          # four approved local publishing hours.
+          if cairo.hour not in (9, 10, 11, 12) or cairo.minute < 15:
+              print(f"Outside recovery window: Cairo {cairo:%H:%M}; no dispatch.")
+              sys.exit(0)
+
+          window_start = now.replace(minute=0, second=0, microsecond=0)
+          start_text = window_start.isoformat().replace("+00:00", "Z")
+          api = f"https://api.github.com/repos/{repo}/actions/runs?per_page=100"
+          request = urllib.request.Request(
+              api,
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              },
+          )
+          with urllib.request.urlopen(request, timeout=20) as response:
+              payload = json.loads(response.read().decode("utf-8"))
+
+          matching = [
+              run for run in payload.get("workflow_runs", [])
+              if run.get("path") == ".github/workflows/daily-recipes.yml"
+              and run.get("event") == "schedule"
+              and run.get("head_branch") == "main"
+              and run.get("created_at", "") >= start_text
+          ]
+          healthy_or_running = [
+              run for run in matching
+              if run.get("status") in ("queued", "in_progress")
+              or (run.get("status") == "completed" and run.get("conclusion") == "success")
+          ]
+          if healthy_or_running:
+              run = healthy_or_running[0]
+              print(
+                  "Scheduled publishing run exists for this UTC window: "
+                  f"id={run.get('id')} status={run.get('status')} "
+                  f"conclusion={run.get('conclusion')}; no recovery dispatch."
+              )
+              sys.exit(0)
+
+          print(
+              f"No successful or active scheduled publishing run found for "
+              f"Cairo {cairo:%Y-%m-%d %H}:00. Dispatching guarded recovery."
+          )
+          dispatch_url = (
+              f"https://api.github.com/repos/{repo}/actions/workflows/"
+              "daily-recipes.yml/dispatches"
+          )
+          body = json.dumps({
+              "ref": "main",
+              "inputs": {
+                  "max_recipes": "3",
+                  "audit_missing_videos": "true",
+              },
+          }).encode("utf-8")
+          dispatch = urllib.request.Request(
+              dispatch_url,
+              data=body,
+              method="POST",
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+                  "Content-Type": "application/json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              },
+          )
+          try:
+              with urllib.request.urlopen(dispatch, timeout=20) as response:
+                  print(f"Recovery dispatch accepted: HTTP {response.status}.")
+          except urllib.error.HTTPError as error:
+              detail = error.read().decode("utf-8", "replace")
+              raise RuntimeError(
+                  f"GitHub rejected the recovery dispatch: HTTP {error.code}: {detail}"
+              )
+          PY
