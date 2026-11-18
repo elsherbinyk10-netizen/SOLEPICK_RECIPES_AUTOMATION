@@ -199,3 +199,4 @@ jobs:
           fi
 # 2026-11-15 recovery trigger: comment-only commit to retry today's guarded publisher after missing scheduled ticks.
 # Manual recovery trigger: rerun the existing guarded daily publisher after missed Cairo schedule windows.
+# Missed-window watchdog installed; guarded current-day recovery [publish-daily-recipe]
