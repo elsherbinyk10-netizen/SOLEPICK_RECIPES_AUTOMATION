@@ -53,7 +53,7 @@ concurrency:
   # Scheduled ticks share one lock so the same Cairo day cannot race.
   # Each reviewed recovery commit has its own lock so a stalled older runner
   # cannot block the fresh code path from making progress.
-  group: solepick-daily-${{ github.event_name == 'schedule' && 'scheduled' || github.sha }}
+  group: solepick-daily-${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'scheduled' || github.sha }}
   cancel-in-progress: false
 
 jobs:
