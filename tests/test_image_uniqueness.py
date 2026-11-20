@@ -8,6 +8,7 @@ import recipe_worker
 
 
 class ImageUniquenessTests(unittest.TestCase):
+    # Regression coverage for YouTube CDN thumbnails with shared filenames.
     def test_shopify_uuid_suffix_does_not_hide_same_original_image(self):
         original = "https://cdn.shopify.com/s/files/1/articles/photo-1551504734.jpg?v=1"
         copied = "https://cdn.shopify.com/s/files/1/articles/photo-1551504734_20434a4e-b7da-4a7d-ae7e-3d05cbb700ca.jpg?v=2"
