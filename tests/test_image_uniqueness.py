@@ -13,6 +13,19 @@ class ImageUniquenessTests(unittest.TestCase):
         copied = "https://cdn.shopify.com/s/files/1/articles/photo-1551504734_20434a4e-b7da-4a7d-ae7e-3d05cbb700ca.jpg?v=2"
         self.assertEqual(recipe_worker._image_identity(original), recipe_worker._image_identity(copied))
 
+    def test_youtube_thumbnail_variants_for_same_video_share_identity(self):
+        urls = [
+            "https://img.youtube.com/vi/AbCdEfGh123/maxresdefault.jpg",
+            "https://img.youtube.com/vi/AbCdEfGh123/hq720.jpg",
+            "https://img.youtube.com/vi/AbCdEfGh123/sddefault.jpg",
+        ]
+        self.assertEqual(len({recipe_worker._image_identity(url) for url in urls}), 1)
+
+    def test_different_youtube_video_thumbnails_are_not_false_duplicates(self):
+        first = "https://img.youtube.com/vi/AbCdEfGh123/maxresdefault.jpg"
+        second = "https://img.youtube.com/vi/ZyXwVuTs987/maxresdefault.jpg"
+        self.assertNotEqual(recipe_worker._image_identity(first), recipe_worker._image_identity(second))
+
     def test_different_source_filenames_remain_distinct(self):
         self.assertNotEqual(
             recipe_worker._image_identity("https://cdn.shopify.com/articles/black-bean-salad.jpg"),
