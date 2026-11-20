@@ -2143,9 +2143,10 @@ def main():
     print(
         "NO_ELIGIBLE_RECIPE: no candidate passed every instruction, verified-video, "
         "dish-photo, and Shopify publication gate. Nothing was published; this is a "
-        "safe content hold, not a publishing-code failure. The next scheduled run will retry."
+        "safe content hold. Exit non-zero so the workflow retries this run, then the "
+        "next approved Cairo window and the 13:00 recovery pass can try again."
     )
-    return
+    raise SystemExit(2)
 
 
 if __name__ == "__main__":
