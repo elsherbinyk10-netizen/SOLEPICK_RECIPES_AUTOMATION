@@ -544,13 +544,18 @@ def _image_identity(url):
         return ""
     parsed = urllib.parse.urlparse(value)
     path = urllib.parse.unquote(parsed.path).lower()
+    # YouTube uses the same generic filenames for every video. Include the
+    # video ID so unrelated recipe thumbnails are not false duplicates, while
+    # treating multiple resolutions of one video as the same image.
+    if (parsed.hostname or "").lower() == "img.youtube.com":
+        match = re.match(r"^/vi/([a-z0-9_-]{11})/(?:maxresdefault|hq720|sddefault)\\.jpg$", path)
+        if match:
+            return "youtube:" + match.group(1)
     filename = path.rsplit("/", 1)[-1]
     # Shopify appends a unique UUID to each imported copy, so strip it to detect
     # the same original photo across different articles.
-    filename = re.sub(r"_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?=\.)", "", filename)
+    filename = re.sub(r"_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?=\\.)", "", filename)
     return filename
-
-
 def _is_retail_product_image(title_text, image_url="", metadata=None):
     """Reject grocery-store shelves, retail aisles, packaged-goods displays and product shots."""
     metadata = metadata or {}
