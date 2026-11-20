@@ -1330,10 +1330,10 @@ def expected_schedule_cron(now=None):
 
 
 def should_run_scheduled_event(event_schedule, now=None):
-    """Accept only the four approved Cairo publishing windows: 09:00–12:00."""
+    """Accept four approved Cairo publishing windows plus the 13:00 recovery pass."""
     now = now or datetime.datetime.now(CAIRO)
     utc_offset_hours = int(now.utcoffset().total_seconds() // 3600)
-    approved_hours = (9, 10, 11, 12)
+    approved_hours = (9, 10, 11, 12, 13)
     current_crons = {f"0 {hour - utc_offset_hours} * * *" for hour in approved_hours}
     return event_schedule in current_crons
 
