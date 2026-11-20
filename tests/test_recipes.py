@@ -176,7 +176,7 @@ class RecipeLibraryTests(unittest.TestCase):
         for hour, cron in winter_hours:
             self.assertTrue(recipe_worker.should_run_scheduled_event(cron, datetime(2026, 1, 15, hour, 0, tzinfo=cairo)))
         self.assertFalse(recipe_worker.should_run_scheduled_event("0 6 * * *", datetime(2026, 1, 15, 8, 0, tzinfo=cairo)))
-        self.assertFalse(recipe_worker.should_run_scheduled_event("0 10 * * *", datetime(2026, 7, 1, 13, 0, tzinfo=cairo)))
+        self.assertTrue(recipe_worker.should_run_scheduled_event("0 10 * * *", datetime(2026, 7, 1, 13, 0, tzinfo=cairo)))
         self.assertFalse(recipe_worker.should_run_scheduled_event("7 7 * * *", datetime(2026, 1, 15, 9, 0, tzinfo=cairo)))
 
     def test_orzo_photo_relevance_accepts_chicken_pasta_alias(self):
