@@ -41,15 +41,22 @@ jobs:
           cairo = now.astimezone(ZoneInfo("Africa/Cairo"))
 
           # Fifteen-minute checks follow each approved local publishing hour.
-          # A final 13:15 Cairo catch-up is allowed after the four windows;
-          # the publisher itself enforces the daily maximum of three.
-          if cairo.minute < 15 or cairo.hour not in (9, 10, 11, 12, 13):
+          # GitHub may queue scheduled events many hours late. Keep a guarded
+          # final catch-up eligible after 13:15 Cairo instead of discarding a
+          # delayed tick; the publisher still enforces quality and the 3/day cap.
+          if cairo.hour < 9 or (cairo.hour <= 13 and cairo.minute < 15):
               print(f"Outside recovery window: Cairo {cairo:%H:%M}; no dispatch.")
               sys.exit(0)
 
-          final_catchup = cairo.hour == 13
+          final_catchup = cairo.hour >= 13
           window_start = now.replace(minute=0, second=0, microsecond=0)
           start_text = window_start.isoformat().replace("+00:00", "Z")
+          day_start_text = (
+              cairo.replace(hour=0, minute=0, second=0, microsecond=0)
+              .astimezone(datetime.timezone.utc)
+              .isoformat()
+              .replace("+00:00", "Z")
+          )
           api = f"https://api.github.com/repos/{repo}/actions/runs?per_page=100"
           request = urllib.request.Request(
               api,
@@ -62,27 +69,43 @@ jobs:
           with urllib.request.urlopen(request, timeout=20) as response:
               payload = json.loads(response.read().decode("utf-8"))
 
-          if not final_catchup:
-              matching = [
-                  run for run in payload.get("workflow_runs", [])
-                  if run.get("path") == ".github/workflows/daily-recipes.yml"
-                  and run.get("event") == "schedule"
-                  and run.get("head_branch") == "main"
-                  and run.get("created_at", "") >= start_text
-              ]
-              healthy_or_running = [
-                  run for run in matching
-                  if run.get("status") in ("queued", "in_progress")
-                  or (run.get("status") == "completed" and run.get("conclusion") == "success")
-              ]
-              if healthy_or_running:
-                  run = healthy_or_running[0]
-                  print(
-                      "Scheduled publishing run exists for this UTC window: "
-                      f"id={run.get('id')} status={run.get('status')} "
-                      f"conclusion={run.get('conclusion')}; no recovery dispatch."
+          matching = [
+              run for run in payload.get("workflow_runs", [])
+              if run.get("path") == ".github/workflows/daily-recipes.yml"
+              and run.get("head_branch") == "main"
+              and (
+                  (
+                      final_catchup
+                      and run.get("created_at", "") >= day_start_text
+                      and (
+                          run.get("event") in ("schedule", "workflow_dispatch")
+                          or (
+                              run.get("event") == "push"
+                              and "[publish-daily-recipe]" in ((run.get("head_commit") or {}).get("message", ""))
+                          )
+                      )
                   )
-                  sys.exit(0)
+                  or (
+                      not final_catchup
+                      and run.get("event") == "schedule"
+                      and run.get("created_at", "") >= start_text
+                  )
+              )
+          ]
+          healthy_or_running = [
+              run for run in matching
+              if run.get("status") in ("queued", "in_progress")
+              or (run.get("status") == "completed" and run.get("conclusion") == "success")
+          ]
+          if healthy_or_running:
+              run = healthy_or_running[0]
+              window_label = "this Cairo day" if final_catchup else "this UTC window"
+              print(
+                  f"A healthy or active publishing run already exists for {window_label}: "
+                  f"id={run.get('id')} status={run.get('status')} "
+                  f"conclusion={run.get('conclusion')}; no recovery dispatch."
+              )
+              sys.exit(0)
 
           reason = (
               "final 13:15 Cairo catch-up; publisher will fill only remaining daily slots"
