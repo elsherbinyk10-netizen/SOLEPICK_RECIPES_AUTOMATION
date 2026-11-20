@@ -35,14 +35,16 @@ on:
         type: boolean
         default: false
   schedule:
-    # Exactly four approved windows in Africa/Cairo: 09:00, 10:00, 11:00 and 12:00.
-    # Cairo summer (UTC+3): 06:00–09:00 UTC; winter (UTC+2): 07:00–10:00 UTC.
-    # The union below covers both offsets; the worker ignores the one off-season extra cron.
+    # Four approved publishing windows (09:00–12:00 Cairo) plus a 13:00 Cairo recovery pass.
+    # The recovery pass retries only if the daily target has not been met; Shopify idempotency prevents duplicates.
+    # Cairo summer (UTC+3): 06:00–10:00 UTC; winter (UTC+2): 07:00–11:00 UTC.
+    # The union below covers both offsets; the worker ignores off-season cron hours.
     - cron: "0 6 * * *"
     - cron: "0 7 * * *"
     - cron: "0 8 * * *"
     - cron: "0 9 * * *"
     - cron: "0 10 * * *"
+    - cron: "0 11 * * *"
 
 permissions:
   contents: write
