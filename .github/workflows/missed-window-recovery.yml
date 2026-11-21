@@ -92,10 +92,19 @@ jobs:
                   )
               )
           ]
+          # A completed workflow can be green while publishing zero recipes
+          # (for example, when all image/video candidates are correctly held).
+          # For the final catch-up, only an active run should suppress dispatch;
+          # the publisher re-reads Shopify and its Cairo-day idempotency guard
+          # prevents duplicates and stops once the 3-recipe cap is reached.
           healthy_or_running = [
               run for run in matching
               if run.get("status") in ("queued", "in_progress")
-              or (run.get("status") == "completed" and run.get("conclusion") == "success")
+              or (
+                  not final_catchup
+                  and run.get("status") == "completed"
+                  and run.get("conclusion") == "success"
+              )
           ]
           if healthy_or_running:
               run = healthy_or_running[0]
