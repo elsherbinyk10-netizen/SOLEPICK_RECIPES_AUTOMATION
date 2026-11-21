@@ -203,3 +203,4 @@ jobs:
 # Manual recovery trigger: rerun the existing guarded daily publisher after missed Cairo schedule windows.
 # Missed-window watchdog installed; guarded current-day recovery [publish-daily-recipe]
 # 2026-11-20 guarded same-day recovery trigger (comment-only; quality gates unchanged).
+# 2026-11-21 guarded same-day recovery trigger [publish-daily-recipe]
