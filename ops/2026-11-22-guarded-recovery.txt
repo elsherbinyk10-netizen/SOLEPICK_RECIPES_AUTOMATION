@@ -1,0 +1,1 @@
+Guarded daily recipe publisher recovery trigger for the Cairo date 2026-11-22. This marker does not change publishing rules. The normal recipe instruction, duplicate, dish-relevant image, video verification, and Shopify publication checks remain mandatory.
