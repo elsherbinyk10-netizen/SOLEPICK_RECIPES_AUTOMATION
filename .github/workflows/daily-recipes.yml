@@ -204,3 +204,4 @@ jobs:
 # Missed-window watchdog installed; guarded current-day recovery [publish-daily-recipe]
 # 2026-11-20 guarded same-day recovery trigger (comment-only; quality gates unchanged).
 # 2026-11-21 guarded same-day recovery trigger [publish-daily-recipe]
+# 2026-11-23 same-Cairo-day guarded recovery: retry after the off-season 06:00 UTC cron was correctly rejected.
