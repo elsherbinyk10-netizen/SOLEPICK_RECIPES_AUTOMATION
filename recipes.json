@@ -5858,5 +5858,46 @@
     "video_verified": false,
     "video_url": "",
     "editorial_status": "original-method-written-awaiting-media-verification"
+  },
+  {
+    "title": "Crispy Smash Burger Tacos",
+    "description": "Thin, seared beef patties are pressed onto small tortillas and finished with crisp lettuce, pickles and a tangy burger-style sauce.",
+    "tags": [
+      "dinner",
+      "beef",
+      "tacos",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "450 g lean ground beef",
+      "8 small flour tortillas",
+      "1 teaspoon fine salt",
+      "1/2 teaspoon black pepper",
+      "1 teaspoon garlic powder",
+      "1 cup shredded lettuce",
+      "1/2 cup diced dill pickles",
+      "1/2 cup grated cheddar",
+      "3 tablespoons mayonnaise",
+      "1 tablespoon ketchup",
+      "1 teaspoon mustard",
+      "1 teaspoon pickle brine"
+    ],
+    "instructions": [
+      "Divide the beef into eight equal portions and season with salt, pepper and garlic powder.",
+      "Mix the mayonnaise, ketchup, mustard and pickle brine in a small bowl to make the sauce.",
+      "Press one portion of beef into a very thin layer over one side of each tortilla, spreading it almost to the edges.",
+      "Heat a large skillet over medium-high heat. Place a tortilla beef-side down and cook for 2–3 minutes until the beef is browned and reaches 71°C (160°F). Flip and warm the tortilla for 30–45 seconds.",
+      "Top each taco with cheddar, lettuce, pickles and burger sauce. Serve immediately."
+    ],
+    "prep_minutes": 15,
+    "cook_minutes": 12,
+    "servings": 4,
+    "slug": "crispy-smash-burger-tacos",
+    "trend_sources": [
+      "SolePick curated evergreen library"
+    ],
+    "trend_evidence_count": 0,
+    "seo_title": "Crispy Smash Burger Tacos | SolePick Recipes",
+    "seo_description": "Thin, seared beef patties are pressed onto small tortillas and finished with crisp lettuce, pickles and a tangy burger-style sauce."
   }
 ]
