@@ -87,9 +87,23 @@ def add_recipe_category_tags(recipe):
 
 
 def _video_title_score(recipe_title, video_title):
+    """Score title identity while normalizing common recipe-video wording variants."""
     stop = {"recipe", "easy", "best", "how", "to", "make", "the", "with", "for", "and", "a", "an", "of", "in", "on", "quick", "simple", "delicious"}
-    wanted = {x for x in re.findall(r"[a-z0-9]+", recipe_title.lower()) if x not in stop}
-    found = {x for x in re.findall(r"[a-z0-9]+", video_title.lower()) if x not in stop}
+    plural_aliases = {
+        "bowls": "bowl", "tacos": "taco", "noodles": "noodle",
+        "parfaits": "parfait", "fajitas": "fajita", "potatoes": "potato",
+        "prawns": "shrimp", "wraps": "wrap", "sandwiches": "sandwich",
+    }
+    wanted = {plural_aliases.get(x, x) for x in re.findall(r"[a-z0-9]+", recipe_title.lower()) if x not in stop}
+    found = {plural_aliases.get(x, x) for x in re.findall(r"[a-z0-9]+", video_title.lower()) if x not in stop}
+    # "Tray bake" and "sheet pan" are equivalent names for the same cooking format.
+    # Keep the strict protein, starch and dish-format checks in _video_title_is_compatible.
+    if {"sheet", "pan"} <= found:
+        found.update({"tray", "bake"})
+    if {"tray", "bake"} <= wanted and {"sheet", "pan"} <= found:
+        found.update({"tray", "bake"})
+    if {"sheet", "pan"} <= wanted and {"tray", "bake"} <= found:
+        found.update({"sheet", "pan"})
     return len(wanted & found) / max(1, len(wanted))
 
 
