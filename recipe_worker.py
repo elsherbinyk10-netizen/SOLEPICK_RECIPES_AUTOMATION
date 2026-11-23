@@ -355,6 +355,8 @@ def search_verified_recipe_videos(query):
         "https://inv.nadeko.net",
         "https://yewtu.be",
     ]
+    combined = []
+    seen_ids = set()
     for instance in instances:
         endpoint = instance + "/api/v1/search?" + urllib.parse.urlencode({
             "q": query, "type": "video", "sort_by": "relevance"
@@ -389,12 +391,14 @@ def search_verified_recipe_videos(query):
                         "publisher": publisher,
                         "description": str(item.get("description") or ""),
                     })
-            if matches:
-                print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} creator candidate(s) for live verification.")
-                return matches
+            fresh = [item for item in matches if item["id"] not in seen_ids]
+            for item in fresh:
+                seen_ids.add(item["id"])
+            combined.extend(fresh)
+            print(f"INVIDIOUS VIDEO SEARCH: {instance} returned {len(matches)} creator candidate(s), {len(fresh)} new; aggregate={len(combined)}.")
         except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError) as error:
             print(f"INVIDIOUS VIDEO SEARCH: {instance} unavailable ({type(error).__name__}); trying another public index.")
-    return []
+    return combined[:60]
 
 
 def find_verified_recipe_video(recipe, excluded_video_ids=None):
@@ -431,11 +435,15 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
     # weakening the strict protein/dish-format and live-embeddability checks.
     # A recipe is published only after a title-compatible video passes oEmbed.
     queries = [
-        f"ytsearch30:{title} recipe",
-        f"ytsearch20:{title} cooking",
+        f"ytsearch50:{title} recipe",
+        f"ytsearch50:{title} cooking",
+        f"ytsearch30:{title} official recipe video",
     ]
     failures = 0
-    max_video_candidates = 24
+    # Search broadly across several independent indexes. The previous 24-ID cap
+    # exhausted the first YouTube query before the second query could contribute
+    # useful alternatives, making temporary search-index noise look like no media.
+    max_video_candidates = 80
     for search_query in queries:
         if len(seen) >= max_video_candidates:
             break
