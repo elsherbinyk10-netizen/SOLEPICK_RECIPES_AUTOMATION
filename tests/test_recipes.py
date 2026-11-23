@@ -493,6 +493,24 @@ class RecipeLibraryTests(unittest.TestCase):
             0.45
         )
 
+    def test_video_title_score_normalizes_sheet_pan_and_tray_bake_aliases(self):
+        self.assertGreaterEqual(
+            recipe_worker._video_title_score(
+                "Lemon Garlic Cod Tray Bake",
+                "Sheet Pan Lemon Garlic Cod Recipe"
+            ),
+            0.72
+        )
+
+    def test_video_title_score_normalizes_plural_dish_names(self):
+        self.assertGreaterEqual(
+            recipe_worker._video_title_score(
+                "Hot Honey Chicken Rice Bowls",
+                "Hot Honey Chicken Rice Bowl Recipe"
+            ),
+            0.72
+        )
+
     def test_video_compatibility_requires_named_dish_format(self):
         self.assertFalse(recipe_worker._video_title_is_compatible(
             {"title": "Creamy Tomato Spinach Pasta"}, "Creamy Tomato Spinach Soup Recipe"
