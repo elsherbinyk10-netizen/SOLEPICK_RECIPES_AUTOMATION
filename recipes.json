@@ -5899,5 +5899,44 @@
     "trend_evidence_count": 0,
     "seo_title": "Crispy Smash Burger Tacos | SolePick Recipes",
     "seo_description": "Thin, seared beef patties are pressed onto small tortillas and finished with crisp lettuce, pickles and a tangy burger-style sauce."
+  },
+  {
+    "title": "Chili Crisp Peanut Noodles",
+    "description": "Springy noodles are tossed in a creamy peanut, soy and chili-crisp sauce, then brightened with lime, cucumber and spring onions.",
+    "tags": [
+      "dinner",
+      "noodles",
+      "vegetarian",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "250 g dried wheat noodles",
+      "3 tablespoons smooth peanut butter",
+      "1 tablespoon soy sauce",
+      "1 tablespoon chili crisp",
+      "1 tablespoon lime juice",
+      "1 teaspoon honey",
+      "3–5 tablespoons hot noodle water",
+      "1 cucumber, cut into matchsticks",
+      "2 spring onions, thinly sliced",
+      "1 teaspoon toasted sesame seeds"
+    ],
+    "instructions": [
+      "Cook the noodles in boiling water according to the packet directions. Reserve at least 1/2 cup of the cooking water, then drain.",
+      "Whisk the peanut butter, soy sauce, chili crisp, lime juice and honey in a bowl.",
+      "Whisk in hot noodle water one tablespoon at a time until the sauce is smooth and pourable.",
+      "Add the warm noodles and toss until every strand is coated. Add another splash of noodle water if needed.",
+      "Divide between bowls and top with cucumber, spring onions and sesame seeds. Serve warm or chilled."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 10,
+    "servings": 2,
+    "slug": "chili-crisp-peanut-noodles",
+    "trend_sources": [
+      "SolePick curated evergreen library"
+    ],
+    "trend_evidence_count": 0,
+    "seo_title": "Chili Crisp Peanut Noodles | SolePick Recipes",
+    "seo_description": "Springy noodles are tossed in a creamy peanut, soy and chili-crisp sauce, then brightened with lime, cucumber and spring onions."
   }
 ]
