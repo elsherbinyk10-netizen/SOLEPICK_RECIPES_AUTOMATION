@@ -1,1 +1,0 @@
-Temporary trigger for the existing guarded SolePick daily publisher. No quality rules or recipe data changed.
