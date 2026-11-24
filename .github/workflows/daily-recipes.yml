@@ -205,3 +205,4 @@ jobs:
 # 2026-11-20 guarded same-day recovery trigger (comment-only; quality gates unchanged).
 # 2026-11-21 guarded same-day recovery trigger [publish-daily-recipe]
 # 2026-11-23 same-Cairo-day guarded recovery: retry after the off-season 06:00 UTC cron was correctly rejected.
+# 2026-11-24 guarded same-Cairo-day recovery after missed 09:00–12:00 Cairo publishing windows; quality gates and duplicate guard unchanged.
