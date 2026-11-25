@@ -6014,5 +6014,46 @@
     "trend_evidence_count": 0,
     "seo_title": "Pesto Eggs on Sourdough | SolePick Recipes",
     "seo_description": "Eggs cook gently in fragrant basil pesto and are served on toasted sourdough with creamy avocado and a squeeze of lemon."
+  },
+  {
+    "title": "Korean-Style Ground Beef Rice Bowls",
+    "description": "Savoury ground beef is glazed with soy, garlic, ginger and a little gochujang, then served over rice with crunchy cucumber and sesame.",
+    "tags": [
+      "dinner",
+      "beef",
+      "rice bowl",
+      "high protein",
+      "quick-and-easy"
+    ],
+    "ingredients": [
+      "450 g lean ground beef",
+      "2 cups cooked rice",
+      "2 tablespoons low-sodium soy sauce",
+      "1 tablespoon gochujang",
+      "1 tablespoon honey",
+      "2 garlic cloves, minced",
+      "1 teaspoon grated fresh ginger",
+      "1 teaspoon sesame oil",
+      "1 cucumber, thinly sliced",
+      "2 spring onions, sliced",
+      "1 teaspoon toasted sesame seeds"
+    ],
+    "instructions": [
+      "Whisk the soy sauce, gochujang and honey together in a small bowl.",
+      "Heat a large skillet over medium-high heat. Add the ground beef and cook for 6–8 minutes, breaking it into small pieces, until no pink remains and it reaches 71°C (160°F). Drain excess fat if needed.",
+      "Add the garlic and ginger and cook for 30 seconds until fragrant.",
+      "Pour in the sauce and simmer for 1–2 minutes, stirring until the beef is glossy and fully coated.",
+      "Divide the rice between bowls. Spoon over the beef and finish with cucumber, spring onions and sesame seeds."
+    ],
+    "prep_minutes": 10,
+    "cook_minutes": 12,
+    "servings": 4,
+    "slug": "korean-style-ground-beef-rice-bowls",
+    "trend_sources": [
+      "SolePick curated evergreen library"
+    ],
+    "trend_evidence_count": 0,
+    "seo_title": "Korean-Style Ground Beef Rice Bowls | SolePick Recipes",
+    "seo_description": "Savoury ground beef is glazed with soy, garlic, ginger and a little gochujang, then served over rice with crunchy cucumber and sesame."
   }
 ]
