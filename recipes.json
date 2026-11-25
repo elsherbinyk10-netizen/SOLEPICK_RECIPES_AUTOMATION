@@ -6055,5 +6055,86 @@
     "trend_evidence_count": 0,
     "seo_title": "Korean-Style Ground Beef Rice Bowls | SolePick Recipes",
     "seo_description": "Savoury ground beef is glazed with soy, garlic, ginger and a little gochujang, then served over rice with crunchy cucumber and sesame."
+  },
+  {
+    "title": "Air Fryer Salmon Bites with Lemon Yogurt",
+    "description": "Bite-sized salmon pieces turn golden in the air fryer and are served with a cool lemon-yogurt dip, cucumber and warm grains.",
+    "tags": [
+      "dinner",
+      "salmon",
+      "seafood",
+      "air fryer",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "450 g skinless salmon fillet, cut into 2.5 cm cubes",
+      "1 tablespoon olive oil",
+      "1 teaspoon smoked paprika",
+      "1/2 teaspoon garlic powder",
+      "1/2 teaspoon fine salt",
+      "1/2 cup plain Greek yogurt",
+      "1 tablespoon lemon juice",
+      "1 teaspoon lemon zest",
+      "2 cups cooked quinoa or rice",
+      "1 cucumber, diced",
+      "1 tablespoon chopped dill"
+    ],
+    "instructions": [
+      "Preheat the air fryer to 200°C (400°F) for 3 minutes.",
+      "Pat the salmon cubes dry. Toss with olive oil, smoked paprika, garlic powder and salt.",
+      "Arrange salmon in a single layer in the air-fryer basket. Cook for 7–9 minutes, shaking once, until the centre reaches 63°C (145°F) and the edges are lightly crisp.",
+      "Stir the Greek yogurt with lemon juice, lemon zest and dill to make the dip.",
+      "Serve the salmon over warm quinoa or rice with cucumber and the lemon-yogurt dip."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 9,
+    "servings": 2,
+    "slug": "air-fryer-salmon-bites-with-lemon-yogurt",
+    "trend_sources": [
+      "SolePick curated evergreen library"
+    ],
+    "trend_evidence_count": 0,
+    "seo_title": "Air Fryer Salmon Bites with Lemon Yogurt | SolePick Recipes",
+    "seo_description": "Bite-sized salmon pieces turn golden in the air fryer and are served with a cool lemon-yogurt dip, cucumber and warm grains."
+  },
+  {
+    "title": "Crispy Potato and Black Bean Tacos",
+    "description": "Spiced roast potatoes and warm black beans fill crisp-edged tortillas with cabbage, lime and a quick smoky yogurt sauce.",
+    "tags": [
+      "dinner",
+      "vegetarian",
+      "tacos",
+      "comfort-food"
+    ],
+    "ingredients": [
+      "500 g potatoes, cut into 1.5 cm cubes",
+      "1 tablespoon olive oil",
+      "1 teaspoon ground cumin",
+      "1 teaspoon smoked paprika",
+      "1/2 teaspoon fine salt",
+      "1 can (400 g) black beans, drained and rinsed",
+      "8 small corn tortillas",
+      "1 cup finely shredded red cabbage",
+      "1/2 cup plain Greek yogurt",
+      "1 tablespoon lime juice",
+      "1/2 teaspoon chipotle powder"
+    ],
+    "instructions": [
+      "Heat the oven to 220°C (425°F). Toss the potatoes with olive oil, cumin, smoked paprika and salt.",
+      "Spread the potatoes on a lined baking tray and roast for 25–30 minutes, turning once, until golden and crisp.",
+      "Warm the black beans in a small saucepan with a splash of water for 3–4 minutes.",
+      "Mix the Greek yogurt with lime juice and chipotle powder to make a smoky sauce.",
+      "Warm the tortillas in a dry skillet. Fill with roast potatoes, black beans and cabbage, then drizzle with the sauce."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 30,
+    "servings": 4,
+    "slug": "crispy-potato-and-black-bean-tacos",
+    "trend_sources": [
+      "SolePick curated evergreen library"
+    ],
+    "trend_evidence_count": 0,
+    "seo_title": "Crispy Potato and Black Bean Tacos | SolePick Recipes",
+    "seo_description": "Spiced roast potatoes and warm black beans fill crisp-edged tortillas with cabbage, lime and a quick smoky yogurt sauce."
   }
 ]
