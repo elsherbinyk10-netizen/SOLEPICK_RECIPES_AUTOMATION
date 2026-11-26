@@ -295,7 +295,7 @@ def official_recipe_article_url(description, publisher):
         candidate = candidate.rstrip(").,;]")
         parsed = urllib.parse.urlparse(candidate)
         host = (parsed.hostname or "").lower()
-        if host not in allowed_hosts or not any(parsed.path.startswith(prefix) for prefix in allowed_paths):
+        if host not in allowed_hosts or not any(re.match(r"^" + re.escape(prefix.rstrip("/")) + r"(?:/|$)", parsed.path) for prefix in allowed_paths):
             continue
         return urllib.parse.urlunparse(("https", host, parsed.path, "", parsed.query, ""))
     return ""
