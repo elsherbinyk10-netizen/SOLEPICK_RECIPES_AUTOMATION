@@ -1,23 +1,33 @@
 # SolePick publisher and content policy
 
+## Approved video publishers
+SolePick may embed recipe videos from these official YouTube channels only:
+- Food Network — channel ID `UC8Y-jrV8oR3s2Ix4viDkZtA`
+- Tasty — channel ID `UCJFp8uSYCjXOMnkUyb3CQ3Q`
+- Jamie Oliver — channel ID `UCpSgg_ECBj25s9moCDfSTsA`
+- Allrecipes — channel ID `UC4tAgeVdaNB5vD_mBoxg50w`
+
+Do not accept fan uploads, re-uploads, unofficial compilations, or any channel outside this allowlist. The publisher name, channel ID, live YouTube oEmbed title and author must agree. The video must be public and embeddable, and its title must match the recipe's named ingredients and dish format.
+
 ## Daily publishing model
-- One new recipe article per Cairo day.
 - Recipe ingredients and method remain independently authored by SolePick.
-- Video discovery is restricted to the official verified Food Network YouTube channel (channel ID UC8Y-jrV8oR3s2Ix4viDkZtA).
-- Candidates must match the recipe identity, pass YouTube oEmbed availability/embedding checks, and expose the Food Network author identity.
-- The featured image must be the high-resolution thumbnail of that same verified video. No AI-generated, stock, unrelated, or generic fallback image is allowed.
-- If a matching video or valid thumbnail cannot be verified, the candidate is skipped.
+- A recipe must pass all existing instruction-quality, duplicate, SEO and Shopify publication checks.
+- The featured image must be a high-resolution, dish-relevant, commercially permitted photo from Wikimedia Commons or Openverse with verified licence and attribution metadata. Do not use AI-generated, stock, unrelated, or generic fallback images.
+- Video discovery may use public indexes, but every candidate is re-verified against the allowlisted YouTube channel and live YouTube oEmbed metadata before use.
+- If a matching video, live embed permission, or valid relevant photo cannot be verified, skip or hold the candidate. Never bypass a quality gate to meet a daily quota.
+- Existing Cairo-day duplicate protection remains mandatory.
+
+## Publisher recipe-page links
+When a selected official channel description contains a recipe link, retain it only if it belongs to that publisher's own approved domain:
+- Food Network: `foodnetwork.com`
+- Tasty: `tasty.co`
+- Jamie Oliver: `jamieoliver.com`
+- Allrecipes: `allrecipes.com`
+
+An official recipe-page link is optional; its absence must not block a candidate that passes the channel, title, live author, embeddability and image checks.
 
 ## Copyright and source handling
-Food Network's published Terms of Use reserve rights in its website text, instructions, images, and video and prohibit unauthorized scraping, reproduction, derivative works, and framing. SolePick therefore does not scrape or republish FoodNetwork.com recipe pages, copy their ingredient lists or instructions, or iframe the Food Network website. It embeds the official YouTube-hosted video using YouTube's standard player and credits Food Network. Recipe text remains independently authored by SolePick.
-
-Food Network terms: https://www.foodnetwork.com/site/terms
-
-For any additional publisher, add it only after confirming written permission or an explicit commercial syndication/embed licence. A public RSS feed or publicly viewable page alone is not a republication licence.
+Do not scrape or republish publisher website text, ingredient lists, instructions, or images. Do not iframe publisher websites. Embed only the official YouTube-hosted video using YouTube's standard player and credit the video publisher. Recipe text and images remain independently sourced and authored by SolePick under the relevant licence terms.
 
 ## SEO and verification
-Every published recipe retains unique title/description metadata, canonical recipe URL, Recipe JSON-LD, ingredients, instructions, prep/cook times, servings, internal recipe links where available, image alt text, and the verified video URL. Publishing remains fail-closed on media verification.
-
-
-## Production verification
-- Source-linked publisher-video discovery is exercised by the scheduled recipe workflow. A run must skip publication if it cannot verify the matching publisher article, official channel video, embed permission, and thumbnail.
+Every published recipe retains unique title/description metadata, canonical recipe URL, Recipe JSON-LD, ingredients, instructions, prep/cook times, servings, internal recipe links where available, image alt text, image attribution/licence metadata, and the verified video URL. Publishing remains fail-closed on recipe quality, media verification, duplicates, and Shopify read-after-write confirmation.
