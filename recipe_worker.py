@@ -845,6 +845,65 @@ def search_openverse_recipe_image(recipe, used_urls, used_identities, searches, 
     return None
 
 
+def preverified_catalogue_image(recipe, used_urls, used_identities):
+    """Reuse an explicitly licensed, attributed Commons photo already reviewed for this recipe."""
+    url = str(recipe.get("image_url") or "").strip()
+    alt = str(recipe.get("image_alt") or "").strip()
+    source_url = str(recipe.get("image_source_url") or "").strip()
+    author = str(recipe.get("image_author") or "").strip()
+    license_name = str(recipe.get("image_license") or "").strip()
+    license_url = str(recipe.get("image_license_url") or "").strip()
+    source_type = str(recipe.get("image_source_type") or "").strip()
+    parsed = urllib.parse.urlparse(url)
+    source = urllib.parse.urlparse(source_url)
+    license_lower = license_name.lower()
+    allowed_license = (
+        "public domain" in license_lower
+        or "cc0" in license_lower
+        or bool(re.search(r"cc by(?:-sa)?(?:\\s|$)", license_lower))
+    )
+    if (
+        not url.startswith("https://")
+        or parsed.hostname not in {"upload.wikimedia.org", "thumb.wikimedia.org"}
+        or source_type != "wikimedia_commons"
+        or source.hostname != "commons.wikimedia.org"
+        or not alt
+        or not allowed_license
+        or "noncommercial" in license_lower
+        or "no derivatives" in license_lower
+        or license_lower.endswith(" nd")
+        or not license_url.startswith("https://creativecommons.org/")
+    ):
+        return None
+    if "public domain" not in license_lower and "cc0" not in license_lower and not author:
+        return None
+    identity = _image_identity(url)
+    if url in used_urls or (identity and identity in used_identities):
+        print("REJECTED DUPLICATE PRE-VERIFIED CATALOGUE PHOTO: " + recipe.get("title", "(untitled)"))
+        return None
+    title_tokens = set(re.findall(r"[a-z0-9]+", str(recipe.get("title") or "").lower()))
+    alt_tokens = set(re.findall(r"[a-z0-9]+", alt.lower()))
+    overlap = len(title_tokens & alt_tokens) / max(1, len(title_tokens))
+    if overlap < 0.5:
+        print("REJECTED IRRELEVANT PRE-VERIFIED CATALOGUE PHOTO: " + recipe.get("title", "(untitled)"))
+        return None
+    quality = inspect_image_url(url)
+    if not is_high_quality_image(quality):
+        print("REJECTED LOW-QUALITY PRE-VERIFIED CATALOGUE PHOTO: " + recipe.get("title", "(untitled)") + " | " + str(quality))
+        return None
+    print("USING PRE-VERIFIED LICENSED COMMONS PHOTO: " + recipe.get("title", "(untitled)") + " | license=" + license_name)
+    return {
+        "url": url,
+        "altText": alt,
+        "source_type": "wikimedia_commons",
+        "title": alt,
+        "author": author or "Public domain",
+        "source_url": source_url,
+        "license": license_name,
+        "license_url": license_url,
+    }
+
+
 def generate_recipe_image(recipe, published_articles=None):
     """Find a dish-relevant Commons photo with verified commercial-use licence and attribution metadata."""
     catalogue = json.loads(RECIPES_PATH.read_text(encoding="utf-8"))
@@ -858,6 +917,9 @@ def generate_recipe_image(recipe, published_articles=None):
         if image.get("url"):
             used_urls.add(str(image["url"]).strip())
     used_identities = {_image_identity(url) for url in used_urls if _image_identity(url)}
+    curated_image = preverified_catalogue_image(recipe, used_urls, used_identities)
+    if curated_image:
+        return curated_image
     # Search Commons using the actual dish name. Prefer exact recipe terms and reject
     # generic images unless both a main ingredient and dish-format anchor are present.
     title = str(recipe.get("title") or "").strip()
