@@ -290,7 +290,7 @@ def official_recipe_article_url(description, publisher):
     allowed_paths = PUBLISHER_RECIPE_PATH_PREFIXES.get(publisher_name, ())
     if not allowed_hosts or not allowed_paths:
         return ""
-    candidates = re.findall(r"https?://[^\\s<>\"']+", str(description or ""))
+    candidates = re.findall(r"https?://[^\s<>\"']+", str(description or ""))
     for candidate in candidates:
         candidate = candidate.rstrip(").,;]")
         parsed = urllib.parse.urlparse(candidate)
