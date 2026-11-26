@@ -458,7 +458,11 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
     # Search broadly enough to recover from sparse YouTube results without
     # weakening the strict protein/dish-format and live-embeddability checks.
     # A recipe is published only after a title-compatible video passes oEmbed.
+    # Search each explicitly approved publisher by name before broad results.
+    # The candidate still has to pass the exact channel-ID, live oEmbed author,
+    # title-compatibility, public-embed, thumbnail and image checks below.
     queries = [
+        *(f"ytsearch30:{title} {publisher} official recipe" for publisher in AUTHORIZED_VIDEO_CHANNELS.values()),
         f"ytsearch50:{title} recipe",
         f"ytsearch50:{title} cooking",
         f"ytsearch30:{title} official recipe video",
@@ -467,7 +471,7 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
     # Search broadly across several independent indexes. The previous 24-ID cap
     # exhausted the first YouTube query before the second query could contribute
     # useful alternatives, making temporary search-index noise look like no media.
-    max_video_candidates = 80
+    max_video_candidates = 160
     for search_query in queries:
         if len(seen) >= max_video_candidates:
             break
