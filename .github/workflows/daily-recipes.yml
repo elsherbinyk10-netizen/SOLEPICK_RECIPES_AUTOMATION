@@ -94,7 +94,7 @@ jobs:
       - name: Check media for replenished recipes without publishing
         if: github.event_name == 'push' && contains(github.event.head_commit.message, '[check-recipe-media]')
         env:
-          MEDIA_CHECK_SLUGS: chicken-shawarma-rice-bowls,shrimp-tacos-mango-slaw,beef-broccoli-stir-fry,lemon-garlic-cod-tray-bake,tofu-peanut-noodle-bowls,lentil-bolognese-pasta,chickpea-coconut-curry,turkey-meatball-pasta,chicken-enchilada-skillet,mediterranean-tuna-pasta-salad,garlic-butter-shrimp-pasta,honey-soy-salmon-tray-bake,thanksgiving-breakfast-casserole,creamy-mashed-potatoes
+          MEDIA_CHECK_SLUGS: thanksgiving-breakfast-casserole,creamy-mashed-potatoes
         run: python recipe_worker.py --check-media-only
 
       - name: Install open-source caption tools
