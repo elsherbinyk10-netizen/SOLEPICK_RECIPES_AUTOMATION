@@ -860,7 +860,7 @@ def preverified_catalogue_image(recipe, used_urls, used_identities):
     allowed_license = (
         "public domain" in license_lower
         or "cc0" in license_lower
-        or bool(re.search(r"cc by(?:-sa)?(?:\\s|$)", license_lower))
+        or bool(re.search(r"cc by(?:-sa)?(?:\s|$)", license_lower))
     )
     if (
         not url.startswith("https://")
