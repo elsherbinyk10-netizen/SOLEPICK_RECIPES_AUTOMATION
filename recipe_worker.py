@@ -293,6 +293,11 @@ def official_recipe_article_url(description, publisher):
     return ""
 
 
+def food_network_recipe_article_url(description):
+    """Backward-compatible Food Network recipe-link extractor used by existing tests."""
+    return official_recipe_article_url(description, "Food Network")
+
+
 def _check_video_candidate(recipe, video_id, title, channel_id="", source_article_url="", expected_publisher=""):
     """Validate a real creator-published YouTube recipe video and its live metadata."""
     if not _is_authorized_video_channel(channel_id):
