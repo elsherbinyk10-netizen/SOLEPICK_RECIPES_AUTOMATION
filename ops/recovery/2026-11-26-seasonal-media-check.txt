@@ -1,0 +1,1 @@
+Run a non-publishing media verification for the existing Thanksgiving Breakfast Casserole and Creamy Mashed Potatoes recipe candidates. Preserve all quality checks, official publisher verification, image licensing, image quality, image uniqueness, duplicate protection, and Shopify read-only behavior. Do not publish from this check.
