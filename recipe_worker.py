@@ -275,19 +275,27 @@ PUBLISHER_RECIPE_DOMAINS = {
     "Jamie Oliver": {"jamieoliver.com", "www.jamieoliver.com"},
     "Allrecipes": {"allrecipes.com", "www.allrecipes.com"},
 }
+PUBLISHER_RECIPE_PATH_PREFIXES = {
+    "Food Network": ("/recipes/",),
+    "Tasty": ("/article/", "/recipe/"),
+    "Jamie Oliver": ("/recipes/",),
+    "Allrecipes": ("/recipe/",),
+}
 
 
 def official_recipe_article_url(description, publisher):
     """Extract a recipe-page URL only from the selected approved publisher's own domain."""
-    allowed_hosts = PUBLISHER_RECIPE_DOMAINS.get(str(publisher or "").strip(), set())
-    if not allowed_hosts:
+    publisher_name = str(publisher or "").strip()
+    allowed_hosts = PUBLISHER_RECIPE_DOMAINS.get(publisher_name, set())
+    allowed_paths = PUBLISHER_RECIPE_PATH_PREFIXES.get(publisher_name, ())
+    if not allowed_hosts or not allowed_paths:
         return ""
     candidates = re.findall(r"https?://[^\\s<>\"']+", str(description or ""))
     for candidate in candidates:
         candidate = candidate.rstrip(").,;]")
         parsed = urllib.parse.urlparse(candidate)
         host = (parsed.hostname or "").lower()
-        if host not in allowed_hosts or not parsed.path or parsed.path == "/":
+        if host not in allowed_hosts or not any(parsed.path.startswith(prefix) for prefix in allowed_paths):
             continue
         return urllib.parse.urlunparse(("https", host, parsed.path, "", parsed.query, ""))
     return ""
