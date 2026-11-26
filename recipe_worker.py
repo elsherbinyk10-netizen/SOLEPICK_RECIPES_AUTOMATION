@@ -269,19 +269,27 @@ def _is_authorized_video_channel(channel_id):
     # search metadata and then re-confirmed with YouTube oEmbed below.
     return bool(re.fullmatch(r"UC[A-Za-z0-9_-]{22}", str(channel_id or "").strip()))
 
-def food_network_recipe_article_url(description):
-    """Extract a direct Food Network recipe-page URL from the official video's description."""
-    text = str(description or "")
-    candidates = re.findall(r"https?://[^\s<>\"']+", text)
+PUBLISHER_RECIPE_DOMAINS = {
+    "Food Network": {"foodnetwork.com", "www.foodnetwork.com"},
+    "Tasty": {"tasty.co", "www.tasty.co"},
+    "Jamie Oliver": {"jamieoliver.com", "www.jamieoliver.com"},
+    "Allrecipes": {"allrecipes.com", "www.allrecipes.com"},
+}
+
+
+def official_recipe_article_url(description, publisher):
+    """Extract a recipe-page URL only from the selected approved publisher's own domain."""
+    allowed_hosts = PUBLISHER_RECIPE_DOMAINS.get(str(publisher or "").strip(), set())
+    if not allowed_hosts:
+        return ""
+    candidates = re.findall(r"https?://[^\\s<>\"']+", str(description or ""))
     for candidate in candidates:
         candidate = candidate.rstrip(").,;]")
         parsed = urllib.parse.urlparse(candidate)
         host = (parsed.hostname or "").lower()
-        if host not in {"foodnetwork.com", "www.foodnetwork.com"}:
+        if host not in allowed_hosts or not parsed.path or parsed.path == "/":
             continue
-        if not parsed.path.startswith("/recipes/"):
-            continue
-        return urllib.parse.urlunparse(("https", "www.foodnetwork.com", parsed.path, "", parsed.query, ""))
+        return urllib.parse.urlunparse(("https", host, parsed.path, "", parsed.query, ""))
     return ""
 
 
@@ -289,10 +297,13 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     """Validate a real creator-published YouTube recipe video and its live metadata."""
     if not _is_authorized_video_channel(channel_id):
         return None
+    publisher_name = str(AUTHORIZED_VIDEO_CHANNELS.get(channel_id) or "").strip()
+    allowed_hosts = PUBLISHER_RECIPE_DOMAINS.get(publisher_name, set())
     parsed_source = urllib.parse.urlparse(str(source_article_url or ""))
     if source_article_url and (
-        (parsed_source.hostname or "").lower() not in {"foodnetwork.com", "www.foodnetwork.com"}
-        or not parsed_source.path.startswith("/recipes/")
+        (parsed_source.hostname or "").lower() not in allowed_hosts
+        or not parsed_source.path
+        or parsed_source.path == "/"
     ):
         return None
     video_id = str(video_id or "").strip()
@@ -339,7 +350,7 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
         "match_score": round(live_score, 2),
         "channel_id": channel_id,
         "publisher": publisher,
-        "source_article_url": ("https://www.foodnetwork.com" + parsed_source.path + (("?" + parsed_source.query) if parsed_source.query else "")) if source_article_url else "",
+        "source_article_url": urllib.parse.urlunparse(("https", (parsed_source.hostname or "").lower(), parsed_source.path, "", parsed_source.query, "")) if source_article_url else "",
     }
 
 
@@ -480,7 +491,8 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
             if _video_title_score(title, title_found) < 0.72:
                 continue
             description = str(entry.get("description") or "")
-            source_article_url = food_network_recipe_article_url(description)
+            publisher = str(entry.get("channel") or entry.get("uploader") or AUTHORIZED_VIDEO_CHANNELS.get(channel_id) or "").strip()
+            source_article_url = official_recipe_article_url(description, publisher)
             if not source_article_url:
                 # YouTube often blocks unauthenticated description lookups from
                 # hosted CI. The verified official channel, exact dish title and
