@@ -406,6 +406,40 @@ class RecipeLibraryTests(unittest.TestCase):
         check.assert_called_once()
         self.assertEqual(check.call_args.args[1], "lmnopqrstuv")
 
+    def test_video_search_targets_every_approved_publisher_before_generic_search(self):
+        import types
+
+        searched = []
+
+        class FakeYoutubeDL:
+            def __init__(self, options):
+                self.options = options
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc_value, traceback):
+                return False
+
+            def extract_info(self, query, download=False):
+                searched.append(query)
+                return {"entries": []}
+
+        fake_ytdlp = types.SimpleNamespace(YoutubeDL=FakeYoutubeDL)
+        with patch.dict(sys.modules, {"yt_dlp": fake_ytdlp}), patch.object(
+            recipe_worker, "search_verified_recipe_videos", return_value=[]
+        ):
+            with self.assertRaisesRegex(RuntimeError, "No currently embeddable"):
+                recipe_worker.find_verified_recipe_video(
+                    {"title": "Lemon Herb Chicken Couscous Bowls"}
+                )
+
+        for publisher in recipe_worker.AUTHORIZED_VIDEO_CHANNELS.values():
+            self.assertTrue(
+                any(publisher in query for query in searched),
+                f"Missing publisher-targeted search for {publisher}",
+            )
+
     def test_second_approved_publisher_video_is_verified_by_exact_channel_and_author(self):
         recipe = {"title": "Crispy Salmon Rice Bowls"}
         metadata = {"title": "Crispy Salmon Rice Bowl Recipe", "author_name": "Tasty"}
