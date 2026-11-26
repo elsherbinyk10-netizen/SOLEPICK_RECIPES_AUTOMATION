@@ -1,0 +1,1 @@
+Run the media-only validation for the two newly added seasonal recipes. Preserve the approved official-channel video checks, Commons/Openverse commercial-use licence checks, image relevance and quality checks, duplicate-image protection, and no-Shopify-write mode. This is a validation-only trigger; do not bypass any gate.
