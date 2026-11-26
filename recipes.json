@@ -6136,5 +6136,45 @@
     "trend_evidence_count": 0,
     "seo_title": "Crispy Potato and Black Bean Tacos | SolePick Recipes",
     "seo_description": "Spiced roast potatoes and warm black beans fill crisp-edged tortillas with cabbage, lime and a quick smoky yogurt sauce."
+  },
+  {
+    "title": "Honey Garlic Halloumi and Veggie Bowls",
+    "description": "Golden halloumi is tossed in a light honey-garlic glaze and paired with roasted vegetables, grains and a bright lemon dressing.",
+    "tags": [
+      "dinner",
+      "halloumi",
+      "vegetarian",
+      "fresh-and-green"
+    ],
+    "ingredients": [
+      "250 g halloumi, cut into 1 cm slices",
+      "1 tablespoon olive oil",
+      "1 red bell pepper, sliced",
+      "1 courgette, sliced",
+      "1 red onion, cut into wedges",
+      "2 cups cooked couscous or quinoa",
+      "1 tablespoon honey",
+      "1 garlic clove, minced",
+      "1 tablespoon lemon juice",
+      "1 teaspoon lemon zest",
+      "2 tablespoons chopped parsley"
+    ],
+    "instructions": [
+      "Heat the oven to 210°C (410°F). Toss the pepper, courgette and onion with half the olive oil and roast for 18–22 minutes until tender and lightly browned.",
+      "Whisk the honey, garlic, lemon juice and lemon zest in a small bowl.",
+      "Heat the remaining oil in a non-stick skillet over medium heat. Cook the halloumi for 1–2 minutes per side until golden.",
+      "Pour the honey-garlic mixture into the skillet and turn the halloumi for 20–30 seconds until lightly glazed.",
+      "Divide the grains and roasted vegetables between bowls. Add the halloumi and finish with parsley."
+    ],
+    "prep_minutes": 12,
+    "cook_minutes": 22,
+    "servings": 2,
+    "slug": "honey-garlic-halloumi-and-veggie-bowls",
+    "trend_sources": [
+      "SolePick curated evergreen library"
+    ],
+    "trend_evidence_count": 0,
+    "seo_title": "Honey Garlic Halloumi and Veggie Bowls | SolePick Recipes",
+    "seo_description": "Golden halloumi is tossed in a light honey-garlic glaze and paired with roasted vegetables, grains and a bright lemon dressing."
   }
 ]
