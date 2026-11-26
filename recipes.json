@@ -6233,7 +6233,14 @@
     "trend_evidence_count": 1,
     "editorial_status": "original-recipe-written-awaiting-licensed-image-verification",
     "seo_title": "Thanksgiving Breakfast Casserole | Make-Ahead Holiday Brunch | SolePick Recipes",
-    "seo_description": "Prepare this make-ahead Thanksgiving breakfast casserole with sausage, apples, herbs, eggs and cheddar, then bake it fresh in the morning."
+    "seo_description": "Prepare this make-ahead Thanksgiving breakfast casserole with sausage, apples, herbs, eggs and cheddar, then bake it fresh in the morning.",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Finished_sausage_breakfast_casserole.jpg",
+    "image_alt": "A finished sausage breakfast casserole baked with eggs, bread and cheese.",
+    "image_source_url": "https://commons.wikimedia.org/wiki/File:Finished_sausage_breakfast_casserole.jpg",
+    "image_author": "MarkTraceur",
+    "image_license": "CC BY-SA 1.0",
+    "image_license_url": "https://creativecommons.org/licenses/by-sa/1.0/",
+    "image_source_type": "wikimedia_commons"
   },
   {
     "slug": "creamy-mashed-potatoes",
@@ -6288,6 +6295,13 @@
     "trend_evidence_count": 1,
     "editorial_status": "original-recipe-written-awaiting-licensed-image-verification",
     "seo_title": "Creamy Mashed Potatoes | Buttery Garlic Parmesan Mash | SolePick Recipes",
-    "seo_description": "Make creamy mashed potatoes with Yukon Gold potatoes, warm butter, milk and sour cream, finished with garlic, Parmesan and chives."
+    "seo_description": "Make creamy mashed potatoes with Yukon Gold potatoes, warm butter, milk and sour cream, finished with garlic, Parmesan and chives.",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/39/MashedPotatoes.jpg",
+    "image_alt": "A small plate of plain, creamy mashed potatoes.",
+    "image_source_url": "https://commons.wikimedia.org/wiki/File:MashedPotatoes.jpg",
+    "image_author": "Renee Comet",
+    "image_license": "Public domain (U.S. National Institutes of Health)",
+    "image_license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "image_source_type": "wikimedia_commons"
   }
 ]
