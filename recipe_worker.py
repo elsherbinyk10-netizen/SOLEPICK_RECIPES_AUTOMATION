@@ -326,7 +326,7 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     if not _video_title_is_compatible(recipe, title):
         return None
     score = _video_title_score(recipe.get("title", ""), title)
-    if score < 0.72:
+    if score < 0.55:
         return None
     # YouTube oEmbed rejects removed/private videos and many videos that disallow embedding.
     oembed_url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({
@@ -346,7 +346,7 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     if not live_title or not _video_title_is_compatible(recipe, live_title):
         return None
     live_score = _video_title_score(recipe.get("title", ""), live_title)
-    if live_score < 0.72:
+    if live_score < 0.55:
         return None
     live_author = str(metadata.get("author_name") or "").strip()
     publisher = str(expected_publisher or AUTHORIZED_VIDEO_CHANNELS.get(channel_id) or live_author).strip()
@@ -461,11 +461,25 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
     # Search each explicitly approved publisher by name before broad results.
     # The candidate still has to pass the exact channel-ID, live oEmbed author,
     # title-compatibility, public-embed, thumbnail and image checks below.
+    # Search both the full editorial title and a compact dish-identity phrase.
+    # Flavor adjectives often differ between a site's recipe title and the creator's
+    # video title; protein/dish-format compatibility below remains mandatory.
+    tokens = re.findall(r"[a-z0-9]+", title.lower())
+    flavor_terms = {
+        "lemon", "herb", "garlic", "honey", "yogurt", "yoghurt", "quick",
+        "easy", "crispy", "creamy", "fresh", "veggie", "veggies", "with",
+        "and", "the", "a", "an", "of", "in", "on", "style"
+    }
+    identity_terms = [token for token in tokens if token not in flavor_terms]
+    compact_title = " ".join(identity_terms) or title
     queries = [
         *(f"ytsearch30:{title} {publisher} official recipe" for publisher in AUTHORIZED_VIDEO_CHANNELS.values()),
         f"ytsearch50:{title} recipe",
         f"ytsearch50:{title} cooking",
         f"ytsearch30:{title} official recipe video",
+        *(f"ytsearch30:{compact_title} {publisher} recipe" for publisher in AUTHORIZED_VIDEO_CHANNELS.values()),
+        f"ytsearch50:{compact_title} recipe",
+        f"ytsearch50:{compact_title} cooking",
     ]
     failures = 0
     # Search broadly across several independent indexes. The previous 24-ID cap
@@ -505,7 +519,7 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
             seen.add(video_id)
             if not _video_title_is_compatible(recipe, title_found):
                 continue
-            if _video_title_score(title, title_found) < 0.72:
+            if _video_title_score(title, title_found) < 0.55:
                 continue
             description = str(entry.get("description") or "")
             publisher = str(entry.get("channel") or entry.get("uploader") or AUTHORIZED_VIDEO_CHANNELS.get(channel_id) or "").strip()
@@ -540,7 +554,7 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
             seen.add(video_id)
             if not _video_title_is_compatible(recipe, entry["title"]):
                 continue
-            if _video_title_score(title, entry["title"]) < 0.72:
+            if _video_title_score(title, entry["title"]) < 0.55:
                 continue
             source_article_url = food_network_recipe_article_url(entry.get("description", ""))
             candidate = _check_video_candidate(
