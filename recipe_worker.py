@@ -522,10 +522,17 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
                 print(f"AUTO-SELECTED VIDEO: {candidate['title']} | match={candidate['match_score']} | live oEmbed check passed.")
                 return candidate
             failures += 1
-    # Public-index fallback: YouTube direct search is frequently bot-challenged
-    # on GitHub-hosted runners. Creator names and channel IDs are checked against
-    # live YouTube oEmbed metadata before any video can be used.
-    for query in (f"{title} recipe", f"{title} cooking"):
+    # Public-index fallback: GitHub-hosted YouTube search is frequently bot-challenged.
+    # Search each approved publisher separately as well as the broad dish query; a
+    # single generic result page can be dominated by unrelated channels. These are
+    # discovery-only query changes: every result still passes the unchanged exact
+    # channel, title-compatibility, title-score, live oEmbed and embed checks.
+    fallback_queries = [
+        *(f"{title} {publisher} official recipe" for publisher in AUTHORIZED_VIDEO_CHANNELS.values()),
+        f"{title} recipe",
+        f"{title} cooking",
+    ]
+    for query in fallback_queries:
         for entry in search_verified_recipe_videos(query):
             video_id = entry["id"]
             if video_id in seen:
