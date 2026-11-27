@@ -1,0 +1,5 @@
+Operational recovery trigger for the missed 2026-11-27 Cairo daily recipe publishing target.
+
+This inert marker file exists only to create a push event whose commit message invokes the existing guarded [publish-daily-recipe] workflow path.
+The existing publisher remains responsible for the complete test suite, coherent original recipe instructions, exact dish relevance, licensed high-quality unique food photography, approved official video channel identity, exact title match, live oEmbed and embed verification, Shopify duplicate protection, the Cairo-day cap of up to three recipes, and Shopify read-after-write verification.
+Do not bypass or weaken any gate. Hold every candidate that fails a gate.
