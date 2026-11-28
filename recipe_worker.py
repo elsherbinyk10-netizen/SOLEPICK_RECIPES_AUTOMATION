@@ -346,7 +346,7 @@ def _check_video_candidate(recipe, video_id, title, channel_id="", source_articl
     if not live_title or not _video_title_is_compatible(recipe, live_title):
         return None
     live_score = _video_title_score(recipe.get("title", ""), live_title)
-    if live_score < 0.55:
+    if live_score < 0.80:
         return None
     live_author = str(metadata.get("author_name") or "").strip()
     publisher = str(expected_publisher or AUTHORIZED_VIDEO_CHANNELS.get(channel_id) or live_author).strip()
@@ -554,7 +554,7 @@ def find_verified_recipe_video(recipe, excluded_video_ids=None):
             seen.add(video_id)
             if not _video_title_is_compatible(recipe, entry["title"]):
                 continue
-            if _video_title_score(title, entry["title"]) < 0.55:
+            if _video_title_score(title, entry["title"]) < 0.80:
                 continue
             source_article_url = food_network_recipe_article_url(entry.get("description", ""))
             candidate = _check_video_candidate(
@@ -699,6 +699,13 @@ def _photo_title_relevance(recipe_title, image_title):
     wanted_formats = wanted & formats
     found = set(re.findall(r"[a-z0-9]+", str(image_title).lower()))
     normalized_found = set(found)
+    # Distinctive named preparations are mandatory visual anchors, not optional
+    # keyword overlap. A chicken-and-potato cafeteria tray is not a chicken fajita
+    # tray bake; chickpea salad is not a Caesar wrap. If the named style is absent,
+    # hold the image and keep searching rather than accepting a loosely related dish.
+    distinctive_anchors = wanted & {"caesar", "fajita"}
+    if distinctive_anchors and not distinctive_anchors.issubset(normalized_found):
+        return 0.0, False, False
     # Singular/plural dish-name variants are common in Commons/Openverse titles.
     for singular, plural in (("chickpea", "chickpeas"), ("lentil", "lentils"),
                              ("bean", "beans"), ("noodle", "noodles"),
@@ -1468,8 +1475,19 @@ def should_run_scheduled_event(event_schedule, now=None):
     now = now or datetime.datetime.now(CAIRO)
     utc_offset_hours = int(now.utcoffset().total_seconds() // 3600)
     approved_hours = (9, 10, 11, 12, 13)
-    current_crons = {f"0 {hour - utc_offset_hours} * * *" for hour in approved_hours}
-    return event_schedule in current_crons
+    # GitHub schedule events are UTC. Accept the primary minute and a 15-minute
+    # same-window retry for every Cairo slot, including the 13:00 recovery pass.
+    # The retry is safe because Shopify's Cairo-day cap and article idempotency
+    # are checked again before any write.
+    try:
+        minute_text, hour_text, day, month, weekday = event_schedule.split()
+        minute, utc_hour = int(minute_text), int(hour_text)
+    except (ValueError, AttributeError):
+        return False
+    if minute not in (0, 15) or (day, month, weekday) != ("*", "*", "*"):
+        return False
+    cairo_hour = (utc_hour + utc_offset_hours) % 24
+    return cairo_hour in approved_hours
 
 
 def already_published_today(articles, now=None, recipe_slugs=None):
@@ -1917,7 +1935,7 @@ def main():
     if event_name == "schedule" and event_schedule and not should_run_scheduled_event(event_schedule, now):
         print(
             f"Schedule guard: ignoring unapproved cron {event_schedule}; "
-            f"approved Cairo windows are 09:00, 10:00, 11:00 and 12:00."
+            f"approved Cairo windows are 09:00–13:00, with a 15-minute retry."
         )
         return
     # GitHub may delay scheduled workflows well beyond their cron time.
