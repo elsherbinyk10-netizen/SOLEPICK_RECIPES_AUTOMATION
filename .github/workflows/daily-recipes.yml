@@ -45,6 +45,13 @@ on:
     - cron: "0 9 * * *"
     - cron: "0 10 * * *"
     - cron: "0 11 * * *"
+    # 15-minute retry ticks hedge against an individual GitHub scheduled event being delayed or dropped.
+    - cron: "15 6 * * *"
+    - cron: "15 7 * * *"
+    - cron: "15 8 * * *"
+    - cron: "15 9 * * *"
+    - cron: "15 10 * * *"
+    - cron: "15 11 * * *"
 
 permissions:
   contents: write
