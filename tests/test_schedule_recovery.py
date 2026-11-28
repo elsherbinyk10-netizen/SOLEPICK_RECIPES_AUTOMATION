@@ -24,6 +24,13 @@ class ScheduleRecoveryTests(unittest.TestCase):
         now = datetime.datetime(2026, 7, 20, 13, 0, tzinfo=CAIRO)
         self.assertTrue(recipe_worker.should_run_scheduled_event("0 10 * * *", now))
 
+    def test_fifteen_minute_retries_cover_all_cairo_windows_in_both_seasons(self):
+        summer = datetime.datetime(2026, 7, 20, 13, 15, tzinfo=CAIRO)
+        winter = datetime.datetime(2026, 11, 20, 13, 15, tzinfo=CAIRO)
+        self.assertTrue(recipe_worker.should_run_scheduled_event("15 10 * * *", summer))
+        self.assertTrue(recipe_worker.should_run_scheduled_event("15 11 * * *", winter))
+        self.assertFalse(recipe_worker.should_run_scheduled_event("15 12 * * *", winter))
+
     def test_unapproved_later_cron_is_rejected(self):
         now = datetime.datetime(2026, 11, 20, 14, 0, tzinfo=CAIRO)
         self.assertFalse(recipe_worker.should_run_scheduled_event("0 12 * * *", now))
