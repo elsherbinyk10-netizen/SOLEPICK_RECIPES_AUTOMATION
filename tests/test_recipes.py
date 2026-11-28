@@ -479,6 +479,13 @@ class RecipeLibraryTests(unittest.TestCase):
             )
         self.assertIsNone(result)
 
+    def test_video_score_rejects_near_match_with_changed_dish_identity(self):
+        score = recipe_worker._video_title_score(
+            "Sheet Pan Chicken Fajita Potatoes",
+            "Chicken Fajita Sweet Potatoes | Episode 12",
+        )
+        self.assertLess(score, 0.80)
+
     def test_video_title_match_rejects_different_flavour_variant(self):
         score = recipe_worker._video_title_score(
             "Hot Honey Chicken Rice Bowls",
@@ -1091,6 +1098,18 @@ class RecipePhotoRelevanceTests(unittest.TestCase):
         self.assertGreaterEqual(score, 0.4)
         self.assertTrue(has_main)
         self.assertTrue(has_format)
+
+    def test_distinctive_caesar_and_fajita_dish_names_are_required_for_photos(self):
+        cases = [
+            ("Crispy Chickpea Caesar Wraps", "File:Chickpea salad with greens.jpg"),
+            ("Sheet Pan Chicken Fajita Potatoes", "File:Chicken tenders with mashed potatoes and macaroni.jpg"),
+        ]
+        for recipe_title, image_title in cases:
+            with self.subTest(recipe=recipe_title):
+                score, has_main, has_format = recipe_worker._photo_title_relevance(recipe_title, image_title)
+                self.assertEqual(score, 0.0)
+                self.assertFalse(has_main)
+                self.assertFalse(has_format)
 
     def test_unrelated_dish_does_not_match(self):
         score, has_main, has_format = recipe_worker._photo_title_relevance(
